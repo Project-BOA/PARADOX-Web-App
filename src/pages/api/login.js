@@ -1,81 +1,71 @@
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue} from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCRlQyWruO-HhPLIXLbUwe8Re3WCuli_VU",
+  authDomain: "codedatabase-819d6.firebaseapp.com",
+  databaseURL: "https://codedatabase-819d6-default-rtdb.firebaseio.com",
+  projectId: "codedatabase-819d6",
+  storageBucket: "codedatabase-819d6.appspot.com",
+  messagingSenderId: "420075124138",
+  appId: "1:420075124138:web:0020e12a55853d65cf67d3",
+  measurementId: "G-QYDJZW417T"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+var pass;
+async function getUser(username){
+  const userNames = ref(db, 'users/'+username);
+  onValue(userNames, (snapshot) => {
+    const data = snapshot.val();
+  
+    pass = data.pass;
+    console.log(pass);
+
+  });
+}
 export default withIronSessionApiRoute(
-  async function login(req, res) {
+    async function handler(req, res) {
 
-    console.log("login api page called...");
-   
-    console.log("looking at the variables we got from the browser..");
-    console.log(req.body);
-  
-    // Get just the username and password and put them into variables.
-    const username = req.body.username;
-    const pass = req.body.password;
-  
-    console.log("username is: "+ username);
-    console.log("password  is: "+ pass);
-  
-  
-    // db
-    // get the client
-    const mysql = require('mysql2');
-  
-    // create the connection to database
-    const connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: 'Wvfn9337',
-      database: 'assignment1'
-    });
-  
-  
-    // simple query
-  connection.query(
-    "SELECT * FROM users WHERE username = '"+username+"' AND pass = '"+pass+"' LIMIT 1;",
-    async function(err, results, fields) {
-   
-      console.log(results); // results contains rows returned by server
-  
-      console.log(results.length);
-  
-      
-      // sending back the result.
-      if(results.length == 1){
+        var username = req.body.username;
+        var password = req.body.password;
 
-        req.session.user = {
-          username: results[0].username,
-          email: results[0].email,
-          address: results[0].address
-        };
+        // var username = "test123";
+        // var password = "pass";
 
-        await req.session.save();
-  
-        //res.status(200).json("ok");
-        var acctype = results[0].acctype;
-        if(acctype == 'customer'){
-          res.status(200).json("customer")
-        }
-        else if(acctype == 'manager'){
-          res.status(200).json("manager")
-        }
-      } else {
+        getUser(username);
+
+        if (pass == password) {
+
+            req.session.user = username;
+
+            await req.session.save();
+
+            res.status(200).json(
+                {
+                    status: "OK"
+                }
+            )
        
-        res.status(200).json("fail");
-  
-      }
-     
-    }
-  );
-      
-  },{
-    cookieName: "myapp_cookiename",
-    password: "complex_password_at_least_32_characters_long",
-    // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
-    cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
+            return
+        }
+        else{
+            res.status(200).json(
+                {
+                    status: "Username or Password Incorrect"
+                }
+            )
+            return
+        }
     },
-  },
-
-
+    {
+        cookieName: process.env.COOKIE_NAME,
+        password: process.env.SESSION_PASSWORD,
+        cookieOptions: {
+          secure: process.env.NODE_ENV === "production",
+        },
+    }
 );
-   

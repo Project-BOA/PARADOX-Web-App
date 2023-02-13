@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
+import { withIronSessionSsr } from "iron-session/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,3 +41,29 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps = withIronSessionSsr(
+  async function getServerSideProps({ req }) {
+    if (req.session.user == undefined) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "login",
+        },
+      };
+    }
+
+    return {
+      props: {
+        user: req.session.user,
+      },
+    };
+  }, // -------------------- All boilerplate code for sessions ------------------------------------
+  {
+    cookieName: process.env.COOKIE_NAME,
+    password: process.env.SESSION_PASSWORD,
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  }
+);
