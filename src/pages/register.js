@@ -1,7 +1,7 @@
-import Head from "next/head";
-import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
 import { useRouter } from "next/router";
+
+import * as React from "react";
+
 import {
   NextUIProvider,
   Container,
@@ -10,47 +10,56 @@ import {
   Text,
   Col,
   Spacer,
-  Button,
   Input,
+  Button,
   Link,
   Grid,
+  Image,
 } from "@nextui-org/react";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export default function Login() {
-
+export default function Home({ data }) {
   const router = useRouter();
 
-  async function handleSubmit(event){
+  // Handle the submit for the form
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    
-    const data = {
+    // Send the data to the server in JSON format.
+    const data = JSON.stringify({
       username: event.target.username.value,
       password: event.target.password.value,
-    };
+      email: event.target.email.value,
+      address: event.target.address.value,
+    });
 
-    
+    // API endpoint where we send form data.
+    const endpoint = "/api/register";
 
+    // Form the request for sending data to the server.
     const options = {
+      // The method is POST because we are sending data.
       method: "POST",
+      // Tell the server we're sending JSON.
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      // Body of the request is the JSON data we created above.
+      body: data,
     };
 
-    console.log(options); 
+    // Send the form data to our forms API on Vercel and get a response.
+    const response = await fetch(endpoint, options);
 
-    const response = await fetch("api/login", options);
+    // Get the response data from server as JSON.
+    // If server returns the name submitted, that means the form works.
     const result = await response.json();
+
+    // redirect based on the result
     if (result.status == "OK") {
       router.push("/");
     } else {
-      alert("Status: " + result.status);
+      alert(result.status);
     }
-
   }
 
   return (
@@ -60,18 +69,19 @@ export default function Login() {
           <Card css={{ $$cardColor: "$colors$primary" }}>
             <Card.Body>
               <Text h6 align="center" size={25} color="white" css={{ m: 0 }}>
-                Welcome to PARADOX
+                PARADOX
               </Text>
             </Card.Body>
           </Card>
         </Row>
         <Spacer y={1} />
         <Row gap={1}>
+        
           <Col>
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>
-              <Text h6 align="center" size={18} color="white" css={{ m: 0 }}>
-                  Login
+                <Text h6 align="center" size={18} color="white" css={{ m: 0 }}>
+                  Register
                 </Text>
                 <Spacer y={1} />
                 <form onSubmit={handleSubmit}>
@@ -82,14 +92,30 @@ export default function Login() {
                     labelPlaceholder="Username"
                   />
                   <Spacer y={1.5} />
-                  <Input.Password
+                  <Input
                     fullWidth
                     id="password"
                     clearable
+                    type={"password"}
                     labelPlaceholder="Password"
                   />
                   <Spacer y={1.5} />
-                  <Grid.Container justify="center">
+                  <Input
+                    fullWidth
+                    id="email"
+                    clearable
+                    type={"email"}
+                    labelPlaceholder="Email"
+                  />
+                  <Spacer y={1.5} />
+                  <Input
+                    fullWidth
+                    id="address"
+                    clearable
+                    labelPlaceholder="Address"
+                  />
+                  <Spacer y={1.5} />
+                  <Grid.Container gap={1} justify="center">
                     <Grid>
                       <Button
                         auto
@@ -97,56 +123,29 @@ export default function Login() {
                         color="secondary"
                         css={{ marginLeft: "auto", marginRight: "auto" }}
                       >
-                        Login
+                        Submit
                       </Button>
                     </Grid>
-                    <Spacer y={0} />
                     <Grid>
-                      <Link href="register">
-                        <Button auto bordered color="secondary">
-                          Register
-                        </Button>
-                      </Link>
+                      <Button
+                        auto
+                        color="secondary"
+                        bordered
+                        as={Link}
+                        href="login"
+                        css={{ marginLeft: "auto", marginRight: "auto" }}
+                      >
+                        Back
+                      </Button>
                     </Grid>
                   </Grid.Container>
                 </form>
-                <Spacer y={1} />
-                <Link
-                  href="#forgot"
-                  block
-                  color="secondary"
-                  css={{ marginLeft: "auto", marginRight: "auto" }}
-                >
-                  Forgot password?
-                </Link>
               </Card.Body>
             </Card>
           </Col>
-          <Col>
-            <Card css={{ $$cardColor: "$colors$primary" }}>
-              <Card.Body>
-              <Text h6 align="center" size={18} color="white" css={{ m: 0 }}>
-                  New Here?
-                </Text>
-                <Spacer y={5} />
-                  <Grid.Container justify="center">
-                    <Grid>
-                      <Link href="register">
-                        <Button auto bordered color="secondary">
-                          Register
-                        </Button>
-                      </Link>
-                    </Grid>
-                  </Grid.Container>
-                <Spacer y={1} />
-              </Card.Body>
-            </Card>
-          </Col>
+        
         </Row>
       </Container>
     </NextUIProvider>
   );
-
-
- 
 }
