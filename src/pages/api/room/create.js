@@ -13,6 +13,7 @@ export default async function create(req, res) {
   // validate input
   // verify puzzle exists
   // check roomID does not already exist
+
   var puzzleID = req.body.puzzleID;
   var roomID = randomstring.generate(5).toUpperCase();
 

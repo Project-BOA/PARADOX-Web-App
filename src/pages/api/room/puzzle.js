@@ -7,14 +7,30 @@ const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
 export default async function handler(req, res) {
-  var puzzleID = req.body.puzzleID;
+  // TODO:
+  // validate input
+  // verify roomID exists
 
-  if (puzzleID == null) {
+  var roomID = req.body.roomID;
+
+  if (roomID == null) {
     res.status(400).json({
       status: "Invalid input",
     });
     return;
   }
+
+  var puzzleID;
+  await get(ref(db, "room/" + roomID + "/puzzleID"))
+    .then((snapshot) => {
+      puzzleID = snapshot.val();
+    })
+    .catch((error) => {
+      res.status(500).json({
+        status: "ERROR",
+      });
+      console.error(error);
+    });
 
   var puzzle;
   await get(ref(db, "puzzle/" + puzzleID))
@@ -22,6 +38,9 @@ export default async function handler(req, res) {
       puzzle = snapshot.toJSON();
     })
     .catch((error) => {
+      res.status(500).json({
+        status: "ERROR",
+      });
       console.error(error);
     });
 

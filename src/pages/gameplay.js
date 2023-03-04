@@ -26,7 +26,10 @@ listAll(listRef)
     });
   })
   .catch((error) => {
-    console.log(error);
+    res.status(500).json({
+      status: "ERROR",
+    });
+    console.error(error);
   });
 
 function nextSlide(nextRef) {
