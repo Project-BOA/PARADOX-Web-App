@@ -110,9 +110,9 @@ export default function Home({ data }) {
                   <Spacer y={1.5} />
                   <Input
                     fullWidth
-                    id="address"
+                    id="Bio"
                     clearable
-                    labelPlaceholder="Address"
+                    labelPlaceholder="Biography"
                   />
                   <Spacer y={1.5} />
                   <Grid.Container gap={1} justify="center">
