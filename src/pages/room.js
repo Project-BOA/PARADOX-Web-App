@@ -7,7 +7,7 @@ import { getDatabase, ref, onValue, remove, get } from "firebase/database";
 import React, { useState } from "react";
 import { useList, useListKeys } from "react-firebase-hooks/database";
 
-var config = require("../../Config.js");
+var config = require("../modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
@@ -89,6 +89,10 @@ export default function Home() {
                     </React.Fragment>
                   )}
                 </p>
+
+                <Button color={"secondary"}>
+                  <Link href="/gameplay">START</Link>
+                </Button>
               </Card.Body>
             </Card>
           </Col>

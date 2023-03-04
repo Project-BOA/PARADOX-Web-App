@@ -7,7 +7,9 @@ var config = require("../modules/config.js");
 const app = initializeApp(config.firebase);
 const storage = getStorage(app);
 
-const listRef = ref(storage, "RG23");
+var puzzleid = "RG23";
+
+const listRef = ref(storage, puzzleid);
 
 var i = 0;
 var fireImage = [];
