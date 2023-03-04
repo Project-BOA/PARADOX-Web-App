@@ -16,11 +16,13 @@ export default function Home() {
   var roomID = "TESTI";
 
   const removePlayer = (event, roomID, player) => {
-    remove(ref(db, "room/" + roomID + "/" + player));
+    remove(ref(db, "room/" + roomID + "/leaderboard/" + player));
     console.log("Room removed at ID: '" + roomID + " player at " + player);
   };
 
-  const [snapshots, loading, error] = useListKeys(ref(db, "room/" + roomID));
+  const [snapshots, loading, error] = useListKeys(
+    ref(db, "room/" + roomID + "/leaderboard")
+  );
 
   var players = [];
 
