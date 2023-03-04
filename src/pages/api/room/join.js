@@ -18,9 +18,7 @@ export default async function create(req, res) {
 
   console.log("User: '" + username + "' joined room with ID: '" + roomID + "'");
 
-  set(ref(db, "room/" + roomID + "/leaderboard"), {
-    username: 0,
-  });
+  set(ref(db, "room/" + roomID + "/leaderboard/" + username), 0);
 
   res.status(200).json({
     status: "OK",

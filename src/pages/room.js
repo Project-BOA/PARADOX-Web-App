@@ -1,11 +1,12 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { Container, Card, Row, Text, Col } from "@nextui-org/react";
-import { Input, Spacer, Link } from "@nextui-org/react";
+import { Spacer, Link } from "@nextui-org/react";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue, remove, get } from "firebase/database";
-import React, { useState } from "react";
-import { useList, useListKeys } from "react-firebase-hooks/database";
+import { getDatabase, ref, remove } from "firebase/database";
+import React from "react";
+import { useListKeys } from "react-firebase-hooks/database";
+import { useRouter } from "next/router";
 
 var config = require("../modules/config.js");
 
@@ -14,10 +15,15 @@ const db = getDatabase(app);
 
 export default function Home() {
   var roomID = "TESTI";
+  const router = useRouter();
 
   const removePlayer = (event, roomID, player) => {
     remove(ref(db, "room/" + roomID + "/leaderboard/" + player));
     console.log("Room removed at ID: '" + roomID + " player at " + player);
+    players.pop();
+    if (players.length == 0) {
+      router.push("/");
+    }
   };
 
   const [snapshots, loading, error] = useListKeys(
@@ -34,7 +40,7 @@ export default function Home() {
             <Card css={{ $$cardColor: "#CC083E" }}>
               <Card.Body>
                 <Text h1 size={60} css={{ m: 0 }} weight="bold" align="center">
-                  {roomID}
+                  {"Room ID: " + roomID}
                 </Text>
               </Card.Body>
             </Card>
@@ -48,21 +54,24 @@ export default function Home() {
           <Col>
             <Card css={{ $$cardColor: "#00764F" }}>
               <Card.Body>
-                <p>
+                <Text h1 size={30}>
                   {error && <strong>Error: {error}</strong>}
                   {loading && <span>List: Loading...</span>}
                   {!loading && snapshots && (
                     <React.Fragment>
                       <span>
                         Players:{""}
+                        <Spacer y={2.5} />
                         {snapshots.map((v) => {
+                          console.log("test");
                           if (players.includes(v) == false) {
-                            players.push(v);
                             return (
-                              <React.Fragment>
+                              <React.Fragment key={v}>
                                 <Button
+                                  align="center"
                                   color="error"
-                                  onClick={(event) =>
+                                  style={{ margin: "auto" }}
+                                  onPress={(event) =>
                                     removePlayer(event, roomID, v)
                                   }
                                 >
@@ -77,7 +86,7 @@ export default function Home() {
                       </span>
                     </React.Fragment>
                   )}
-                </p>
+                </Text>
 
                 <Button color={"secondary"}>
                   <Link href="/gameplay">START</Link>
