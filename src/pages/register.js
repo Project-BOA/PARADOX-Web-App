@@ -33,7 +33,7 @@ export default function Home({ data }) {
     });
 
     // API endpoint where we send form data.
-    const endpoint = "/api/register";
+    const endpoint = "/api/profile/register";
 
     // Form the request for sending data to the server.
     const options = {

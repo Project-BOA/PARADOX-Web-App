@@ -22,6 +22,35 @@ import {
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  async function handleSubmit(event){
+    event.preventDefault();
+
+    
+    const data = {
+      
+    };
+
+    
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+
+    console.log(options); 
+
+    const response = await fetch("api/create", options);
+    const result = await response.json();
+    if (result.status == "OK") {
+      router.push("/room");
+    } else {
+      alert("Status: " + result.status);
+    }
+
+  }
   return (
     <>
     <NextUIProvider>
