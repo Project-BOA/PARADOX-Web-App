@@ -1,17 +1,17 @@
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
+import { getDatabase, onValue } from "firebase/database";
 
 var config = require("../modules/config.js");
 
 const app = initializeApp(config.firebase);
 const storage = getStorage(app);
-
+const db = getDatabase(app);
 var puzzleid = "RG23";
 
 const listRef = ref(storage, puzzleid);
 
-var i = 0;
 var fireImage = [];
 
 listAll(listRef)
@@ -22,6 +22,7 @@ listAll(listRef)
     });
     res.items.forEach((itemRef) => {
       // All the items under listRef.
+      //console.log(itemRef + "\n");
       getImageRef(itemRef);
     });
   })
@@ -29,8 +30,8 @@ listAll(listRef)
     console.log(error);
   });
 
-function nextSlide(nextRef) {
-  getDownloadURL(nextRef).then((url) => {
+async function nextSlide(nextRef) {
+  await getDownloadURL(nextRef).then((url) => {
     const img = document.getElementById("myimg");
     img.setAttribute("src", url);
   });
@@ -47,8 +48,11 @@ function Replace() {
 
 export default function gameplay() {
   var time = 5;
+  var i = 0;
+
   return (
     <div id="container">
+      {}
       <CountdownCircleTimer
         isPlaying
         duration={time}
@@ -60,7 +64,7 @@ export default function gameplay() {
             return { shouldRepeat: false }; // repeat animation in 1.5 seconds
           }
           nextSlide(fireImage[i++]);
-          console.log(i);
+
           return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
         }}
       >
@@ -68,10 +72,12 @@ export default function gameplay() {
       </CountdownCircleTimer>
 
       <img
+        src="/Loading_icon.gif"
         id="myimg"
         alt={"Puzzle image: " + fireImage[i]}
         width="500"
         height="500"
+        object-fit="cover"
       ></img>
     </div>
   );
