@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue } from "firebase/database";
 
-var config = require("../../../Config.js");
+var config = require("../../../modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
   var leaderboard;
   await get(ref(db, "room/" + roomId + "/leaderboard"), (snapshot) => {
-    leaderboard = snapshot.val();
+    leaderboard = snapshot.toJSON();
   });
 
   if (leaderboard == null) {

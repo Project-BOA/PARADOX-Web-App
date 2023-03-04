@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get } from "firebase/database";
 
-var config = require("../../../Config.js");
+var config = require("../../../modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
@@ -17,6 +17,7 @@ export default async function handler(req, res) {
   var answer = req.body.answer;
   var roomID = req.body.roomID;
 
+  // get the room as a JSON object
   var room;
   await get(ref(db, "room/" + roomID))
     .then((snapshot) => {
@@ -63,16 +64,6 @@ export default async function handler(req, res) {
   if (answer == puzzleAnswer) {
     set(ref(db, "room/" + roomID + "/" + username), {
       score: room[username].score + 5,
-    }).catch((error) => {
-      res.status(500).json({
-        status: "ERROR",
-      });
-      console.error(error);
-    });
-  }
-  else{
-    set(ref(db, "room/" + roomID + "/" + username), {
-      score: room[username].score + 0,
     }).catch((error) => {
       res.status(500).json({
         status: "ERROR",
