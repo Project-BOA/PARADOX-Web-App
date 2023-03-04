@@ -9,17 +9,19 @@ const db = getDatabase(app);
 export default async function handler(req, res) {
   var username = req.body.username;
   var password = req.body.password;
+  var email = req.body.email;
   var biography = req.body.biography;
 
-  if (
-    username == null ||
-    password == null ||
-    biography == null // biography mandatory?
-  ) {
+  if (username == null || password == null || email == null) {
     res.status(400).json({
       status: "Invalid input",
     });
     return;
+  }
+
+  // biography not mandatory: default is "No Biography"
+  if (biography == null) {
+    biography = "No Biography";
   }
 
   await get(ref(db, "users/" + username))
@@ -32,6 +34,7 @@ export default async function handler(req, res) {
       } else {
         set(ref(db, "users/" + username), {
           password: password,
+          email: email,
           biography: biography,
         }).catch((error) => {
           console.error(error);
