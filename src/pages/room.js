@@ -12,30 +12,15 @@ var config = require("../modules/config.js");
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
-// function removePlayer(roomID, player) {
-//   // get(ref(db, "room/" + roomID + "/" + player)).then((snapshot) => {
-//   //   if (snapshot.exists()) {
-//   //     console.log("efe");
-//   //   } else {
-//   //     console.log("Room does not exist");
-//   //   }
-//   // });
-
-//   remove(ref(db, "room/" + roomID + "/" + player));
-//   console.log("Room removed at ID: '" + roomID + " player at " + player);
-// }
-
 export default function Home() {
   var roomID = "TESTI";
 
   const removePlayer = (event, roomID, player) => {
-    remove(ref(db, "room/" + roomID + "/leaderboard/" + player));
+    remove(ref(db, "room/" + roomID + "/" + player));
     console.log("Room removed at ID: '" + roomID + " player at " + player);
   };
 
-  const [snapshots, loading, error] = useListKeys(
-    ref(db, "room/" + roomID + "/leaderboard")
-  );
+  const [snapshots, loading, error] = useListKeys(ref(db, "room/" + roomID));
 
   var players = [];
 
@@ -72,7 +57,6 @@ export default function Home() {
                           if (players.includes(v) == false) {
                             players.push(v);
                             return (
-                              // eslint-disable-next-line react/jsx-key
                               <React.Fragment>
                                 <Button
                                   color="error"
@@ -106,32 +90,4 @@ export default function Home() {
       </Container>
     </NextUIProvider>
   );
-}
-
-export async function getServerSideProps() {
-  const JSONdata = JSON.stringify({ roomID: "TESTI" });
-
-  // API endpoint where we send form data.
-  const endpoint = "http://localhost:3000/api/room/";
-
-  // Form the request for sending data to the server.
-  const options = {
-    // The method is POST because we are sending data.
-    method: "POST",
-    // Tell the server we're sending JSON.
-    headers: {
-      "Content-Type": "application/json",
-    },
-    // Body of the request is the JSON data we created above.
-    body: JSONdata,
-  };
-
-  const res = await fetch(endpoint, options);
-
-  //const res = await fetch(`http://localhost:3000/api/room/`);
-  const players = await res.json();
-
-  return {
-    props: { players },
-  };
 }
