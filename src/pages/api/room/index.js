@@ -7,8 +7,10 @@ const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
 export default async function handler(req, res) {
+  // TODO:
+  // validate input
+
   var roomID = req.body.roomID;
-  var room;
 
   await get(ref(db, "room/" + roomID))
     .then((snapshot) => {

@@ -7,38 +7,45 @@ const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
 export default async function handler(req, res) {
-  var username = req.body.username;
-  var password = req.body.password;
+  // TODO:
+  // validate input
+  // verify roomID exists
 
-  if (username == null || password == null) {
+  var roomID = req.body.roomID;
+
+  if (roomID == null) {
     res.status(400).json({
       status: "Invalid input",
     });
     return;
   }
 
-  var user;
-  await get(ref(db, "users/" + username))
+  var puzzleID;
+  await get(ref(db, "room/" + roomID + "/puzzleID"))
     .then((snapshot) => {
-      user = snapshot.toJSON();
+      puzzleID = snapshot.val();
     })
     .catch((error) => {
-      console.error(error);
       res.status(500).json({
         status: "ERROR",
       });
+      console.error(error);
     });
 
-  if (user == null || user.password != password) {
-    res.status(400).json({
-      status: "Username or Password Incorrect",
+  var puzzle;
+  await get(ref(db, "puzzle/" + puzzleID))
+    .then((snapshot) => {
+      puzzle = snapshot.toJSON();
+    })
+    .catch((error) => {
+      res.status(500).json({
+        status: "ERROR",
+      });
+      console.error(error);
     });
-    return;
-  }
 
   res.status(200).json({
     status: "OK",
-    email: user.email,
-    biography: user.biography,
+    puzzle: puzzle,
   });
 }
