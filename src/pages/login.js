@@ -101,16 +101,10 @@ export default function Login() {
                       </Button>
                     </Grid>
                     <Spacer y={0} />
-                    <Grid>
-                      <Link href="register">
-                        <Button auto bordered color="secondary">
-                          Register
-                        </Button>
-                      </Link>
-                    </Grid>
+            
                   </Grid.Container>
                 </form>
-                <Spacer y={1} />
+               
                 <Link
                   href="#forgot"
                   block
