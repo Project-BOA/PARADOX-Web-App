@@ -75,7 +75,7 @@ export default function gameplay() {
       </CountdownCircleTimer>
 
       <img
-        src="/Loading_icon.gif"
+        src="/image/Loading_icon.gif"
         id="myimg"
         alt={"Puzzle image: " + fireImage[i]}
         width="500"

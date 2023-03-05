@@ -34,7 +34,7 @@ export default function Room() {
   };
 
   const [snapshots, loading, error] = useListKeys(
-    ref(db, "room/" + roomID + "/leaderboard")
+    ref(db, "room/" + roomID + "/leaderboard/")
   );
 
   var players = [];
