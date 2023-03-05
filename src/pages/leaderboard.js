@@ -18,6 +18,7 @@ export default function Leaderboard() {
   const { roomID } = router.query;
 
   function Leaderboard() {
+    var players = [];
     const [snapshots, loading, error] = useList(
       ref(db, "room/" + roomID + "/leaderboard")
     );
@@ -45,14 +46,17 @@ export default function Leaderboard() {
                 var name = snap.key;
                 var position = index + 1;
                 var score = snap.val();
-                return (
-                  <React.Fragment key={name}>
-                    <span>
-                      {position}. {name} - {score} points
-                    </span>
-                    <Spacer y={2.5} />
-                  </React.Fragment>
-                );
+                if (!players.contains(name)) {
+                  players.push(name);
+                  return (
+                    <React.Fragment key={name}>
+                      <span>
+                        {position}. {name} - {score} points
+                      </span>
+                      <Spacer y={2.5} />
+                    </React.Fragment>
+                  );
+                }
               })}
           </React.Fragment>
         )}
@@ -82,7 +86,6 @@ export default function Leaderboard() {
     }
   }
 
-  var players = [];
   return (
     <NextUIProvider>
       <Container gap={0}>
