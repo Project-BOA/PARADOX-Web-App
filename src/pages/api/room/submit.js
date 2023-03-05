@@ -51,7 +51,9 @@ export default async function handler(req, res) {
       if (snapshot.exists()) {
         puzzleAnswer = snapshot.val();
       } else {
-        console.log("No answer available");
+        res.status(500).json({
+          status: "No answer available",
+        });
       }
     })
     .catch((error) => {
@@ -62,9 +64,10 @@ export default async function handler(req, res) {
     });
 
   if (answer == puzzleAnswer) {
-    set(ref(db, "room/" + roomID + "/" + username), {
-      score: room[username].score + 5,
-    }).catch((error) => {
+    set(
+      ref(db, "room/" + roomID + "/leaderboard/" + username),
+      room.leaderboard[username] + 5
+    ).catch((error) => {
       res.status(500).json({
         status: "ERROR",
       });
@@ -74,7 +77,7 @@ export default async function handler(req, res) {
 
   res.status(200).json({
     status: "OK",
-    score: room[username].score,
+    score: room.leaderboard[username],
     puzzleID: room.puzzleID,
   });
 }
