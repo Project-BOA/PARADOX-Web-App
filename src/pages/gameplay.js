@@ -55,7 +55,7 @@ function getImageRef(imageRef) {
   fireImage.push(imageRef);
 }
 
-export default function gameplay() {
+export default function Gameplay() {
   var time = 1;
   var i = 0;
   const router = useRouter();
