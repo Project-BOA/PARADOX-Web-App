@@ -24,7 +24,11 @@ export default function Leaderboard() {
     );
     return (
       <>
-        {error && <strong>Error: {error}</strong>}
+        {error && (
+          <Text h2 size={30} weight="bold" align="center">
+            Error: {error}
+          </Text>
+        )}
         {loading && (
           <Text h2 size={30} align="center">
             Loading Leaderboard...
@@ -50,9 +54,9 @@ export default function Leaderboard() {
                   players.push(name);
                   return (
                     <React.Fragment key={name}>
-                      <span>
+                      <Text h3 size={25}>
                         {position}. {name} - {score} points
-                      </span>
+                      </Text>
                       <Spacer y={2.5} />
                     </React.Fragment>
                   );
