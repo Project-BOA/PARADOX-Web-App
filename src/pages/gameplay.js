@@ -2,6 +2,9 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";
 import { getDatabase, onValue } from "firebase/database";
+import { NextUIProvider, Button, Link } from "@nextui-org/react";
+
+import { useRouter } from "next/router";
 
 var config = require("../modules/config.js");
 
@@ -46,42 +49,46 @@ function getImageRef(imageRef) {
 
 function Replace() {
   document.getElementById("container").innerHTML =
-    "The Puzzle is Complete <br></br> See your Score Here: <br></br>";
+    "The Puzzle is Complete <br></br> See the leaderboard here <br></br>";
 }
-
 export default function gameplay() {
-  var time = 5;
+  var time = 1;
   var i = 0;
+  const router = useRouter();
 
   return (
-    <div id="container">
-      {}
-      <CountdownCircleTimer
-        isPlaying
-        duration={time}
-        colors={["#000C66", "#F7B801", "#A30000"]}
-        colorsTime={[2, 1, 0]}
-        onComplete={() => {
-          if (i == fireImage.length - 1) {
-            Replace();
-            return { shouldRepeat: false }; // repeat animation in 1.5 seconds
-          }
-          nextSlide(fireImage[i++]);
+    <NextUIProvider>
+      <div id="container">
+        {}
+        <CountdownCircleTimer
+          isPlaying
+          duration={time}
+          colors={["#000C66", "#F7B801", "#A30000"]}
+          colorsTime={[2, 1, 0]}
+          onComplete={() => {
+            if (i == fireImage.length - 1) {
+              Replace();
 
-          return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
-        }}
-      >
-        {({ remainingTime }) => remainingTime}
-      </CountdownCircleTimer>
+              router.push("/leaderboard");
+              return { shouldRepeat: false }; // repeat animation in 1.5 seconds
+            }
+            nextSlide(fireImage[i++]);
 
-      <img
-        src="/image/Loading_icon.gif"
-        id="myimg"
-        alt={"Puzzle image: " + fireImage[i]}
-        width="500"
-        height="500"
-        object-fit="cover"
-      ></img>
-    </div>
+            return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
+          }}
+        >
+          {({ remainingTime }) => remainingTime}
+        </CountdownCircleTimer>
+
+        <img
+          src="/image/Loading_icon.gif"
+          id="myimg"
+          alt={"Puzzle image: " + fireImage[i]}
+          width="500"
+          height="500"
+          object-fit="cover"
+        ></img>
+      </div>
+    </NextUIProvider>
   );
 }
