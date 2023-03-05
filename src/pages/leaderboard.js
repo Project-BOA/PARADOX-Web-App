@@ -46,7 +46,7 @@ export default function Leaderboard() {
                 var name = snap.key;
                 var position = index + 1;
                 var score = snap.val();
-                if (!players.contains(name)) {
+                if (!players.includes(name)) {
                   players.push(name);
                   return (
                     <React.Fragment key={name}>
