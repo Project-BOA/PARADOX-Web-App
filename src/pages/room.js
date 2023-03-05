@@ -6,14 +6,16 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, remove, get } from "firebase/database";
 import React, { useState } from "react";
 import { useList, useListKeys } from "react-firebase-hooks/database";
+import { useRouter } from "next/router";
 
 var config = require("../modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
-export default function Home() {
-  var roomID = "TESTI";
+export default function Room() {
+  const router = useRouter();
+  const roomID = router.query.roomID;
 
   const removePlayer = (event, roomID, player) => {
     remove(ref(db, "room/" + roomID + "/" + player));
@@ -55,12 +57,13 @@ export default function Home() {
                         Players:{""}
                         {snapshots.map((v) => {
                           if (players.includes(v) == false) {
-                            players.push(v);
                             return (
-                              <React.Fragment>
+                              <React.Fragment key={v}>
                                 <Button
+                                  align="center"
                                   color="error"
-                                  onClick={(event) =>
+                                  style={{ margin: "auto" }}
+                                  onPress={(event) =>
                                     removePlayer(event, roomID, v)
                                   }
                                 >
