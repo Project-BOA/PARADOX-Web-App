@@ -18,11 +18,11 @@ export default function Room() {
 
   const roomID = router.query.roomID;
 
-  if (process.browser) {
-    if (roomID == undefined) {
-      router.push("/app");
-    }
-  }
+  //   if (process.browser) {
+  //     if (roomID == undefined) {
+  //       router.push("/app");
+  //     }
+  //   }
 
   const removePlayer = (event, roomID, player) => {
     remove(ref(db, "room/" + roomID + "/leaderboard/" + player));
@@ -70,12 +70,13 @@ export default function Room() {
                         <Spacer y={2.5} />
                         {snapshots.map((v) => {
                           if (!players.includes(v)) {
+                            players.push(v);
                             return (
                               <React.Fragment key={v}>
                                 <Button
                                   align="center"
                                   color="error"
-                                  style={{ margin: "auto" }}
+                                  style={{ margin: "auto", fontSize: "20px" }}
                                   onPress={(event) =>
                                     removePlayer(event, roomID, v)
                                   }
