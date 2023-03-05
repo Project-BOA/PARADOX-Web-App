@@ -93,10 +93,9 @@ export default function Room() {
                     </React.Fragment>
                   )}
                 </Text>
-
-                <Button color={"secondary"}>
-                  <Link href="/gameplay">START</Link>
-                </Button>
+                <Link href={"/gameplay?roomID=" + roomID}>
+                  <Button color={"secondary"}>START</Button>
+                </Link>
               </Card.Body>
             </Card>
           </Col>
