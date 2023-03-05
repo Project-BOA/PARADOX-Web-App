@@ -45,7 +45,7 @@ export default function Room() {
         {!loading && snapshots && (
           <React.Fragment>
             <Text h2 size={30} align="center">
-              Players: {roomID}
+              Players
             </Text>
             <Spacer y={2.5} />
             {snapshots.map((v) => {

@@ -19,6 +19,7 @@ export default function Leaderboard() {
 
   function Leaderboard() {
     var players = [];
+    var position = 1;
     const [snapshots, loading, error] = useList(
       ref(db, "room/" + roomID + "/leaderboard")
     );
@@ -37,7 +38,7 @@ export default function Leaderboard() {
         {!loading && snapshots && (
           <React.Fragment>
             <Text h2 size={30} align="center">
-              Leaderboard: {roomID}
+              Leaderboard
             </Text>
             <Spacer y={2.5} />
             {snapshots
@@ -48,14 +49,13 @@ export default function Leaderboard() {
               })
               .map((snap, index) => {
                 var name = snap.key;
-                var position = index + 1;
                 var score = snap.val();
                 if (!players.includes(name)) {
                   players.push(name);
                   return (
                     <React.Fragment key={name}>
                       <Text h3 size={25}>
-                        {position}. {name} - {score} points
+                        {position++}. {name} - {score} points
                       </Text>
                       <Spacer y={2.5} />
                     </React.Fragment>
