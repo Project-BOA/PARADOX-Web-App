@@ -76,7 +76,6 @@ export default function Home({ data }) {
         </Row>
         <Spacer y={1} />
         <Row gap={1}>
-        
           <Col>
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>
@@ -143,7 +142,6 @@ export default function Home({ data }) {
               </Card.Body>
             </Card>
           </Col>
-        
         </Row>
       </Container>
     </NextUIProvider>
