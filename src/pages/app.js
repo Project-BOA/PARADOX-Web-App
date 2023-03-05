@@ -25,8 +25,6 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const router = useRouter();
 
-  console.log(router.query);
-
   async function getRoom(puzzleID) {
     const data = {
       puzzleID: puzzleID,
@@ -45,7 +43,7 @@ export default function Home() {
     const response = await fetch("api/room/create", options);
     const result = await response.json();
     if (result.status == "OK") {
-      router.push({ pathname: "/room", query: result });
+      router.push({ pathname: "/room", query: { roomID: result.roomID } });
     } else {
       alert("Status: " + result.status);
     }
@@ -58,11 +56,11 @@ export default function Home() {
           <Navbar.Brand>
             <Link href="/">
               <Image
-                width={182}
-                height={64}
+                width={188}
+                height={75}
                 src="/image/penrose-triangle-PARADOX-text.png"
                 alt=" Logo"
-                objectFit="cover"
+                style={{ objectFit: "cover" }}
               />
             </Link>
           </Navbar.Brand>
@@ -74,132 +72,122 @@ export default function Home() {
           <Navbar.Content>
             <Navbar.Item>
               <Text h6 align="right" size={25} color="white" css={{ m: 0 }}>
-                Welcome{" "}
-                <User
-                  src="https://media.istockphoto.com/id/1311634222/photo/portrait-of-successful-black-male-modern-day-student-holding-smartphone.jpg"
-                  name="Benji"
-                />
+                <User src="/image/user_icon.png" name="Benji" />
               </Text>
             </Navbar.Item>
           </Navbar.Content>
         </Navbar>
 
         <Spacer y={1} />
+
         <Container>
-          <Spacer y={1} />
           <Row gap={1}>
-            <Col>
-              <Card css={{ $$cardColor: "$colors$primary" }}>
-                <Card.Body>
-                  <Grid.Container gap={2} justify="center">
-                    <Grid xs={4}>
-                      <Card css={{ mw: "330px" }}>
-                        <Card.Header>
-                          <Text
-                            css={{ marginLeft: "auto", marginRight: "auto" }}
-                            b
-                          >
-                            Puzzle 1
-                          </Text>
-                        </Card.Header>
-                        <Card.Divider />
-                        <Card.Body css={{ py: "$10" }}>
-                          <Image
-                            width={300}
-                            height={300}
-                            src="/image/puzzle.jpg"
-                            alt=" Logo"
-                            objectFit="cover"
-                          />
-                        </Card.Body>
-                        <Card.Divider />
-                        <Card.Footer>
-                          <Row justify="flex-end">
-                            <Button
-                              onClick={(event) => {
-                                getRoom("RG23");
-                              }}
-                              size="sm"
-                              css={{ marginLeft: "auto", marginRight: "auto" }}
-                            >
-                              Start
-                            </Button>
-                          </Row>
-                        </Card.Footer>
-                      </Card>
-                    </Grid>
-                    <Grid xs={4}>
-                      <Card css={{ mw: "330px" }}>
-                        <Card.Header>
-                          <Text
-                            css={{ marginLeft: "auto", marginRight: "auto" }}
-                            b
-                          >
-                            Puzzle 2
-                          </Text>
-                        </Card.Header>
-                        <Card.Divider />
-                        <Card.Body css={{ py: "$10" }}>
-                          <Image
-                            width={300}
-                            height={300}
-                            src="/image/puzzle.jpg"
-                            alt=" Logo"
-                            objectFit="cover"
-                          />
-                        </Card.Body>
-                        <Card.Divider />
-                        <Card.Footer>
-                          <Row justify="flex-end">
-                            <Button
-                              onClick={getRoom}
-                              size="sm"
-                              css={{ marginLeft: "auto", marginRight: "auto" }}
-                            >
-                              Start
-                            </Button>
-                          </Row>
-                        </Card.Footer>
-                      </Card>
-                    </Grid>
-                    <Grid xs={4}>
-                      <Card css={{ mw: "330px" }}>
-                        <Card.Header>
-                          <Text
-                            css={{ marginLeft: "auto", marginRight: "auto" }}
-                            b
-                          >
-                            Puzzle 3
-                          </Text>
-                        </Card.Header>
-                        <Card.Divider />
-                        <Card.Body css={{ py: "$10" }}>
-                          <Image
-                            width={300}
-                            height={300}
-                            src="/image/puzzle.jpg"
-                            alt=" Logo"
-                            objectFit="cover"
-                          />
-                        </Card.Body>
-                        <Card.Divider />
-                        <Card.Footer>
-                          <Row justify="flex-end">
-                            <Button
-                              onClick={getRoom}
-                              size="sm"
-                              css={{ marginLeft: "auto", marginRight: "auto" }}
-                            >
-                              Start
-                            </Button>
-                          </Row>
-                        </Card.Footer>
-                      </Card>
-                    </Grid>
-                  </Grid.Container>
-                </Card.Body>
-              </Card>
-            </Col>
+            <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card.Body>
+                <Grid.Container gap={2} justify="center">
+                  <Card css={{ mw: "330px" }}>
+                    <Card.Header>
+                      <Text css={{ marginLeft: "auto", marginRight: "auto" }} b>
+                        T45
+                      </Text>
+                    </Card.Header>
+
+                    <Card.Divider />
+
+                    <Card.Body css={{ py: "$10" }}>
+                      <Image
+                        width={300}
+                        height={300}
+                        src="/image/default_puzzle_image.png"
+                        alt=" Logo"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </Card.Body>
+
+                    <Card.Divider />
+
+                    <Card.Footer>
+                      <Row justify="flex-end">
+                        <Button
+                          onClick={(event) => {
+                            getRoom("T45");
+                          }}
+                          size="sm"
+                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                        >
+                          Start
+                        </Button>
+                      </Row>
+                    </Card.Footer>
+                  </Card>
+                  <Spacer x={4} />
+                  <Card css={{ mw: "330px" }}>
+                    <Card.Header>
+                      <Text css={{ marginLeft: "auto", marginRight: "auto" }} b>
+                        RG23
+                      </Text>
+                    </Card.Header>
+                    <Card.Divider />
+                    <Card.Body css={{ py: "$10" }}>
+                      <Image
+                        width={300}
+                        height={300}
+                        src="/image/default_puzzle_image.png"
+                        alt=" Logo"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </Card.Body>
+                    <Card.Divider />
+                    <Card.Footer>
+                      <Row justify="flex-end">
+                        <Button
+                          onClick={(event) => {
+                            getRoom("RG23");
+                          }}
+                          size="sm"
+                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                        >
+                          Start
+                        </Button>
+                      </Row>
+                    </Card.Footer>
+                  </Card>
+                  <Spacer x={4} />
+                  <Card css={{ mw: "330px" }}>
+                    <Card.Header>
+                      <Text css={{ marginLeft: "auto", marginRight: "auto" }} b>
+                        A97
+                      </Text>
+                    </Card.Header>
+                    <Card.Divider />
+                    <Card.Body css={{ py: "$10" }}>
+                      <Image
+                        width={300}
+                        height={300}
+                        src="/image/default_puzzle_image.png"
+                        alt=" Logo"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </Card.Body>
+
+                    <Card.Divider />
+                    <Card.Footer>
+                      <Row justify="flex-end">
+                        <Button
+                          onClick={(event) => {
+                            getRoom("A97");
+                          }}
+                          size="sm"
+                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                        >
+                          Start
+                        </Button>
+                      </Row>
+                    </Card.Footer>
+                  </Card>
+                </Grid.Container>
+              </Card.Body>
+            </Card>
           </Row>
         </Container>
       </NextUIProvider>

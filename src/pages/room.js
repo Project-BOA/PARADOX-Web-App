@@ -15,7 +15,14 @@ const db = getDatabase(app);
 
 export default function Room() {
   const router = useRouter();
+
   const roomID = router.query.roomID;
+
+  if (process.browser) {
+    if (roomID == undefined) {
+      router.push("/app");
+    }
+  }
 
   const removePlayer = (event, roomID, player) => {
     remove(ref(db, "room/" + roomID + "/leaderboard/" + player));
@@ -31,7 +38,6 @@ export default function Room() {
   );
 
   var players = [];
-
   return (
     <NextUIProvider>
       <Container gap={0}>
@@ -56,15 +62,14 @@ export default function Room() {
               <Card.Body>
                 <Text h1 size={30}>
                   {error && <strong>Error: {error}</strong>}
-                  {loading && <span>List: Loading...</span>}
+                  {loading && <span>Loading Room...</span>}
                   {!loading && snapshots && (
                     <React.Fragment>
                       <span>
                         Players:{""}
                         <Spacer y={2.5} />
                         {snapshots.map((v) => {
-                          console.log("test");
-                          if (players.includes(v) == false) {
+                          if (!players.includes(v)) {
                             return (
                               <React.Fragment key={v}>
                                 <Button
