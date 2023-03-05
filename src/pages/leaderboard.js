@@ -32,7 +32,7 @@ export default function Leaderboard() {
         {!loading && snapshots && (
           <React.Fragment>
             <Text h2 size={30} align="center">
-              Leaderboard
+              Leaderboard: {roomID}
             </Text>
             <Spacer y={2.5} />
             {snapshots
@@ -62,7 +62,7 @@ export default function Leaderboard() {
 
   async function endRoom() {
     const data = {
-      roomId: roomID,
+      roomID: roomID,
     };
 
     const options = {

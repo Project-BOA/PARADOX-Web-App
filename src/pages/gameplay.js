@@ -14,7 +14,6 @@ const db = getDatabase(app);
 const storage = getStorage(app);
 var fireImage = [];
 
-//var puzzleid = "RG23";
 async function getPuzzle(roomID) {
   var puzzleID;
 
@@ -66,7 +65,7 @@ export default function gameplay() {
   return (
     <NextUIProvider>
       <Grid.Container gap={2} justify="center">
-        <Grid xs={4}>{roomID}</Grid>
+        <Grid xs={4}></Grid>
         <Grid xs={4}>
           <img
             src="/image/Loading_icon.gif"
@@ -86,7 +85,7 @@ export default function gameplay() {
             colorsTime={[2, 1, 0]}
             onComplete={() => {
               if (i == fireImage.length - 1) {
-                router.push("/leaderboard");
+                router.push("/leaderboard?roomID=" + roomID);
                 return { shouldRepeat: false }; // repeat animation in 1.5 seconds
               }
               nextSlide(fireImage[i++]);
