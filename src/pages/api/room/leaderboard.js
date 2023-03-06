@@ -8,6 +8,7 @@ const db = getDatabase(app);
 
 export default async function handler(req, res) {
   // TODO:
+  // verify room exists
   // validate input
 
   var roomID = req.body.roomID;
@@ -28,9 +29,10 @@ export default async function handler(req, res) {
           if (a[1] > b[1]) return -1;
           return 0;
         })
-        .map((item, index) => ({
-          name: item[0],
+        .map((entry, index) => ({
           position: index + 1,
+          name: entry[0],
+          score: entry[1],
         }));
     })
     .catch((error) => {
@@ -38,14 +40,12 @@ export default async function handler(req, res) {
       res.status(500).json({
         status: "ERROR",
       });
-      return;
     });
 
   if (leaderboard == null) {
     res.status(400).json({
       status: "Unknown Room ID",
     });
-    return;
   }
 
   res.status(200).json({
