@@ -43,16 +43,14 @@ export default async function handler(req, res) {
       roomID +
       "'"
   );
-
-  // check answer
-  var puzzleAnswer;
-  await get(ref(db, "puzzle/" + room.puzzleID + "/answer"))
+  var puzzleType;
+  await get(ref(db, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        puzzleAnswer = snapshot.val();
+        puzzleType = snapshot.val();
       } else {
         res.status(500).json({
-          status: "No answer available",
+          status: "No puzzle type available",
         });
       }
     })
@@ -63,16 +61,82 @@ export default async function handler(req, res) {
       console.error(error);
     });
 
-  if (answer == puzzleAnswer) {
-    set(
-      ref(db, "room/" + roomID + "/leaderboard/" + username),
-      room.leaderboard[username] + 5
-    ).catch((error) => {
-      res.status(500).json({
-        status: "ERROR",
+  if (puzzleType == "multi") {
+    var puzzleAnswers;
+    await get(ref(db, "puzzle/" + room.puzzleID + "/answers"))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          puzzleAnswers = snapshot.toJSON();
+        } else {
+          res.status(500).json({
+            status: "No answer available",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
       });
-      console.error(error);
-    });
+  } else {
+    // check answer
+    var puzzleAnswer;
+    await get(ref(db, "puzzle/" + room.puzzleID + "/answer"))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          puzzleAnswer = snapshot.val();
+        } else {
+          res.status(500).json({
+            status: "No answer available",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
+      });
+  }
+  if (puzzleType == "time") {
+    if (answer == puzzleAnswer) {
+      set(
+        ref(db, "room/" + roomID + "/leaderboard/" + username),
+        room.leaderboard[username] + room.points
+      ).catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
+      });
+    }
+  } else if (puzzleType == "single") {
+    if (answer == puzzleAnswer) {
+      set(
+        ref(db, "room/" + roomID + "/leaderboard/" + username),
+        room.leaderboard[username] + 100
+      ).catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
+      });
+    }
+  } else if (puzzleType == "multi") {
+    //user can guess any answer at any time
+    //wrong answers reduce points
+    if (answer == puzzleAnswers.overall) {
+      set(
+        ref(db, "room/" + roomID + "/leaderboard/" + username),
+        room.leaderboard[username] + 100
+      ).catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
+      });
+    }
   }
 
   res.status(200).json({
