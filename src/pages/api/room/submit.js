@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, update } from "firebase/database";
+import { use } from "react";
 
 var config = require("../../../modules/config.js");
 
@@ -43,6 +44,8 @@ export default async function handler(req, res) {
       roomID +
       "'"
   );
+
+  console.log(room.leaderboard[username]);
   var puzzleType;
   await get(ref(db, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
@@ -61,6 +64,7 @@ export default async function handler(req, res) {
       console.error(error);
     });
 
+  // check answer
   if (puzzleType == "multi") {
     var puzzleAnswers;
     await get(ref(db, "puzzle/" + room.puzzleID + "/answers"))
@@ -99,6 +103,7 @@ export default async function handler(req, res) {
         console.error(error);
       });
   }
+
   if (puzzleType == "time") {
     if (answer == puzzleAnswer) {
       set(
@@ -124,18 +129,53 @@ export default async function handler(req, res) {
       });
     }
   } else if (puzzleType == "multi") {
-    //user can guess any answer at any time
-    //wrong answers reduce points
-    if (answer == puzzleAnswers.overall) {
-      set(
-        ref(db, "room/" + roomID + "/leaderboard/" + username),
-        room.leaderboard[username] + 100
-      ).catch((error) => {
-        res.status(500).json({
-          status: "ERROR",
+    if (!room.leaderboard[username].hasOwnProperty("solved")) {
+      room.leaderboard[username].solved = {};
+    }
+
+    if (!room.leaderboard[username].solved.hasOwnProperty(answer)) {
+      if (answer == puzzleAnswers.overall) {
+        set(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
+          score: room.leaderboard[username].score + 100,
+          solved: room.leaderboard[username].solved,
+          //solved: answer,
+        }).catch((error) => {
+          res.status(500).json({
+            status: "ERROR with Multi Puzzle",
+          });
         });
-        console.error(error);
-      });
+      } else {
+        if (puzzleAnswers.partial.hasOwnProperty(answer)) {
+          room.leaderboard[username].solved[answer] =
+            puzzleAnswers.partial[answer];
+
+          set(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
+            score:
+              room.leaderboard[username].score + puzzleAnswers.partial[answer],
+            solved: room.leaderboard[username].solved,
+          }).catch((error) => {
+            res.status(500).json({
+              status: "ERROR with answer",
+            });
+            console.error(error);
+          });
+        } else {
+          var score = room.leaderboard[username].score;
+          score -= 50;
+          if (score <= 0) {
+            score = 0;
+          }
+          room.leaderboard[username].score = score;
+          update(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
+            score: (room.leaderboard[username].score = score),
+          }).catch((error) => {
+            res.status(500).json({
+              status: "ERROR with answer",
+            });
+            console.error(error);
+          });
+        }
+      }
     }
   }
 
