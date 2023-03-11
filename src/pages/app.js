@@ -1,6 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
+import { initializeApp } from "firebase/app";
+import { getStorage, getDownloadURL, listAll, ref } from "firebase/storage";
 import styles from "@/styles/Home.module.css";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
@@ -67,7 +69,7 @@ export default function Home() {
           <Navbar.Content hideIn="xs" variant="highlight-rounded">
             <Navbar.Link href="/">Profile</Navbar.Link>
             <Navbar.Link href="/">Puzzle</Navbar.Link>
-            <Navbar.Link href="/">LeaderBoard</Navbar.Link>
+            <Navbar.Link href="/leaderboard">LeaderBoard</Navbar.Link>
           </Navbar.Content>
           <Navbar.Content>
             <Navbar.Item>
@@ -85,106 +87,93 @@ export default function Home() {
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>
                 <Grid.Container gap={2} justify="center">
-                  <Card css={{ mw: "330px" }}>
-                    <Card.Header>
-                      <Text css={{ marginLeft: "auto", marginRight: "auto" }} b>
-                        T45
-                      </Text>
+                  <Card css={{ w: "25%", h: "400px" }}>
+                    <Card.Header
+                      css={{ marginLeft: "auto", marginRight: "auto" }}
+                    >
+                      <Col>
+                        <Text
+                          size={16}
+                          weight="bold"
+                          transform="uppercase"
+                          color="black"
+                        >
+                          Title
+                        </Text>
+                        <Text
+                          size={12}
+                          weight="bold"
+                          transform="uppercase"
+                          color="black"
+                        >
+                          Description
+                        </Text>
+                      </Col>
                     </Card.Header>
-
-                    <Card.Divider />
-
-                    <Card.Body css={{ py: "$10" }}>
-                      <Image
-                        width={300}
-                        height={300}
+                    <Card.Body css={{ p: 0 }}>
+                      <Card.Image
                         src="/image/default_puzzle_image.png"
-                        alt=" Logo"
-                        style={{ objectFit: "cover" }}
+                        objectFit="cover"
+                        width="100%"
+                        height="100%"
+                        alt="puzzle image"
                       />
                     </Card.Body>
-
-                    <Card.Divider />
-
-                    <Card.Footer>
-                      <Row justify="flex-end">
-                        <Button
-                          onClick={(event) => {
-                            getRoom("T45");
-                          }}
-                          size="sm"
-                          css={{ marginLeft: "auto", marginRight: "auto" }}
-                        >
-                          Start
-                        </Button>
+                    <Card.Footer
+                      isBlurred
+                      css={{
+                        position: "absolute",
+                        bgBlur: "#0f111466",
+                        borderTop: "$borderWeights$light solid $gray800",
+                        bottom: 0,
+                        zIndex: 1,
+                      }}
+                    >
+                      <Row>
+                        <Col>
+                          <Row>
+                            <Col span={3}>
+                              <Card.Image
+                                src="/image/penrose-triangle-PARADOX-text.png"
+                                css={{ bg: "black", br: "50%" }}
+                                height={40}
+                                width={40}
+                                alt="PARADOX app icon"
+                              />
+                            </Col>
+                            <Col>
+                              <Text color="#d1d1d1" size={12}>
+                                PARADOX App
+                              </Text>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col>
+                          <Row justify="flex-end">
+                            <Button
+                              flat
+                              auto
+                              rounded
+                              css={{ color: "#94f9f0", bg: "#94f9f026" }}
+                              onClick={(event) => {
+                                getRoom("T45");
+                              }}
+                            >
+                              <Text
+                                css={{ color: "inherit" }}
+                                size={12}
+                                weight="bold"
+                                transform="uppercase"
+                              >
+                                Start
+                              </Text>
+                            </Button>
+                          </Row>
+                        </Col>
                       </Row>
                     </Card.Footer>
                   </Card>
                   <Spacer x={4} />
-                  <Card css={{ mw: "330px" }}>
-                    <Card.Header>
-                      <Text css={{ marginLeft: "auto", marginRight: "auto" }} b>
-                        RG23
-                      </Text>
-                    </Card.Header>
-                    <Card.Divider />
-                    <Card.Body css={{ py: "$10" }}>
-                      <Image
-                        width={300}
-                        height={300}
-                        src="/image/default_puzzle_image.png"
-                        alt=" Logo"
-                        style={{ objectFit: "cover" }}
-                      />
-                    </Card.Body>
-                    <Card.Divider />
-                    <Card.Footer>
-                      <Row justify="flex-end">
-                        <Button
-                          onClick={(event) => {
-                            getRoom("RG23");
-                          }}
-                          size="sm"
-                          css={{ marginLeft: "auto", marginRight: "auto" }}
-                        >
-                          Start
-                        </Button>
-                      </Row>
-                    </Card.Footer>
-                  </Card>
-                  <Spacer x={4} />
-                  <Card css={{ mw: "330px" }}>
-                    <Card.Header>
-                      <Text css={{ marginLeft: "auto", marginRight: "auto" }} b>
-                        A97
-                      </Text>
-                    </Card.Header>
-                    <Card.Divider />
-                    <Card.Body css={{ py: "$10" }}>
-                      <Image
-                        width={300}
-                        height={300}
-                        src="/image/default_puzzle_image.png"
-                        alt=" Logo"
-                        style={{ objectFit: "cover" }}
-                      />
-                    </Card.Body>
-
-                    <Card.Divider />
-                    <Card.Footer>
-                      <Row justify="flex-end">
-                        <Button
-                          onClick={(event) => {
-                            getRoom("A97");
-                          }}
-                          size="sm"
-                          css={{ marginLeft: "auto", marginRight: "auto" }}
-                        >
-                          Start
-                        </Button>
-                      </Row>
-                    </Card.Footer>
-                  </Card>
                 </Grid.Container>
               </Card.Body>
             </Card>
@@ -193,6 +182,18 @@ export default function Home() {
       </NextUIProvider>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      puzzles: [
+        { title: "Test", puzzleID: "Test", description: "Test" },
+        { title: "", puzzleID: "", description: "" },
+        { title: "", puzzleID: "", description: "" },
+      ],
+    }, // will be passed to the page component as props
+  };
 }
 
 // export const getServerSideProps = withIronSessionSsr(
