@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   if (biography == null) {
     biography = "No Biography";
   }
-  const saltRounds = 10;
+  const saltRounds = 12;
 
   const salt = bcrypt.genSaltSync(saltRounds);
   const hashPassword = bcrypt.hashSync(password, salt);

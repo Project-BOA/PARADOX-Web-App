@@ -18,6 +18,8 @@ export default async function handler(req, res) {
   var answer = req.body.answer;
   var roomID = req.body.roomID;
 
+  answer = answer.toLowerCase();
+
   // get the room as a JSON object
   var room;
   await get(ref(db, "room/" + roomID))
@@ -45,7 +47,6 @@ export default async function handler(req, res) {
       "'"
   );
 
-  console.log(room.leaderboard[username]);
   var puzzleType;
   await get(ref(db, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
@@ -135,10 +136,10 @@ export default async function handler(req, res) {
 
     if (!room.leaderboard[username].solved.hasOwnProperty(answer)) {
       if (answer == puzzleAnswers.overall) {
+        room.leaderboard[username].solved[answer] = answer;
         set(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
           score: room.leaderboard[username].score + 100,
           solved: room.leaderboard[username].solved,
-          //solved: answer,
         }).catch((error) => {
           res.status(500).json({
             status: "ERROR with Multi Puzzle",
