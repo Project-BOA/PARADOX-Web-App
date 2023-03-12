@@ -5,6 +5,7 @@ var config = require("../../../modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
+const bcrypt = require("bcrypt");
 
 export default async function handler(req, res) {
   var username = req.body.username;
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
       });
     });
 
-  if (user == null || user.password != password) {
+  if (user == null || !bcrypt.compareSync(password, user.password)) {
     res.status(400).json({
       status: "Username or Password Incorrect",
     });

@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, get } from "firebase/database";
 
 var config = require("../../../modules/config.js");
+const bcrypt = require("bcrypt");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
       });
     });
 
-  if (user == null || user.password != password) {
+  if (user == null || !bcrypt.compareSync(password, user.password)) {
     res.status(400).json({
       status: "Username or Password Incorrect",
     });

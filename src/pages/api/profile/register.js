@@ -5,6 +5,7 @@ var config = require("../../../modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
+const bcrypt = require("bcrypt");
 
 export default async function handler(req, res) {
   var username = req.body.username;
@@ -23,6 +24,10 @@ export default async function handler(req, res) {
   if (biography == null) {
     biography = "No Biography";
   }
+  const saltRounds = 10;
+
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hashPassword = bcrypt.hashSync(password, salt);
 
   await get(ref(db, "users/" + username))
     .then((snapshot) => {
@@ -33,7 +38,7 @@ export default async function handler(req, res) {
         return;
       } else {
         set(ref(db, "users/" + username), {
-          password: password,
+          password: hashPassword,
           email: email,
           biography: biography,
         }).catch((error) => {
