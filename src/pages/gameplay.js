@@ -55,6 +55,7 @@ async function nextSlide(nextRef) {
 
 function getImageRef(imageRef) {
   fireImage.push(imageRef);
+  console.log(fireImage.length);
 }
 
 export default function Gameplay({
@@ -91,7 +92,7 @@ export default function Gameplay({
             colors={["#000C66", "#F7B801", "#A30000"]}
             colorsTime={[2, 1, 0]}
             onComplete={() => {
-              if (i == fireImage.length - 1) {
+              if (i >= fireImage.length / 2) {
                 router.push("/leaderboard?roomID=" + roomID);
                 return { shouldRepeat: false }; // repeat animation in 1.5 seconds
               }
