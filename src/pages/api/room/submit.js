@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, update } from "firebase/database";
+import { use } from "react";
 
 var config = require("../../../modules/config.js");
 
@@ -16,6 +17,8 @@ export default async function handler(req, res) {
   var username = req.body.username;
   var answer = req.body.answer;
   var roomID = req.body.roomID;
+
+  answer = answer.toLowerCase();
 
   // get the room as a JSON object
   var room;
@@ -44,15 +47,14 @@ export default async function handler(req, res) {
       "'"
   );
 
-  // check answer
-  var puzzleAnswer;
-  await get(ref(db, "puzzle/" + room.puzzleID + "/answer"))
+  var puzzleType;
+  await get(ref(db, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        puzzleAnswer = snapshot.val();
+        puzzleType = snapshot.val();
       } else {
         res.status(500).json({
-          status: "No answer available",
+          status: "No puzzle type available",
         });
       }
     })
@@ -63,16 +65,119 @@ export default async function handler(req, res) {
       console.error(error);
     });
 
-  if (answer == puzzleAnswer) {
-    set(
-      ref(db, "room/" + roomID + "/leaderboard/" + username),
-      room.leaderboard[username] + 5
-    ).catch((error) => {
-      res.status(500).json({
-        status: "ERROR",
+  // check answer
+  if (puzzleType == "multi") {
+    var puzzleAnswers;
+    await get(ref(db, "puzzle/" + room.puzzleID + "/answers"))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          puzzleAnswers = snapshot.toJSON();
+        } else {
+          res.status(500).json({
+            status: "No answer available",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
       });
-      console.error(error);
-    });
+  } else {
+    // check answer
+    var puzzleAnswer;
+    await get(ref(db, "puzzle/" + room.puzzleID + "/answer"))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          puzzleAnswer = snapshot.val();
+        } else {
+          res.status(500).json({
+            status: "No answer available",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
+      });
+  }
+
+  if (puzzleType == "time") {
+    if (answer == puzzleAnswer) {
+      set(
+        ref(db, "room/" + roomID + "/leaderboard/" + username),
+        room.leaderboard[username] + room.points
+      ).catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
+      });
+    }
+  } else if (puzzleType == "single") {
+    if (answer == puzzleAnswer) {
+      set(
+        ref(db, "room/" + roomID + "/leaderboard/" + username),
+        room.leaderboard[username] + 100
+      ).catch((error) => {
+        res.status(500).json({
+          status: "ERROR",
+        });
+        console.error(error);
+      });
+    }
+  } else if (puzzleType == "multi") {
+    if (!room.leaderboard[username].hasOwnProperty("solved")) {
+      room.leaderboard[username].solved = {};
+    }
+
+    if (!room.leaderboard[username].solved.hasOwnProperty(answer)) {
+      if (answer == puzzleAnswers.overall) {
+        room.leaderboard[username].solved[answer] = answer;
+        set(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
+          score: room.leaderboard[username].score + 100,
+          solved: room.leaderboard[username].solved,
+        }).catch((error) => {
+          res.status(500).json({
+            status: "ERROR with Multi Puzzle",
+          });
+        });
+      } else {
+        if (puzzleAnswers.partial.hasOwnProperty(answer)) {
+          room.leaderboard[username].solved[answer] =
+            puzzleAnswers.partial[answer];
+
+          set(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
+            score:
+              room.leaderboard[username].score + puzzleAnswers.partial[answer],
+            solved: room.leaderboard[username].solved,
+          }).catch((error) => {
+            res.status(500).json({
+              status: "ERROR with answer",
+            });
+            console.error(error);
+          });
+        } else {
+          var score = room.leaderboard[username].score;
+          score -= 50;
+          if (score <= 0) {
+            score = 0;
+          }
+          room.leaderboard[username].score = score;
+          update(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
+            score: (room.leaderboard[username].score = score),
+          }).catch((error) => {
+            res.status(500).json({
+              status: "ERROR with answer",
+            });
+            console.error(error);
+          });
+        }
+      }
+    }
   }
 
   res.status(200).json({

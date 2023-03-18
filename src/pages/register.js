@@ -17,7 +17,7 @@ import {
   Image,
 } from "@nextui-org/react";
 
-export default function Home({ data }) {
+export default function Home() {
   const router = useRouter();
 
   // Handle the submit for the form
@@ -29,7 +29,7 @@ export default function Home({ data }) {
       username: event.target.username.value,
       password: event.target.password.value,
       email: event.target.email.value,
-      address: event.target.address.value,
+      biography: event.target.bio.value,
     });
 
     // API endpoint where we send form data.
@@ -109,7 +109,7 @@ export default function Home({ data }) {
                   <Spacer y={1.5} />
                   <Input
                     fullWidth
-                    id="Bio"
+                    id="bio"
                     clearable
                     labelPlaceholder="Biography"
                   />
