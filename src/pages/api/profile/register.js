@@ -1,21 +1,28 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get } from "firebase/database";
 
-var config = require("../../../modules/config.js");
+var config = require("@/modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 const bcrypt = require("bcrypt");
+var validator = require("validator");
 
 export default async function handler(req, res) {
   var username = req.body.username;
   var password = req.body.password;
-  var email = req.body.email;
   var biography = req.body.biography;
 
-  if (username == null || password == null || email == null) {
+  if (username == null || password == null) {
     res.status(400).json({
       status: "Invalid input",
+    });
+    return;
+  }
+
+  if (!validator.isAscii(username) || !validator.isAscii(password)) {
+    res.status(400).json({
+      status: "Only Text",
     });
     return;
   }
@@ -39,7 +46,6 @@ export default async function handler(req, res) {
       } else {
         set(ref(db, "users/" + username), {
           password: hashPassword,
-          email: email,
           biography: biography,
         }).catch((error) => {
           console.error(error);

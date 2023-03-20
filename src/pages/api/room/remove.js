@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, remove } from "firebase/database";
 
-var config = require("../../../modules/config.js");
+var config = require("@/modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);

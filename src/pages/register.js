@@ -28,7 +28,6 @@ export default function Home() {
     const data = JSON.stringify({
       username: event.target.username.value,
       password: event.target.password.value,
-      email: event.target.email.value,
       biography: event.target.bio.value,
     });
 
@@ -97,14 +96,6 @@ export default function Home() {
                     clearable
                     type={"password"}
                     labelPlaceholder="Password"
-                  />
-                  <Spacer y={1.5} />
-                  <Input
-                    fullWidth
-                    id="email"
-                    clearable
-                    type={"email"}
-                    labelPlaceholder="Email"
                   />
                   <Spacer y={1.5} />
                   <Input
