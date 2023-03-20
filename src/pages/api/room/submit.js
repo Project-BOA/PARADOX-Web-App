@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get, update } from "firebase/database";
 import { use } from "react";
 
-var config = require("../../../modules/config.js");
+var config = require("@/modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
