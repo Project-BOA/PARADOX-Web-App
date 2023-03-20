@@ -17,6 +17,9 @@ export default async function handler(req, res) {
     });
     return;
   }
+  // sanitation
+  username = username.trim();
+  password = password.trim();
 
   var user;
   await get(ref(db, "users/" + username))

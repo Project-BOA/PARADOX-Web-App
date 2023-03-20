@@ -19,6 +19,9 @@ export default async function handler(req, res) {
     });
     return;
   }
+  // sanitation
+  username = username.trim();
+  password = password.trim();
 
   if (!validator.isAscii(username) || !validator.isAscii(password)) {
     res.status(400).json({
