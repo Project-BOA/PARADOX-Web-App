@@ -8,7 +8,7 @@ import React from "react";
 import { useList, useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 
-var config = require("../modules/config.js");
+var config = require("@/modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
