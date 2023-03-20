@@ -1,6 +1,6 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import { Container, Card, Row, Text, Col } from "@nextui-org/react";
+import { Container, Card, Row, Text, Col, Grid } from "@nextui-org/react";
 import { Spacer, Link } from "@nextui-org/react";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, remove, get } from "firebase/database";
@@ -13,7 +13,7 @@ var config = require("@/modules/config.js");
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
-export default function Room() {
+export default function Room(data) {
   const router = useRouter();
   const { roomID } = router.query;
 
@@ -75,26 +75,51 @@ export default function Room() {
   return (
     <NextUIProvider>
       <Container gap={0}>
-        <Row gap={1}>
+        <Row gap={0}>
           <Col>
             <Card css={{ $$cardColor: "#CC083E" }}>
               <Card.Body>
-                <Text h1 size={60} css={{ m: 0 }} weight="bold" align="center">
-                  {"Room ID: " + roomID}
-                </Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        <Spacer y={1} />
-        <Row gap={1}>
-          <Col>
-            <Card css={{ $$cardColor: "#00764F" }}></Card>
-          </Col>
-          <Col>
-            <Card css={{ $$cardColor: "#00764F" }}>
-              <Card.Body>
-                <Room />
+                <Row>
+                  <Col>
+                    <Card>
+                      <Card.Body>
+                        <Text
+                          h1
+                          size={30}
+                          css={{ m: 0 }}
+                          weight="bold"
+                          align="left"
+                        >
+                          {"Room ID: " + roomID}
+                        </Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col>
+                    <Card>
+                      <Card.Body>
+                        <Text
+                          h1
+                          size={30}
+                          css={{ m: 0 }}
+                          weight="bold"
+                          align="right"
+                        >
+                          {"Puzzle Name: " + data.title}
+                        </Text>
+                        <Text
+                          h1
+                          size={30}
+                          css={{ m: 0 }}
+                          weight="bold"
+                          align="right"
+                        >
+                          {"Puzzle Name: " + data.puzzleType}
+                        </Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
                 <Button
                   onPress={(event) => {
                     router.push("/gameplay?roomID=" + roomID);
@@ -106,6 +131,20 @@ export default function Room() {
               </Card.Body>
             </Card>
           </Col>
+        </Row>
+
+        <Spacer y={1} />
+        <Row gap={1}>
+          <Col>
+            <Card css={{ $$cardColor: "#00764F" }}></Card>
+          </Col>
+          <Col>
+            <Card css={{ $$cardColor: "#00764F" }}>
+              <Card.Body>
+                <Room />
+              </Card.Body>
+            </Card>
+          </Col>
           <Col>
             <Card css={{ $$cardColor: "#00764F" }}></Card>
           </Col>
@@ -113,4 +152,38 @@ export default function Room() {
       </Container>
     </NextUIProvider>
   );
+}
+
+export async function getServerSideProps(context) {
+  var puzzleID;
+
+  await get(ref(db, "room/" + context.query.roomID + "/puzzleID")).then(
+    (snapshot) => {
+      puzzleID = snapshot.val();
+    }
+  );
+
+  var puzzleType;
+  await get(ref(db, "puzzle/" + puzzleID + "/puzzleType")).then((snapshot) => {
+    if (snapshot.exists()) {
+      puzzleType = snapshot.val();
+    } else {
+      console.log("No puzzle type available");
+    }
+  });
+
+  var title;
+
+  await get(ref(db, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
+    if (snapshot.exists()) {
+      title = snapshot.val();
+    } else {
+      title = "No Ttile";
+      console.log("No puzzle piece available");
+    }
+  });
+  console.log(title);
+  return {
+    props: { puzzleType, title }, // will be passed to the page component as props
+  };
 }
