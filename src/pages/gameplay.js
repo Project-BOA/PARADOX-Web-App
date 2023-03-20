@@ -19,7 +19,7 @@ const db = getDatabase(app);
 const storage = getStorage(app);
 var fireImage = [];
 
-var time = 1;
+var time = 5;
 var getPoints = 0;
 var decrement = 0;
 
@@ -55,6 +55,7 @@ async function nextSlide(nextRef) {
 
 function getImageRef(imageRef) {
   fireImage.push(imageRef);
+  console.log(fireImage.length);
 }
 
 export default function Gameplay({
@@ -91,7 +92,7 @@ export default function Gameplay({
             colors={["#000C66", "#F7B801", "#A30000"]}
             colorsTime={[2, 1, 0]}
             onComplete={() => {
-              if (i == fireImage.length - 1) {
+              if (i >= fireImage.length / 2) {
                 router.push("/leaderboard?roomID=" + roomID);
                 return { shouldRepeat: false }; // repeat animation in 1.5 seconds
               }
@@ -134,16 +135,25 @@ export async function getServerSideProps(context) {
       }
     }
   );
+  await get(ref_database(db, "puzzle/" + puzzleID + "/pieceTime")).then(
+    (snapshot) => {
+      if (snapshot.exists()) {
+        var pieceTime = snapshot.toJSON();
+        time = pieceTime.interval;
+      } else {
+        time = 10;
+        console.log("No puzzle piece available");
+      }
+    }
+  );
 
   if (puzzleType == "time") {
     await get(ref_database(db, "puzzle/" + puzzleID + "/pieceTime")).then(
       (snapshot) => {
         if (snapshot.exists()) {
           var pieceTime = snapshot.toJSON();
-          time = pieceTime.interval;
           decrement = pieceTime.decrement;
         } else {
-          time = 10;
           decrement = 10;
           console.log("No puzzle piece available");
         }
