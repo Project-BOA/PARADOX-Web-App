@@ -19,7 +19,7 @@ const db = getDatabase(app);
 const storage = getStorage(app);
 var fireImage = [];
 
-var time = 1;
+var time = 5;
 var getPoints = 0;
 var decrement = 0;
 
@@ -135,16 +135,25 @@ export async function getServerSideProps(context) {
       }
     }
   );
+  await get(ref_database(db, "puzzle/" + puzzleID + "/pieceTime")).then(
+    (snapshot) => {
+      if (snapshot.exists()) {
+        var pieceTime = snapshot.toJSON();
+        time = pieceTime.interval;
+      } else {
+        time = 10;
+        console.log("No puzzle piece available");
+      }
+    }
+  );
 
   if (puzzleType == "time") {
     await get(ref_database(db, "puzzle/" + puzzleID + "/pieceTime")).then(
       (snapshot) => {
         if (snapshot.exists()) {
           var pieceTime = snapshot.toJSON();
-          time = pieceTime.interval;
           decrement = pieceTime.decrement;
         } else {
-          time = 10;
           decrement = 10;
           console.log("No puzzle piece available");
         }

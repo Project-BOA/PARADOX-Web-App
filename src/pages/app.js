@@ -200,7 +200,7 @@ export default function Home() {
             </Link>
           </Navbar.Brand>
           <Navbar.Content hideIn="xs" variant="highlight-rounded">
-            <Navbar.Link href="/">Profile</Navbar.Link>
+            <Navbar.Link href="/profile">Profile</Navbar.Link>
             <Navbar.Link href="/">Puzzle</Navbar.Link>
             <Navbar.Link href="/leaderboard">LeaderBoard</Navbar.Link>
           </Navbar.Content>
