@@ -1,6 +1,14 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import { Container, Card, Row, Text, Col, Grid } from "@nextui-org/react";
+import {
+  createTheme,
+  Container,
+  Card,
+  Row,
+  Text,
+  Col,
+  Grid,
+} from "@nextui-org/react";
 import { Spacer, Link } from "@nextui-org/react";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue, remove, get } from "firebase/database";
@@ -12,6 +20,35 @@ var config = require("@/modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
+const theme = createTheme({
+  type: "dark", // it could be "light" or "dark"
+  theme: {
+    colors: {
+      // brand colors
+      primaryLight: "$green200",
+      primaryLightHover: "$green300",
+      primaryLightActive: "$green400",
+      primaryLightContrast: "$green600",
+      primary: "#4ADE7B",
+      primaryBorder: "$green500",
+      primaryBorderHover: "$green600",
+      primarySolidHover: "$green700",
+      primarySolidContrast: "$white",
+      primaryShadow: "$green500",
+
+      gradient:
+        "linear-gradient(112deg, $blue100 -25%, $pink500 -10%, $purple500 80%)",
+      link: "#5E1DAD",
+
+      // you can also create your own color
+      myColor: "#ff4ecd",
+
+      // ...  more colors
+    },
+    space: {},
+    fonts: {},
+  },
+});
 
 export default function Room(data) {
   const router = useRouter();
@@ -73,15 +110,15 @@ export default function Room(data) {
   }
 
   return (
-    <NextUIProvider>
+    <NextUIProvider theme={theme}>
       <Container gap={0}>
         <Row gap={0}>
           <Col>
-            <Card css={{ $$cardColor: "#CC083E" }}>
+            <Card variant="bordered" css={{ $$cardColor: "#3A1078" }}>
               <Card.Body>
                 <Row>
                   <Col>
-                    <Card>
+                    <Container>
                       <Card.Body>
                         <Text
                           h1
@@ -90,13 +127,27 @@ export default function Room(data) {
                           weight="bold"
                           align="left"
                         >
-                          {"Room ID: " + roomID}
+                          {data.title}
                         </Text>
                       </Card.Body>
-                    </Card>
+                    </Container>
                   </Col>
                   <Col>
-                    <Card>
+                    <Container>
+                      <Text
+                        h1
+                        size={30}
+                        css={{ m: 0 }}
+                        weight="bold"
+                        align="center"
+                        color="white"
+                      >
+                        {"Room ID: " + roomID}
+                      </Text>
+                    </Container>
+                  </Col>
+                  <Col>
+                    <Container>
                       <Card.Body>
                         <Text
                           h1
@@ -105,29 +156,28 @@ export default function Room(data) {
                           weight="bold"
                           align="right"
                         >
-                          {"Puzzle Name: " + data.title}
-                        </Text>
-                        <Text
-                          h1
-                          size={30}
-                          css={{ m: 0 }}
-                          weight="bold"
-                          align="right"
-                        >
-                          {"Puzzle Name: " + data.puzzleType}
+                          {"Type: " + data.puzzleType}
                         </Text>
                       </Card.Body>
-                    </Card>
+                    </Container>
                   </Col>
                 </Row>
-                <Button
-                  onPress={(event) => {
-                    router.push("/gameplay?roomID=" + roomID);
-                  }}
-                  color={"secondary"}
-                >
-                  Start
-                </Button>
+                <Container>
+                  <Button
+                    onPress={(event) => {
+                      router.push("/gameplay?roomID=" + roomID);
+                    }}
+                    size="lg"
+                    css={{
+                      color: "black",
+                      fontSize: "35px",
+                      backgroundColor: "#2F58CD",
+                      marginInline: "auto",
+                    }}
+                  >
+                    Start
+                  </Button>
+                </Container>
               </Card.Body>
             </Card>
           </Col>
@@ -136,10 +186,10 @@ export default function Room(data) {
         <Spacer y={1} />
         <Row gap={1}>
           <Col>
-            <Card css={{ $$cardColor: "#00764F" }}></Card>
+            <Card css={{ $$cardColor: "#3A1078" }}></Card>
           </Col>
           <Col>
-            <Card css={{ $$cardColor: "#00764F" }}>
+            <Card css={{ $$cardColor: "#2F58CD" }}>
               <Card.Body>
                 <Room />
               </Card.Body>
@@ -183,6 +233,9 @@ export async function getServerSideProps(context) {
     }
   });
   console.log(title);
+
+  puzzleType = puzzleType.toUpperCase();
+
   return {
     props: { puzzleType, title }, // will be passed to the page component as props
   };
