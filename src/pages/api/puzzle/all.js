@@ -6,7 +6,7 @@ var config = require("@/modules/config.js");
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
-export default async function personHandler(req, res) {
+export default async function handler(req, res) {
   const page = req.body.page || 1;
 
   await get(ref(db, "puzzle/"))

@@ -16,6 +16,17 @@ export default async function personHandler(req, res) {
     return;
   }
 
+  // match first 3 or more uppercase alphanumeric with with regex
+  var validation = puzzleID.match(/[A-Z0-9]{3,}/);
+  if (validation == null) {
+    res.status(400).json({
+      status: "Invalid puzzleID",
+    });
+    return;
+  } else {
+    puzzleID = validation[0]; // first matched substring
+  }
+
   await get(ref(db, "puzzle/" + puzzleID))
     .then((snapshot) => {
       if (!snapshot.exists()) {

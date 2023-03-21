@@ -7,17 +7,24 @@ const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
 export default async function handler(req, res) {
-  // TODO:
-  // validate input
-  // verify roomID exists
-
   var roomID = req.body.roomID;
 
   if (roomID == null) {
     res.status(400).json({
-      status: "Invalid input",
+      status: "Invalid request body",
     });
     return;
+  }
+
+  // match first 5 uppercase letters with with regex
+  var validation = roomID.match(/[A-Z0-9]{5}?/);
+  if (validation == null) {
+    res.status(400).json({
+      status: "Invalid RoomID",
+    });
+    return;
+  } else {
+    roomID = validation[0]; // first matched substring
   }
 
   var puzzleID;

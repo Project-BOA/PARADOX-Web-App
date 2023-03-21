@@ -18,6 +18,24 @@ export default async function handler(req, res) {
   var answer = req.body.answer;
   var roomID = req.body.roomID;
 
+  if (roomID == null) {
+    res.status(400).json({
+      status: "Invalid request body",
+    });
+    return;
+  }
+
+  // match first 5 uppercase letters with with regex
+  var validation = roomID.match(/[A-Z0-9]{5}?/);
+  if (validation == null) {
+    res.status(400).json({
+      status: "Invalid RoomID",
+    });
+    return;
+  } else {
+    roomID = validation[0]; // first matched substring
+  }
+
   answer = answer.toLowerCase();
 
   // get the room as a JSON object
