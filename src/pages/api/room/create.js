@@ -41,7 +41,12 @@ export default async function create(req, res) {
   });
 
   while (filter.isProfane(roomID)) {
-    roomID = randomstring.generate(5).toUpperCase();
+    roomID = randomstring.generate({
+      length: 5,
+      readable: true,
+      charset: "alphanumeric",
+      capitalization: "uppercase",
+    });
   }
 
   console.log("Room Created with ID: '" + roomID + "'");
