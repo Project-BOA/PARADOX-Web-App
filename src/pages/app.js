@@ -1,10 +1,8 @@
-import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 import { initializeApp } from "firebase/app";
-import { getStorage, getDownloadURL, listAll } from "firebase/storage";
-import { getDatabase, ref, get } from "firebase/database";
-import { useList, useListKeys } from "react-firebase-hooks/database";
+import { getDatabase, ref } from "firebase/database";
+import { useList } from "react-firebase-hooks/database";
 import styles from "@/styles/Home.module.css";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
@@ -17,7 +15,6 @@ import {
   Col,
   Spacer,
   Button,
-  Input,
   Link,
   Grid,
   User,

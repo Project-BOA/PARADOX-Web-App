@@ -1,8 +1,5 @@
-import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
-import { initializeApp } from "firebase/app";
-import { getStorage, getDownloadURL, listAll, ref } from "firebase/storage";
 import styles from "@/styles/Home.module.css";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";

@@ -7,7 +7,7 @@ const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
 export default async function personHandler(req, res) {
-  const puzzleID = req.body.puzzleID;
+  var puzzleID = req.body.puzzleID;
 
   if (puzzleID == null) {
     res.status(400).json({
