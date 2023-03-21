@@ -7,7 +7,8 @@ const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
 var randomstring = require("randomstring");
-
+var Filter = require("bad-words"),
+  filter = new Filter();
 export default async function create(req, res) {
   // TODO:
   // validate input
@@ -15,6 +16,10 @@ export default async function create(req, res) {
   // check roomID does not already exist
   var puzzleID = req.body.puzzleID;
   var roomID = randomstring.generate(5).toUpperCase();
+
+  while (filter.isProfane(roomID)) {
+    roomID = randomstring.generate(5).toUpperCase();
+  }
 
   console.log("Room Created with ID: '" + roomID + "'");
 

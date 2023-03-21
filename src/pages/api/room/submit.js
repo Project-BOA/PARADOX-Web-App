@@ -6,7 +6,8 @@ var config = require("@/modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
-
+var Filter = require("bad-words"),
+  filter = new Filter();
 export default async function handler(req, res) {
   // TODO:
   // validate input
@@ -17,6 +18,13 @@ export default async function handler(req, res) {
   var username = req.body.username;
   var answer = req.body.answer;
   var roomID = req.body.roomID;
+
+  if (filter.isProfane(answer)) {
+    res.status(400).json({
+      status: "Lets Keep it PG",
+    });
+    return;
+  }
 
   answer = answer.toLowerCase();
 

@@ -7,7 +7,8 @@ const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 const bcrypt = require("bcrypt");
 var validator = require("validator");
-
+var Filter = require("bad-words"),
+  filter = new Filter();
 export default async function handler(req, res) {
   var username = req.body.username;
   var password = req.body.password;
@@ -23,13 +24,19 @@ export default async function handler(req, res) {
   username = username.trim();
   password = password.trim();
 
-  if (!validator.isAscii(username) || !validator.isAscii(password)) {
+  if (filter.isProfane(username) || filter.isProfane(password)) {
     res.status(400).json({
       status: "Only Text",
     });
     return;
   }
 
+  if (!validator.isAscii(username) || !validator.isAscii(password)) {
+    res.status(400).json({
+      status: "Only Text",
+    });
+    return;
+  }
   // biography not mandatory: default is "No Biography"
   if (biography == null) {
     biography = "No Biography";
