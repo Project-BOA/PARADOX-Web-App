@@ -43,13 +43,23 @@ export default function Leaderboard() {
             <Spacer y={2.5} />
             {snapshots
               .sort((a, b) => {
-                if (a.val() < b.val()) return 1;
-                if (a.val() > b.val()) return -1;
+                var scoreA = a.val();
+                var scoreB = b.val();
+                if (a.hasChild("score")) {
+                  scoreA = scoreA.score;
+                  scoreB = scoreB.score;
+                }
+                if (scoreA < scoreB) return 1;
+                if (scoreA > scoreB) return -1;
                 return 0;
               })
               .map((snap, index) => {
                 var name = snap.key;
                 var score = snap.val();
+                if (snap.hasChild("score")) {
+                  score = score.score;
+                }
+                console.log(score);
                 if (!players.includes(name)) {
                   players.push(name);
                   return (

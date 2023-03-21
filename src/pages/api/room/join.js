@@ -16,6 +16,24 @@ export default async function create(req, res) {
   var username = req.body.username;
   var roomID = req.body.roomID;
 
+  if (username == null || roomID == null) {
+    res.status(400).json({
+      status: "Invalid request body",
+    });
+    return;
+  }
+
+  // match first 5 uppercase letters with with regex
+  var validation = roomID.match(/[A-Z0-9]{5}?/);
+  if (validation == null) {
+    res.status(400).json({
+      status: "Invalid RoomID",
+    });
+    return;
+  } else {
+    roomID = validation[0]; // first matched substring
+  }
+
   console.log("User: '" + username + "' joined room with ID: '" + roomID + "'");
 
   var room;

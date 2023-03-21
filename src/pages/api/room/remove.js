@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, remove } from "firebase/database";
+import { getDatabase, ref, remove, get } from "firebase/database";
 
 var config = require("@/modules/config.js");
 
@@ -12,11 +12,44 @@ export default async function create(req, res) {
   // add authentication to who is allowed to destroy room
   var roomID = req.body.roomID;
 
-  remove(ref(db, "room/" + roomID));
+  if (roomID == null) {
+    res.status(400).json({
+      status: "Invalid request body",
+    });
+    return;
+  }
 
-  console.log("Room removed at ID: '" + roomID + "'");
+  // match first 5 uppercase letters with with regex
+  var validation = roomID.match(/[A-Z0-9]{5}?/);
+  if (validation == null) {
+    res.status(400).json({
+      status: "Invalid RoomID",
+    });
+    return;
+  } else {
+    roomID = validation[0]; // first matched substring
+  }
 
-  res.status(200).json({
-    status: "OK",
-  });
+  await get(ref(db, "room/" + roomID))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        remove(ref(db, "room/" + roomID));
+
+        console.log("Room removed at ID: '" + roomID + "'");
+
+        res.status(200).json({
+          status: "OK",
+        });
+      } else {
+        res.status(400).json({
+          status: "Room does not Exist",
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({
+        status: "ERROR",
+      });
+      console.error(error);
+    });
 }

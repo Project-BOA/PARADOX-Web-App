@@ -26,6 +26,24 @@ export default async function handler(req, res) {
     return;
   }
 
+  if (roomID == null) {
+    res.status(400).json({
+      status: "Invalid request body",
+    });
+    return;
+  }
+
+  // match first 5 uppercase letters with with regex
+  var validation = roomID.match(/[A-Z0-9]{5}?/);
+  if (validation == null) {
+    res.status(400).json({
+      status: "Invalid RoomID",
+    });
+    return;
+  } else {
+    roomID = validation[0]; // first matched substring
+  }
+
   answer = answer.toLowerCase();
 
   // get the room as a JSON object
@@ -59,7 +77,7 @@ export default async function handler(req, res) {
   await get(ref(db, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        puzzleType = snapshot.val();
+        puzzleType = snapshot.val().toUpperCase();
       } else {
         res.status(500).json({
           status: "No puzzle type available",
@@ -113,7 +131,7 @@ export default async function handler(req, res) {
       });
   }
 
-  if (puzzleType == "time") {
+  if (puzzleType == "TIME") {
     if (answer == puzzleAnswer) {
       set(
         ref(db, "room/" + roomID + "/leaderboard/" + username),
@@ -125,7 +143,7 @@ export default async function handler(req, res) {
         console.error(error);
       });
     }
-  } else if (puzzleType == "single") {
+  } else if (puzzleType == "SINGLE") {
     if (answer == puzzleAnswer) {
       set(
         ref(db, "room/" + roomID + "/leaderboard/" + username),
@@ -137,7 +155,7 @@ export default async function handler(req, res) {
         console.error(error);
       });
     }
-  } else if (puzzleType == "multi") {
+  } else if (puzzleType == "MULTI") {
     if (!room.leaderboard[username].hasOwnProperty("solved")) {
       room.leaderboard[username].solved = {};
     }
@@ -189,7 +207,7 @@ export default async function handler(req, res) {
   }
 
   res.status(200).json({
-    status: "OK",
+    status: "OK - " + puzzleType,
     score: room.leaderboard[username],
     puzzleID: room.puzzleID,
   });

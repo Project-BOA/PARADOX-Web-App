@@ -7,13 +7,24 @@ const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 
 export default async function personHandler(req, res) {
-  const puzzleID = req.body.puzzleID;
+  var puzzleID = req.body.puzzleID;
 
   if (puzzleID == null) {
     res.status(400).json({
       status: "Invalid input",
     });
     return;
+  }
+
+  // match first 3 or more uppercase alphanumeric with with regex
+  var validation = puzzleID.match(/[A-Z0-9]{3,}/);
+  if (validation == null) {
+    res.status(400).json({
+      status: "Invalid puzzleID",
+    });
+    return;
+  } else {
+    puzzleID = validation[0]; // first matched substring
   }
 
   await get(ref(db, "puzzle/" + puzzleID))

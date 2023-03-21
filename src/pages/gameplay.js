@@ -28,10 +28,6 @@ async function getPuzzle(puzzleID) {
 
   listAll(listRef)
     .then((res) => {
-      res.prefixes.forEach((folderRef) => {
-        // All the prefixes under listRef.
-        // You may call listAll() recursively on them.
-      });
       res.items.forEach((itemRef) => {
         // All the items under listRef.
         //console.log(itemRef + "\n");

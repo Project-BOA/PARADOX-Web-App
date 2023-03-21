@@ -11,11 +11,34 @@ var Filter = require("bad-words"),
   filter = new Filter();
 export default async function create(req, res) {
   // TODO:
-  // validate input
   // verify puzzle exists
   // check roomID does not already exist
   var puzzleID = req.body.puzzleID;
-  var roomID = randomstring.generate(5).toUpperCase();
+
+  if (puzzleID == null) {
+    res.status(400).json({
+      status: "Invalid request body",
+    });
+    return;
+  }
+
+  // match first 3 or more uppercase alphanumeric with with regex
+  var validation = puzzleID.match(/[A-Z0-9]{3,}/);
+  if (validation == null) {
+    res.status(400).json({
+      status: "Invalid puzzleID",
+    });
+    return;
+  } else {
+    puzzleID = validation[0]; // first matched substring
+  }
+
+  var roomID = randomstring.generate({
+    length: 5,
+    readable: true,
+    charset: "alphanumeric",
+    capitalization: "uppercase",
+  });
 
   while (filter.isProfane(roomID)) {
     roomID = randomstring.generate(5).toUpperCase();
