@@ -92,7 +92,7 @@ export default async function handler(req, res) {
     });
 
   // check answer
-  if (puzzleType == "multi") {
+  if (puzzleType == "MULTI") {
     var puzzleAnswers;
     await get(ref(db, "puzzle/" + room.puzzleID + "/answers"))
       .then((snapshot) => {
@@ -132,7 +132,7 @@ export default async function handler(req, res) {
   }
 
   if (puzzleType == "TIME") {
-    if (answer == puzzleAnswer) {
+    if (answer == puzzleAnswer.toLowerCase()) {
       set(
         ref(db, "room/" + roomID + "/leaderboard/" + username),
         room.leaderboard[username] + room.points
