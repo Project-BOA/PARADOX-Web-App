@@ -144,7 +144,7 @@ export default async function handler(req, res) {
       });
     }
   } else if (puzzleType == "SINGLE") {
-    if (answer == puzzleAnswer) {
+    if (answer == puzzleAnswer.toLowerCase()) {
       set(
         ref(db, "room/" + roomID + "/leaderboard/" + username),
         room.leaderboard[username] + 100
@@ -161,7 +161,7 @@ export default async function handler(req, res) {
     }
 
     if (!room.leaderboard[username].solved.hasOwnProperty(answer)) {
-      if (answer == puzzleAnswers.overall) {
+      if (answer == puzzleAnswers.overall.toLowerCase()) {
         room.leaderboard[username].solved[answer] = answer;
         set(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
           score: room.leaderboard[username].score + 100,
