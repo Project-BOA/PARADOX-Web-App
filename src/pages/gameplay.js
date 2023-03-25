@@ -17,70 +17,29 @@ var config = require("@/modules/config.js");
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
 const storage = getStorage(app);
-
 var time = 5;
-var getPoints = 0;
-var decrement = 0;
-
-async function getPuzzle(puzzleID) {
-  // const listRef = ref(storage, puzzleID);
-  // listAll(listRef)
-  //   .then((res) => {
-  //     res.items.forEach((itemRef) => {
-  //       // All the items under listRef.
-  //       //console.log(itemRef + "\n");
-  //       getImageRef(itemRef);
-  //     });
-  //   })
-  //   .catch((error) => {
-  //     res.status(500).json({
-  //       status: "ERROR",
-  //     });
-  //     console.error(error);
-  //   });
-}
-
-// async function nextSlide(nextRef) {
-//   getDownloadURL(nextRef).then((url) => {
-//     const img = document.getElementById("myimg");
-//     img.setAttribute("src", url);
-//   });
-// }
-async function nextSlide(nextRef) {
-  await getDownloadURL(nextRef).then((url) => {
-    const img = document.getElementById("myimg");
-    img.setAttribute("src", url);
-  });
-}
-
-// function getImageRef(imageRef) {
-//   fireImage.push(imageRef);
-//   console.log(fireImage.length);
-// }
+var getPoints,
+  decrement = 0;
 export default function Gameplay({
   time,
   getPoints,
   puzzleType,
   decrement,
-  puzzleID,
-  fireImage,
-  newI,
+  puzzlePieces,
 }) {
-  //var i = 0;
   const router = useRouter();
   var roomID = router.query.roomID;
-
-  var i = newI;
-  getPuzzle(puzzleID);
+  var pieceIndex = 0;
+  console.log(puzzlePieces);
   return (
     <NextUIProvider>
       <Grid.Container gap={2} justify="center">
         <Grid xs={4}></Grid>
         <Grid xs={4}>
           <Image
-            src="/image/Loading_icon.gif"
-            id="myimg"
-            alt={"Puzzle image: " + fireImage[i]}
+            src={puzzlePieces[pieceIndex]}
+            id="puzzlePieceImg"
+            alt={"Puzzle piece image"}
             width="100%"
             height="auto"
             object-fit="cover"
@@ -93,11 +52,12 @@ export default function Gameplay({
             colors={["#000C66", "#F7B801", "#A30000"]}
             colorsTime={[2, 1, 0]}
             onComplete={() => {
-              if (i >= fireImage.length) {
+              pieceIndex++;
+              if (pieceIndex >= puzzlePieces.length) {
                 router.push("/leaderboard?roomID=" + roomID);
-                i = 0;
-                return { shouldRepeat: false }; // repeat animation in 1.5 seconds
+                return { shouldRepeat: false };
               }
+
               if (puzzleType == "time") {
                 if (getPoints <= 0) getPoints = 0;
                 getPoints = getPoints - decrement;
@@ -105,7 +65,9 @@ export default function Gameplay({
                   points: getPoints,
                 });
               }
-              nextSlide(fireImage[i++]);
+
+              const img = document.getElementById("puzzlePieceImg");
+              img.setAttribute("src", puzzlePieces[pieceIndex]);
 
               return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
             }}
@@ -156,17 +118,20 @@ export async function getServerSideProps(context) {
   );
 
   const listRef = ref(storage, puzzleID);
-  var fireImage = [];
+  var puzzlePieces = [];
 
-  await listAll(listRef).then((res) => {
-    res.items.forEach((itemRef) => {
-      // All the items under listRef.
-      //console.log(itemRef + "\n");
-      fireImage.push(itemRef);
-    });
+  await listAll(listRef).then(async (res) => {
+    await Promise.all(
+      res.items.map(async (itemRef) => {
+        await getDownloadURL(ref(storage, itemRef)).then((url) => {
+          puzzlePieces.push(url);
+        });
+      })
+    );
   });
 
-  //console.log(fireImage[0]);
+  puzzlePieces.sort(); // sort urls in ascending, ASCII character order
+
   var newI = 0;
   return {
     props: {
@@ -175,7 +140,7 @@ export async function getServerSideProps(context) {
       puzzleType,
       decrement,
       puzzleID,
-      fireImage,
+      puzzlePieces,
       newI,
     }, // will be passed to the page component as props
   };
