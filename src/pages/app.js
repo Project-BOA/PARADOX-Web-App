@@ -60,12 +60,12 @@ export default function Home() {
     return (
       <>
         {error && (
-          <Text h2 size={30} weight="bold" align="center">
+          <Text h2 size={40} weight="bold" align="center">
             Error: {error}
           </Text>
         )}
         {loading && (
-          <Text h2 size={30} align="center">
+          <Text h2 size={40} align="center">
             Loading Puzzles...
           </Text>
         )}
@@ -80,13 +80,16 @@ export default function Home() {
                       var puzzle = snap.val();
                       return (
                         <>
-                          <Card key={puzzleID} css={{ w: "25%", h: "400px" }}>
+                          <Card
+                            key={puzzleID}
+                            css={{ w: "30em", h: "50vh", margin: "1em" }}
+                          >
                             <Card.Header
                               css={{ marginLeft: "auto", marginRight: "auto" }}
                             >
                               <Col>
                                 <Text
-                                  size={16}
+                                  size={32}
                                   weight="bold"
                                   transform="uppercase"
                                   color="black"
@@ -94,7 +97,7 @@ export default function Home() {
                                   {puzzle.title}
                                 </Text>
                                 <Text
-                                  size={12}
+                                  size={20}
                                   weight="bold"
                                   transform="uppercase"
                                   color="black"
@@ -124,53 +127,32 @@ export default function Home() {
                               }}
                             >
                               <Row>
-                                <Col>
-                                  <Row>
-                                    <Col span={3}>
-                                      <Card.Image
-                                        src="/image/penrose-triangle-PARADOX-text.png"
-                                        css={{ bg: "black", br: "50%" }}
-                                        height={40}
-                                        width={40}
-                                        alt="PARADOX app icon"
-                                      />
-                                    </Col>
-                                    <Col>
-                                      <Text color="#d1d1d1" size={12}>
-                                        PARADOX App
-                                      </Text>
-                                    </Col>
-                                  </Row>
-                                </Col>
-                                <Col>
-                                  <Row justify="flex-end">
-                                    <Button
-                                      flat
-                                      auto
-                                      rounded
-                                      css={{
-                                        color: "#94f9f0",
-                                        bg: "#94f9f026",
-                                      }}
-                                      onClick={(event) => {
-                                        getRoom(puzzleID);
-                                      }}
+                                <Row justify="center">
+                                  <Button
+                                    flat
+                                    auto
+                                    rounded
+                                    css={{
+                                      color: "#94f9f0",
+                                      bg: "#94f9f026",
+                                    }}
+                                    onClick={(event) => {
+                                      getRoom(puzzleID);
+                                    }}
+                                  >
+                                    <Text
+                                      css={{ color: "inherit" }}
+                                      size={12}
+                                      weight="bold"
+                                      transform="uppercase"
                                     >
-                                      <Text
-                                        css={{ color: "inherit" }}
-                                        size={12}
-                                        weight="bold"
-                                        transform="uppercase"
-                                      >
-                                        Start
-                                      </Text>
-                                    </Button>
-                                  </Row>
-                                </Col>
+                                      Start
+                                    </Text>
+                                  </Button>
+                                </Row>
                               </Row>
                             </Card.Footer>
                           </Card>
-                          <Spacer x={4} />
                         </>
                       );
                     })}
@@ -212,7 +194,13 @@ export default function Home() {
             </Navbar.Item>
           </Navbar.Content>
         </Navbar>
+        <Spacer y={1} />
 
+        <Container>
+          <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
+            Puzzles
+          </Text>
+        </Container>
         <Spacer y={1} />
 
         <Puzzles />

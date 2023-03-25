@@ -83,6 +83,15 @@ export default function Gameplay({
 export async function getServerSideProps(context) {
   var puzzleID;
 
+  if (context.query.roomID == undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/app",
+      },
+    };
+  }
+
   await get(
     ref_database(db, "room/" + context.query.roomID + "/puzzleID")
   ).then((snapshot) => {
