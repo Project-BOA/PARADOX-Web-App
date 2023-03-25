@@ -8,7 +8,7 @@ export default function Custom404() {
       </Text>
       <Text h1 align="center" size={50} css={{ m: 0 }}>
         Return to home Page
-        <Link align="center" block href="/app">
+        <Link align="center" block href="/">
           Home
         </Link>
       </Text>

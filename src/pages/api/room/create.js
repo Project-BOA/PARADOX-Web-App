@@ -73,7 +73,7 @@ export default async function create(req, res) {
 
   if (puzzleType == "time") {
     var points;
-    await get(ref(db, "puzzle/" + puzzleID + "/points/full"))
+    await get(ref(db, "puzzle/" + puzzleID + "/points"))
       .then((snapshot) => {
         if (snapshot.exists()) {
           points = snapshot.val();

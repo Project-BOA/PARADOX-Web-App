@@ -20,6 +20,7 @@ export default function Leaderboard() {
   function Leaderboard() {
     var players = [];
     var position = 1;
+
     const [snapshots, loading, error] = useList(
       ref(db, "room/" + roomID + "/leaderboard")
     );
@@ -64,7 +65,7 @@ export default function Leaderboard() {
                   players.push(name);
                   return (
                     <React.Fragment key={name}>
-                      <Text h3 size={25}>
+                      <Text h3 size={25} align="center">
                         {position++}. {name} - {score} points
                       </Text>
                       <Spacer y={2.5} />
@@ -94,7 +95,7 @@ export default function Leaderboard() {
     const response = await fetch("api/room/remove", options);
     const result = await response.json();
     if (result.status == "OK") {
-      router.push("/app");
+      router.push("/");
     } else {
       alert("Status: " + result.status);
     }
@@ -140,4 +141,16 @@ export default function Leaderboard() {
       </Container>
     </NextUIProvider>
   );
+}
+
+export async function getServerSideProps(context) {
+  if (context.query.roomID == undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
+  return { props: {} };
 }

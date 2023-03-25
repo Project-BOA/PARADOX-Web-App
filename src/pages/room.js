@@ -207,13 +207,22 @@ export default function Room(data) {
 export async function getServerSideProps(context) {
   var puzzleID;
 
+  if (context.query.roomID == undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
+
   await get(ref(db, "room/" + context.query.roomID + "/puzzleID")).then(
     (snapshot) => {
       puzzleID = snapshot.val();
     }
   );
 
-  var puzzleType;
+  var puzzleType = "None";
   await get(ref(db, "puzzle/" + puzzleID + "/puzzleType")).then((snapshot) => {
     if (snapshot.exists()) {
       puzzleType = snapshot.val();
