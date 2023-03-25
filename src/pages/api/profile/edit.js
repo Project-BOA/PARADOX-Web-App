@@ -2,9 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get } from "firebase/database";
 
 var config = require("@/modules/config.js");
+const bcrypt = require("bcrypt");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
+var Filter = require("bad-words"),
+  filter = new Filter();
 
 export default async function handler(req, res) {
   var username = req.body.username;
@@ -22,6 +25,13 @@ export default async function handler(req, res) {
     return;
   }
 
+  if (filter.isProfane(username) || filter.isProfane(biography)) {
+    res.status(400).json({
+      status: "Invalid input",
+    });
+    return;
+  }
+
   await get(ref(db, "users/" + username))
     .then((snapshot) => {
       if (!snapshot.exists()) {
@@ -30,8 +40,8 @@ export default async function handler(req, res) {
         });
         return;
       } else {
-        console.log(snapshot.child("password").val());
-        if (snapshot.child("password").val() == password) {
+        //console.log(snapshot.child("password").val());
+        if (bcrypt.compareSync(password, snapshot.child("password").val())) {
           set(ref(db, "users/" + username), {
             password: password,
             biography: biography,
