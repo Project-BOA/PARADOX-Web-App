@@ -20,6 +20,7 @@ export default function Leaderboard() {
   function Leaderboard() {
     var players = [];
     var position = 1;
+
     const [snapshots, loading, error] = useList(
       ref(db, "room/" + roomID + "/leaderboard")
     );
@@ -140,4 +141,16 @@ export default function Leaderboard() {
       </Container>
     </NextUIProvider>
   );
+}
+
+export async function getServerSideProps(context) {
+  if (context.query.roomID == undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/app",
+      },
+    };
+  }
+  return { props: {} };
 }
