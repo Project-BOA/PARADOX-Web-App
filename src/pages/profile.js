@@ -21,7 +21,7 @@ import {
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Profile(user) {
   const router = useRouter();
 
   async function getRoom(puzzleID) {
@@ -74,6 +74,11 @@ export default function Home() {
                 <User src="/image/user_icon.png" name="Benji" />
               </Text>
             </Navbar.Item>
+            <Navbar.Item>
+              <Button auto flat as={Link} href="logout">
+                Logout
+              </Button>
+            </Navbar.Item>
           </Navbar.Content>
         </Navbar>
 
@@ -94,3 +99,29 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps = withIronSessionSsr(
+  async function getServerSideProps({ req }) {
+    if (req.session.user == undefined) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "login",
+        },
+      };
+    }
+
+    return {
+      props: {
+        user: req.session.user,
+      },
+    };
+  }, // -------------------- All boilerplate code for sessions ------------------------------------
+  {
+    cookieName: process.env.COOKIE_NAME,
+    password: process.env.SESSION_PASSWORD,
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+    },
+  }
+);

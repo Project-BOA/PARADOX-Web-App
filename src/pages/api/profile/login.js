@@ -1,48 +1,64 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, get } from "firebase/database";
+import { withIronSessionApiRoute } from "iron-session/next";
 
 var config = require("@/modules/config.js");
 const bcrypt = require("bcrypt");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
+export default withIronSessionApiRoute(
+  async function handler(req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
 
-export default async function handler(req, res) {
-  var username = req.body.username;
-  var password = req.body.password;
-
-  if (username == null || password == null) {
-    res.status(400).json({
-      status: "Invalid input",
-    });
-    return;
-  }
-  // sanitation
-  username = username.trim();
-  password = password.trim();
-
-  var user;
-  await get(ref(db, "users/" + username))
-    .then((snapshot) => {
-      user = snapshot.toJSON();
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({
-        status: "ERROR",
+    if (username == null || password == null) {
+      res.status(400).json({
+        status: "Invalid input",
       });
-    });
+      return;
+    }
+    // sanitation
+    username = username.trim();
+    password = password.trim();
 
-  if (user == null || !bcrypt.compareSync(password, user.password)) {
-    res.status(400).json({
-      status: "Username or Password Incorrect",
+    var user;
+    await get(ref(db, "users/" + username))
+      .then((snapshot) => {
+        user = snapshot.toJSON();
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json({
+          status: "ERROR",
+        });
+      });
+
+    if (user == null || !bcrypt.compareSync(password, user.password)) {
+      res.status(400).json({
+        status: "Username or Password Incorrect",
+      });
+      return;
+    }
+
+    // save user to session
+    req.session.user = {
+      username,
+      biography: user.biography,
+    };
+
+    await req.session.save();
+
+    res.status(200).json({
+      status: "OK",
+      biography: user.biography,
     });
-    return;
+  },
+  {
+    cookieName: process.env.COOKIE_NAME,
+    password: process.env.SESSION_PASSWORD,
+    cookieOptions: {
+      secure: process.env.NODE_ENV === "production",
+    },
   }
-
-  res.status(200).json({
-    status: "OK",
-    email: user.email,
-    biography: user.biography,
-  });
-}
+);
