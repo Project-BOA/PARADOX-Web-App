@@ -37,6 +37,13 @@ export default async function handler(req, res) {
     });
     return;
   }
+
+  if (biography.length > 50) {
+    res.status(400).json({
+      status: "Max Biography length is less than 50",
+    });
+    return;
+  }
   // biography not mandatory: default is "No Biography"
   if (biography == null) {
     biography = "No Biography";

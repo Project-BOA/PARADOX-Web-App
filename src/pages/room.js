@@ -213,7 +213,7 @@ export async function getServerSideProps(context) {
     }
   );
 
-  var puzzleType;
+  var puzzleType = "None";
   await get(ref(db, "puzzle/" + puzzleID + "/puzzleType")).then((snapshot) => {
     if (snapshot.exists()) {
       puzzleType = snapshot.val();

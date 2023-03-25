@@ -31,7 +31,12 @@ export default async function handler(req, res) {
     });
     return;
   }
-
+  if (biography.length > 50) {
+    res.status(400).json({
+      status: "Max Biography length is less than 50",
+    });
+    return;
+  }
   await get(ref(db, "users/" + username))
     .then((snapshot) => {
       if (!snapshot.exists()) {
