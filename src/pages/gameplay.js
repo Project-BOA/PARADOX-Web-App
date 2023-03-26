@@ -52,24 +52,25 @@ export default function Gameplay({
   function UpdateLeaderboard(snapshots) {
     var players = [];
     var position = 1;
+
     for (const snapshot of snapshots) {
+      const newEntry = {
+        name: snapshot.key,
+        score: snapshot.val().score ?? snapshot.val(),
+      };
+
       if (
-        !leaderboard.some((element) => {
-          return element.name == snapshot.key;
+        leaderboard.some((entry) => {
+          return entry.name == snapshot.key;
         })
       ) {
-        leaderboard.push({
-          name: snapshot.key,
-          score: snapshot.val().score ?? snapshot.val(),
-        });
-      } else {
         leaderboard[
           leaderboard.findIndex((item) => item.name == snapshot.key)
-        ] = {
-          name: snapshot.key,
-          score: snapshot.val().score ?? snapshot.val(),
-        };
+        ] = newEntry;
+        continue;
       }
+
+      leaderboard.push(newEntry);
     }
 
     //console.log(leaderboard);
