@@ -72,93 +72,88 @@ export default function Home({ user }) {
         {!loading && snapshots && (
           <Container>
             <Row gap={1}>
-              <Card css={{ $$cardColor: "$colors$primary" }}>
-                <Card.Body>
-                  <Grid.Container gap={2} justify="center">
-                    {snapshots.map((snap, index) => {
-                      var puzzleID = snap.key;
-                      var puzzle = snap.val();
-                      return (
-                        <>
-                          <Card
-                            key={puzzleID}
-                            css={{ w: "30em", h: "50vh", margin: "1em" }}
-                          >
-                            <Card.Header
-                              css={{ marginLeft: "auto", marginRight: "auto" }}
+              <Grid.Container gap={2} justify="center">
+                {snapshots.map((snap, index) => {
+                  var puzzleID = snap.key;
+                  var puzzle = snap.val();
+                  return (
+                    <>
+                      <Card
+                        key={puzzleID}
+                        css={{ w: "30em", h: "50vh", margin: "1em" }}
+                      >
+                        <Card.Header
+                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                        >
+                          <Col>
+                            <Text
+                              size={28}
+                              weight="bold"
+                              transform="uppercase"
+                              color="black"
                             >
-                              <Col>
+                              {puzzle.title}
+                            </Text>
+                            <Text
+                              size={18}
+                              weight="bold"
+                              transform="uppercase"
+                              color="black"
+                            >
+                              {puzzle.description}
+                            </Text>
+                          </Col>
+                        </Card.Header>
+                        <Card.Body css={{ p: 0 }}>
+                          <Card.Image
+                            src="/image/default_puzzle_image.png"
+                            objectFit="cover"
+                            width="100%"
+                            height="100%"
+                            alt="puzzle image"
+                          />
+                        </Card.Body>
+                        <Card.Footer
+                          isBlurred
+                          css={{
+                            position: "absolute",
+                            bgBlur: "#0f111466",
+                            borderTop: "$borderWeights$light solid $gray800",
+                            bottom: 0,
+                            zIndex: 1,
+                          }}
+                        >
+                          <Row>
+                            <Row justify="center">
+                              <Button
+                                flat
+                                auto
+                                rounded
+                                css={{
+                                  color: "#94f9f0",
+                                  bg: "#94f9f026",
+                                }}
+                                onClick={(event) => {
+                                  getRoom(puzzleID);
+                                }}
+                              >
                                 <Text
-                                  size={28}
+                                  css={{ color: "inherit" }}
+                                  size={12}
                                   weight="bold"
                                   transform="uppercase"
-                                  color="black"
                                 >
-                                  {puzzle.title}
+                                  Start
                                 </Text>
-                                <Text
-                                  size={18}
-                                  weight="bold"
-                                  transform="uppercase"
-                                  color="black"
-                                >
-                                  {puzzle.description}
-                                </Text>
-                              </Col>
-                            </Card.Header>
-                            <Card.Body css={{ p: 0 }}>
-                              <Card.Image
-                                src="/image/default_puzzle_image.png"
-                                objectFit="cover"
-                                width="100%"
-                                height="100%"
-                                alt="puzzle image"
-                              />
-                            </Card.Body>
-                            <Card.Footer
-                              isBlurred
-                              css={{
-                                position: "absolute",
-                                bgBlur: "#0f111466",
-                                borderTop:
-                                  "$borderWeights$light solid $gray800",
-                                bottom: 0,
-                                zIndex: 1,
-                              }}
-                            >
-                              <Row>
-                                <Row justify="center">
-                                  <Button
-                                    flat
-                                    auto
-                                    rounded
-                                    css={{
-                                      color: "#94f9f0",
-                                      bg: "#94f9f026",
-                                    }}
-                                    onClick={(event) => {
-                                      getRoom(puzzleID);
-                                    }}
-                                  >
-                                    <Text
-                                      css={{ color: "inherit" }}
-                                      size={12}
-                                      weight="bold"
-                                      transform="uppercase"
-                                    >
-                                      Start
-                                    </Text>
-                                  </Button>
-                                </Row>
-                              </Row>
-                            </Card.Footer>
-                          </Card>
-                        </>
-                      );
-                    })}
-                  </Grid.Container>
-                </Card.Body>
-              </Card>
+                              </Button>
+                            </Row>
+                          </Row>
+                        </Card.Footer>
+                      </Card>
+                    </>
+                  );
+                })}
+              </Grid.Container>
             </Row>
           </Container>
         )}

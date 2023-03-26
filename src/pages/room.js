@@ -15,40 +15,12 @@ import { getDatabase, ref, onValue, remove, get } from "firebase/database";
 import React, { useState } from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
+import Footer from "./footer";
 
 var config = require("@/modules/config.js");
 
 const app = initializeApp(config.firebase);
 const db = getDatabase(app);
-const theme = createTheme({
-  type: "dark", // it could be "light" or "dark"
-  theme: {
-    colors: {
-      // brand colors
-      primaryLight: "$green200",
-      primaryLightHover: "$green300",
-      primaryLightActive: "$green400",
-      primaryLightContrast: "$green600",
-      primary: "#4ADE7B",
-      primaryBorder: "$green500",
-      primaryBorderHover: "$green600",
-      primarySolidHover: "$green700",
-      primarySolidContrast: "$white",
-      primaryShadow: "$green500",
-
-      gradient:
-        "linear-gradient(112deg, $blue100 -25%, $pink500 -10%, $purple500 80%)",
-      link: "#5E1DAD",
-
-      // you can also create your own color
-      myColor: "#ff4ecd",
-
-      // ...  more colors
-    },
-    space: {},
-    fonts: {},
-  },
-});
 
 export default function Room(data) {
   const router = useRouter();
@@ -81,7 +53,7 @@ export default function Room(data) {
         )}
         {!loading && snapshots && (
           <React.Fragment>
-            <Text h2 size={30} align="center">
+            <Text h2 size={30} color="#17706E" align="center">
               Players
             </Text>
             <Spacer y={2.5} />
@@ -92,8 +64,13 @@ export default function Room(data) {
                   <React.Fragment key={v}>
                     <Button
                       align="center"
-                      color="error"
-                      style={{ margin: "auto", fontSize: "20px" }}
+                      color="#F7F7EE"
+                      style={{
+                        color: "#F7F7EE",
+                        margin: "auto",
+                        fontSize: "20px",
+                        backgroundColor: "#FB7813",
+                      }}
                       onPress={(event) => removePlayer(event, roomID, v)}
                     >
                       {v}
@@ -110,11 +87,11 @@ export default function Room(data) {
   }
 
   return (
-    <NextUIProvider theme={theme}>
+    <NextUIProvider>
       <Container gap={0}>
         <Row gap={0}>
           <Col>
-            <Card variant="bordered" css={{ $$cardColor: "#3A1078" }}>
+            <Card variant="bordered" css={{ $$cardColor: "#17706E" }}>
               <Card.Body>
                 <Row>
                   <Col>
@@ -126,6 +103,7 @@ export default function Room(data) {
                           css={{ m: 0 }}
                           weight="bold"
                           align="left"
+                          color="#F7F7EE"
                         >
                           {data.title}
                         </Text>
@@ -140,7 +118,7 @@ export default function Room(data) {
                         css={{ m: 0 }}
                         weight="bold"
                         align="center"
-                        color="white"
+                        color="#F7F7EE"
                       >
                         {"Room ID: " + roomID}
                       </Text>
@@ -155,6 +133,7 @@ export default function Room(data) {
                           css={{ m: 0 }}
                           weight="bold"
                           align="right"
+                          color="#F7F7EE"
                         >
                           {"Type: " + data.puzzleType}
                         </Text>
@@ -169,9 +148,9 @@ export default function Room(data) {
                     }}
                     size="lg"
                     css={{
-                      color: "black",
+                      color: "#17706E",
                       fontSize: "35px",
-                      backgroundColor: "#2F58CD",
+                      backgroundColor: "#FB7813",
                       marginInline: "auto",
                     }}
                   >
@@ -185,20 +164,19 @@ export default function Room(data) {
 
         <Spacer y={1} />
         <Row gap={1}>
+          <Col></Col>
           <Col>
-            <Card css={{ $$cardColor: "#3A1078" }}></Card>
-          </Col>
-          <Col>
-            <Card css={{ $$cardColor: "#2F58CD" }}>
+            <Card css={{ $$cardColor: "#B6EB7A" }}>
               <Card.Body>
                 <Room />
               </Card.Body>
             </Card>
           </Col>
-          <Col>
-            <Card css={{ $$cardColor: "#00764F" }}></Card>
-          </Col>
+          <Col></Col>
         </Row>
+      </Container>
+      <Container id="footer">
+        <Footer />
       </Container>
     </NextUIProvider>
   );

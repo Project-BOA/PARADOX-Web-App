@@ -10,7 +10,7 @@ import {
 import { NextUIProvider } from "@nextui-org/react";
 import { Grid, Image, Text, Spacer, Tooltip } from "@nextui-org/react";
 import React from "react";
-import { useList } from "react-firebase-hooks/database";
+import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 
 var config = require("@/modules/config.js");
@@ -34,19 +34,18 @@ export default function Gameplay({
   var roomID = router.query.roomID;
   var leaderboard = [];
 
-  async function GetUserBio(name) {
-    var bio = "No biography";
-    await get(ref_database(db, "users/" + name + "/biography")).then(
-      (snapshot) => {
-        if (snapshot.exists()) {
-          bio = snapshot.val();
-          console.log(bio);
-        } else {
-          console.log("No Bio");
-        }
-      }
+  function BioToolTip({ name }) {
+    const [snapshot, loading, error] = useObject(
+      ref_database(db, "users/" + name + "/biography")
     );
-    return bio;
+
+    return (
+      <>
+        {error && <Text align="center">Error: {error}</Text>}
+        {loading && <Text align="center">Loading Bio...</Text>}
+        {!loading && snapshot && <Text align="center">{snapshot.val()}</Text>}
+      </>
+    );
   }
 
   function UpdateLeaderboard(snapshots) {
@@ -72,8 +71,6 @@ export default function Gameplay({
       }
     }
 
-    //console.log(leaderboard);
-
     return leaderboard
       .sort((a, b) => {
         if (a.score < b.score) return 1;
@@ -88,7 +85,7 @@ export default function Gameplay({
           if (index < 3) {
             return (
               <React.Fragment key={name}>
-                <Tooltip content={"Bio: " + GetUserBio(name)}>
+                <Tooltip content={<BioToolTip name={name} />}>
                   <Text h3 size={25} style={{ margin: "auto" }}>
                     {position++}. {name} - {score} points
                   </Text>
@@ -105,6 +102,7 @@ export default function Gameplay({
     const [snapshots, loading, error] = useList(
       ref_database(db, "room/" + roomID + "/leaderboard")
     );
+
     return (
       <>
         {error && (
@@ -141,7 +139,6 @@ export default function Gameplay({
     <NextUIProvider>
       <Grid.Container gap={2} justify="center">
         <Grid xs={4}>
-          {" "}
           <Text h1 size={30} css={{ m: 0 }} weight="bold" align="left">
             RoomID: {roomID}
           </Text>
@@ -185,7 +182,6 @@ export default function Gameplay({
 
       <Grid.Container gap={0} justify="center">
         <Grid xs>
-          {" "}
           <Image
             src={puzzlePieces[pieceIndex]}
             id="puzzlePieceImg"
