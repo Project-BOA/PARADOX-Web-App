@@ -147,7 +147,10 @@ export default function Gameplay({
           <Text h1 size={50} css={{ m: 0 }} weight="bold" align="center">
             {puzzleName}
           </Text>
+
+          <Text h3 size={25} align="center" id="availPoints"></Text>
         </Grid>
+
         <Grid xs={1}>
           <CountdownCircleTimer
             isPlaying
@@ -167,6 +170,7 @@ export default function Gameplay({
                 update(ref_database(db, "room/" + roomID), {
                   points: getPoints,
                 });
+                document.getElementById("availPoints").innerHTML = getPoints;
               }
 
               const img = document.getElementById("puzzlePieceImg");
