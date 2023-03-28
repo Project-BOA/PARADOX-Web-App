@@ -21,7 +21,7 @@ import {
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Profile(user) {
+export default function Profile({ user }) {
   const router = useRouter();
 
   async function getRoom(puzzleID) {
@@ -71,7 +71,7 @@ export default function Profile(user) {
           <Navbar.Content>
             <Navbar.Item>
               <Text h6 align="right" size={25} color="white" css={{ m: 0 }}>
-                <User src="/image/user_icon.png" name="Benji" />
+                <User src="/image/user_icon.png" name={user.username} />
               </Text>
             </Navbar.Item>
             <Navbar.Item>
@@ -89,6 +89,9 @@ export default function Profile(user) {
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>
                 <Grid.Container gap={2} justify="center">
+                  {user.email}
+                  Solved Puzzles:
+                  {JSON.stringify(user.completedPuzzles)}
                   <Spacer x={4} />
                 </Grid.Container>
               </Card.Body>
