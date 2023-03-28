@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, update} from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
 var config = require("@/modules/config.js");
@@ -11,6 +11,7 @@ export default withIronSessionApiRoute(
   async function handler(req, res) {
     var username = req.body.username;
     var password = req.body.password;
+    var loggedOnSite = req.body.website;
 
     if (username == null || password == null) {
       res.status(400).json({
@@ -18,6 +19,8 @@ export default withIronSessionApiRoute(
       });
       return;
     }
+
+
     // sanitation
     username = username.trim();
     password = password.trim();
@@ -34,6 +37,7 @@ export default withIronSessionApiRoute(
         });
       });
 
+
     if (user == null || !bcrypt.compareSync(password, user.password)) {
       res.status(400).json({
         status: "Username or Password Incorrect",
@@ -41,6 +45,21 @@ export default withIronSessionApiRoute(
       return;
     }
 
+
+    if(!loggedOnSite){
+      update(ref(db, "users/" + username), {
+        loggedIn:true
+      
+      });
+    }
+
+    if(user.loggedIn)
+    {
+      res.status(400).json({
+        status: "User logged in on another device",
+      });
+      return;
+    }
     // save user to session
     req.session.user = {
       username,
