@@ -64,6 +64,7 @@ export default async function handler(req, res) {
         set(ref(db, "users/" + username), {
           password: hashPassword,
           biography: biography,
+          loggedIn:false
         }).catch((error) => {
           console.error(error);
           res.status(500).json({
