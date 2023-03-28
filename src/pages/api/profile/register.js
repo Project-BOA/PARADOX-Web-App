@@ -13,6 +13,8 @@ export default async function handler(req, res) {
   var username = req.body.username;
   var password = req.body.password;
   var biography = req.body.biography;
+  var email = req.body.email;
+
 
   if (username == null || password == null) {
     res.status(400).json({
@@ -34,6 +36,15 @@ export default async function handler(req, res) {
   if (!validator.isAscii(username) || !validator.isAscii(password)) {
     res.status(400).json({
       status: "Only Text",
+    });
+    return;
+  }
+
+
+  if(!validator.isEmail(email))
+  {
+    res.status(400).json({
+      status: "Valid Email",
     });
     return;
   }
@@ -64,6 +75,7 @@ export default async function handler(req, res) {
         set(ref(db, "users/" + username), {
           password: hashPassword,
           biography: biography,
+          email:email,
           loggedIn:false
         }).catch((error) => {
           console.error(error);
