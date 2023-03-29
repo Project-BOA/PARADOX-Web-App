@@ -30,6 +30,8 @@ export default async function create(req, res) {
     roomID = validation[0]; // first matched substring
   }
 
+
+
   await get(ref(db, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {

@@ -217,14 +217,13 @@ export async function getServerSideProps(context) {
 
   var players = [];
   const date = new Date();
-  const currentDate = date.toLocaleDateString();
 
   if (puzzleType == "multi") {
     for (var player in leaderboard) {
       players.push([player, leaderboard[player].score]);
 
       await update(ref(db, "users/" + player + "/solved/" + title), {
-        completedOn: currentDate,
+        completedOn: date,
         points: leaderboard[player].score,
       });
     }
@@ -232,7 +231,7 @@ export async function getServerSideProps(context) {
     for (var player in leaderboard) {
       players.push([player, leaderboard[player]]);
       await update(ref(db, "users/" + player + "/solved/" + title), {
-        completedOn: currentDate,
+        completedOn: date,
         points: leaderboard[player],
       });
 

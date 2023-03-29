@@ -19,6 +19,7 @@ import {
   Grid,
   User,
   Navbar,
+  Tooltip,
 } from "@nextui-org/react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -54,6 +55,56 @@ export default function Home({ user }) {
       alert("Status: " + result.status);
     }
   }
+
+  async function gottoComments(puzzleID) {
+    //puzzleID = "TU1";
+    const data = {
+      puzzleID: puzzleID,
+    };
+
+    router.push({ pathname: "/comment", query: { puzzleID: puzzleID } });
+  }
+
+  const GetComment = ({ puzzleID }) => {
+    return (
+      <Grid.Container
+        css={{
+          borderRadius: "14px",
+          padding: "0.75rem",
+          maxWidth: "330px",
+        }}
+      >
+        <Row justify="center" align="center">
+          <Text b>Confirm</Text>
+        </Row>
+        <Row>
+          <Text>
+            Are you sure you want to check the comments of this puzzle?, there
+            could be possible spoilers for answers
+          </Text>
+        </Row>
+        <Grid.Container justify="space-between" alignContent="center">
+          <Grid>
+            <Button size="sm" light>
+              Cancel
+            </Button>
+          </Grid>
+          <Grid>
+            <Button
+              size="sm"
+              shadow
+              color="error"
+              onClick={(event) => {
+                gottoComments(puzzleID);
+              }}
+            >
+              Check
+            </Button>
+          </Grid>
+        </Grid.Container>
+      </Grid.Container>
+    );
+  };
 
   function Puzzles() {
     const [snapshots, loading, error] = useList(ref(db, "puzzle/"));
@@ -146,6 +197,19 @@ export default function Home({ user }) {
                                   Start
                                 </Text>
                               </Button>
+                              <Tooltip
+                                trigger="click"
+                                content={<GetComment puzzleID={puzzleID} />}
+                              >
+                                <Text
+                                  css={{ color: "inherit" }}
+                                  size={12}
+                                  weight="bold"
+                                  transform="uppercase"
+                                >
+                                  Comments
+                                </Text>
+                              </Tooltip>
                             </Row>
                           </Row>
                         </Card.Footer>
