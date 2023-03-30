@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, update } from "firebase/database";
 
 var config = require("@/modules/config.js");
 const bcrypt = require("bcrypt");
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
 
           const salt = bcrypt.genSaltSync(saltRounds);
           const hashPassword = bcrypt.hashSync(newPassword, salt);
-          set(ref(db, "users/" + username), {
+          update(ref(db, "users/" + username), {
             password: hashPassword,
             biography: biography,
           }).catch((error) => {
