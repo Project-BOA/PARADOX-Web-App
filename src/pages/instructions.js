@@ -36,6 +36,7 @@ export default function Home({ user }) {
     "Better answer quick these puzzles require quick thinking or you will lose so many points";
   const singleDescritption =
     "Simple, answer the puzzles single answer and get points";
+
   return (
     <>
       <NextUIProvider>
@@ -104,6 +105,17 @@ export default function Home({ user }) {
             </Card>
           </Grid>
         </Grid.Container>
+        <Grid xs={4}>
+          <Card css={{ $$cardColor: "#B6EB7A" }}>
+            <Text size={20} align="center" color="green" css={{ m: 0 }}>
+              Obtain our app{" "}
+              <Link color href="#">
+                here
+              </Link>{" "}
+              and get ready to play
+            </Text>
+          </Card>
+        </Grid>
         <Spacer y={1} />
       </NextUIProvider>
     </>

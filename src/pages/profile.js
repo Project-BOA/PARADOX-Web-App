@@ -24,27 +24,45 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Profile({ user }) {
   const router = useRouter();
 
-  async function getRoom(puzzleID) {
-    const data = {
-      puzzleID: puzzleID,
-    };
+  async function handleSubmit(event) {
+    event.preventDefault();
 
+    // Send the data to the server in JSON format.
+    const data = JSON.stringify({
+      username: user.username,
+      password: event.target.password.value,
+      newPassword: event.target.newPassword.value,
+      biography: event.target.biography.value,
+      //email: event.target.email.value,
+    });
+
+    // API endpoint where we send form data.
+    const endpoint = "/api/profile/edit";
+
+    // Form the request for sending data to the server.
     const options = {
+      // The method is POST because we are sending data.
       method: "POST",
+      // Tell the server we're sending JSON.
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      // Body of the request is the JSON data we created above.
+      body: data,
     };
 
-    console.log(options);
+    // Send the form data to our forms API on Vercel and get a response.
+    const response = await fetch(endpoint, options);
 
-    const response = await fetch("api/room/create", options);
+    // Get the response data from server as JSON.
+    // If server returns the name submitted, that means the form works.
     const result = await response.json();
+
+    // redirect based on the result
     if (result.status == "OK") {
-      router.push({ pathname: "/room", query: { roomID: result.roomID } });
+      router.push("/profile");
     } else {
-      alert("Status: " + result.status);
+      alert(result.status);
     }
   }
 
@@ -90,9 +108,65 @@ export default function Profile({ user }) {
               <Card.Body>
                 <Grid.Container gap={2} justify="center">
                   {user.email}
+                  <Spacer y={1.5} />
+                  {user.biography}
+                  <Spacer y={1.5} />
                   Solved Puzzles:
                   {JSON.stringify(user.completedPuzzles)}
                   <Spacer x={4} />
+                </Grid.Container>
+              </Card.Body>
+            </Card>
+            <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card.Body>
+                <Grid.Container gap={2} justify="center">
+                  <Spacer x={4} />
+                  <form onSubmit={handleSubmit}>
+                    <Input
+                      fullWidth
+                      id="newPassword"
+                      clearable
+                      type={"password"}
+                      labelPlaceholder="newPassword"
+                    />
+                    <Spacer y={1.5} />
+
+                    <Input
+                      fullWidth
+                      id="password"
+                      clearable
+                      type={"password"}
+                      labelPlaceholder="Password"
+                    />
+                    <Spacer y={1.5} />
+
+                    <Input
+                      fullWidth
+                      id="email"
+                      clearable
+                      labelPlaceholder="Email"
+                    />
+                    <Spacer y={1.5} />
+                    <Input
+                      fullWidth
+                      id="biography"
+                      clearable
+                      labelPlaceholder="Biography"
+                    />
+                    <Spacer y={1.5} />
+                    <Grid.Container gap={1} justify="center">
+                      <Grid>
+                        <Button
+                          auto
+                          type="submit"
+                          color="secondary"
+                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                        >
+                          Submit
+                        </Button>
+                      </Grid>
+                    </Grid.Container>
+                  </form>
                 </Grid.Container>
               </Card.Body>
             </Card>

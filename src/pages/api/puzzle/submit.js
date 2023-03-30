@@ -26,7 +26,9 @@ export default async function handler(req, res) {
     });
     return;
   }
-  const date = new Date();
+
+  const date = Date.now();
+
   await update(ref(db, "puzzle/" + puzzleID + "/comments/" + username), {
     comment: comment,
     commentedOn: date,

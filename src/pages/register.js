@@ -29,8 +29,7 @@ export default function Home() {
       username: event.target.username.value,
       password: event.target.password.value,
       biography: event.target.bio.value,
-      email: event.target.bio.email,
-
+      email: event.target.email.value,
     });
 
     // API endpoint where we send form data.
@@ -99,14 +98,15 @@ export default function Home() {
                     type={"password"}
                     labelPlaceholder="Password"
                   />
-                                    <Spacer y={1.5} />
+                  <Spacer y={1.5} />
 
-                                <Input
-                fullWidth
-                id="email"
-                clearable
-                labelPlaceholder="Email"
-              />
+                  <Input
+                    fullWidth
+                    id="email"
+                    clearable
+                    labelPlaceholder="Email"
+                  />
+
                   <Spacer y={1.5} />
                   <Input
                     fullWidth

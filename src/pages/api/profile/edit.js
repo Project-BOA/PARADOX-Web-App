@@ -12,6 +12,7 @@ var Filter = require("bad-words"),
 export default async function handler(req, res) {
   var username = req.body.username;
   var password = req.body.password;
+  var newPassword = req.body.newPassword;
   var biography = req.body.biography;
 
   if (
@@ -25,7 +26,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (filter.isProfane(username) || filter.isProfane(biography)) {
+  if (filter.isProfane(biography)) {
     res.status(400).json({
       status: "Invalid input",
     });
@@ -37,6 +38,7 @@ export default async function handler(req, res) {
     });
     return;
   }
+
   await get(ref(db, "users/" + username))
     .then((snapshot) => {
       if (!snapshot.exists()) {
@@ -47,8 +49,12 @@ export default async function handler(req, res) {
       } else {
         //console.log(snapshot.child("password").val());
         if (bcrypt.compareSync(password, snapshot.child("password").val())) {
+          const saltRounds = 12;
+
+          const salt = bcrypt.genSaltSync(saltRounds);
+          const hashPassword = bcrypt.hashSync(newPassword, salt);
           set(ref(db, "users/" + username), {
-            password: password,
+            password: hashPassword,
             biography: biography,
           }).catch((error) => {
             console.error(error);

@@ -216,7 +216,7 @@ export async function getServerSideProps(context) {
   });
 
   var players = [];
-  const date = new Date();
+  const date = Date.now();
 
   if (puzzleType == "multi") {
     for (var player in leaderboard) {

@@ -12,6 +12,7 @@ import { Grid, Image, Text, Spacer, Tooltip } from "@nextui-org/react";
 import React from "react";
 import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 var config = require("@/modules/config.js");
 
@@ -135,6 +136,13 @@ export default function Gameplay({
   }
 
   var pieceIndex = 0;
+
+  useEffect(() => {
+    addEventListener("beforeunload", function (event) {
+      event.returnValue = "You have unsaved changes.";
+    });
+  });
+
   return (
     <NextUIProvider>
       <Grid.Container gap={2} justify="center">
