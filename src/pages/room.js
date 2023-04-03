@@ -26,6 +26,28 @@ export default function Room(data) {
   const router = useRouter();
   const { roomID } = router.query;
 
+  async function endRoom() {
+    const data = {
+      roomID: roomID,
+    };
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+
+    const response = await fetch("api/room/remove", options);
+    const result = await response.json();
+    if (result.status == "OK") {
+      router.push("/");
+    } else {
+      alert("Status: " + result.status);
+    }
+  }
+
   function Room() {
     var players = [];
     const [snapshots, loading, error] = useListKeys(
@@ -155,6 +177,13 @@ export default function Room(data) {
                     }}
                   >
                     Start
+                  </Button>
+                  <Button
+                    onPress={(event) => {
+                      endRoom();
+                    }}
+                  >
+                    End
                   </Button>
                 </Container>
               </Card.Body>
