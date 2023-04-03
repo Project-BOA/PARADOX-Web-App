@@ -8,7 +8,7 @@ import {
   update,
 } from "firebase/database";
 import { NextUIProvider } from "@nextui-org/react";
-import { Grid, Image, Text, Spacer, Tooltip } from "@nextui-org/react";
+import { Grid, Image, Text, Spacer, Tooltip, Button } from "@nextui-org/react";
 import React from "react";
 import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
@@ -155,7 +155,13 @@ export default function Gameplay({
           <Text h1 size={50} css={{ m: 0 }} weight="bold" align="center">
             {puzzleName}
           </Text>
-
+          <Button
+            onPress={(event) => {
+              router.push("/leaderboard?roomID=" + roomID);
+            }}
+          >
+            End Game
+          </Button>
           <Text h3 size={25} align="center" id="availPoints"></Text>
         </Grid>
 
