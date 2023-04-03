@@ -68,7 +68,7 @@ export default async function handler(req, res) {
   await get(ref(db, "users/" + username))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        res.status(200).json({
+        res.status(400).json({
           status: "Name is already in use",
         });
         return;
