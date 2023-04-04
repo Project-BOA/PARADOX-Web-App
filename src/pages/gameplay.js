@@ -1,5 +1,4 @@
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { initializeApp } from "firebase/app";
 import { getStorage, getDownloadURL, listAll, ref } from "firebase/storage";
 import {
   getDatabase,
@@ -14,11 +13,10 @@ import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-var config = require("@/modules/config.js");
+const { firebaseApp } = require("@/modules/config.js"),
+  db = getDatabase(firebaseApp);
+const storage = getStorage(firebaseApp);
 
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
-const storage = getStorage(app);
 var time = 5;
 var getPoints,
   decrement = 0;

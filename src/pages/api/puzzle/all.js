@@ -1,10 +1,7 @@
-import { initializeApp } from "firebase/app";
 import { getDatabase, ref, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { firebaseApp } = require("@/modules/config.js"),
+  db = getDatabase(firebaseApp);
 
 export default async function handler(req, res) {
   const page = req.body.page || 1;

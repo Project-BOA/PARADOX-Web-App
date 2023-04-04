@@ -1,10 +1,7 @@
-import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { firebaseApp } = require("@/modules/config.js"),
+  db = getDatabase(firebaseApp);
 const bcrypt = require("bcrypt");
 var validator = require("validator");
 var Filter = require("bad-words"),

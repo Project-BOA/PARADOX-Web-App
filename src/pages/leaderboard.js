@@ -1,92 +1,28 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { Container, Card, Row, Text, Col } from "@nextui-org/react";
-import { Spacer, Link } from "@nextui-org/react";
-import { initializeApp } from "firebase/app";
+import { Spacer } from "@nextui-org/react";
 import {
-  getDatabase,
-  ref,
-  onValue,
-  remove,
-  get,
-  push,
-  update,
-  set,
-} from "firebase/database";
-import React from "react";
-import { useList, useListKeys } from "react-firebase-hooks/database";
+  Button,
+  Card,
+  Col,
+  Container,
+  NextUIProvider,
+  Row,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
+import { getDatabase, ref, get, update } from "firebase/database";
+
 import { useRouter } from "next/router";
 
-var config = require("@/modules/config.js");
+const { firebaseApp } = require("@/modules/config.js"),
+  db = getDatabase(firebaseApp);
 
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
 
 export default function Leaderboard(data) {
   const router = useRouter();
   const { roomID } = router.query;
-
-  // function Leaderboard() {
-  //   var players = [];
-  //   var position = 1;
-
-  //   const [snapshots, loading, error] = useList(
-  //     ref(db, "room/" + roomID + "/leaderboard")
-  //   );
-  //   return (
-  //     <>
-  //       {error && (
-  //         <Text h2 size={30} weight="bold" align="center">
-  //           Error: {error}
-  //         </Text>
-  //       )}
-  //       {loading && (
-  //         <Text h2 size={30} align="center">
-  //           Loading Leaderboard...
-  //         </Text>
-  //       )}
-  //       {!loading && snapshots && (
-  //         <React.Fragment>
-  //           <Text h2 size={30} align="center">
-  //             Leaderboard
-  //           </Text>
-  //           <Spacer y={2.5} />
-  //           {snapshots
-  //             .sort((a, b) => {
-  //               var scoreA = a.val();
-  //               var scoreB = b.val();
-  //               if (a.hasChild("score")) {
-  //                 scoreA = scoreA.score;
-  //                 scoreB = scoreB.score;
-  //               }
-  //               if (scoreA < scoreB) return 1;
-  //               if (scoreA > scoreB) return -1;
-  //               return 0;
-  //             })
-  //             .map((snap, index) => {
-  //               var name = snap.key;
-  //               var score = snap.val();
-  //               if (snap.hasChild("score")) {
-  //                 score = score.score;
-  //               }
-  //               console.log(score);
-  //               if (!players.includes(name)) {
-  //                 players.push(name);
-  //                 return (
-  //                   <React.Fragment key={name}>
-  //                     <Text h3 size={25} align="center">
-  //                       {position++}. {name} - {score} points
-  //                     </Text>
-  //                     <Spacer y={2.5} />
-  //                   </React.Fragment>
-  //                 );
-  //               }
-  //             })}
-  //         </React.Fragment>
-  //       )}
-  //     </>
-  //   );
-  // }
 
   function Leaderboard() {
     var position = 1;
@@ -197,14 +133,6 @@ export async function getServerSideProps(context) {
       puzzleID = snapshot.val();
     }
   );
-  var puzzleType;
-  await get(ref(db, "puzzle/" + puzzleID + "/puzzleType")).then((snapshot) => {
-    if (snapshot.exists()) {
-      puzzleType = snapshot.val();
-    } else {
-      console.log("No puzzle type available");
-    }
-  });
 
   var title;
   await get(ref(db, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
@@ -218,32 +146,24 @@ export async function getServerSideProps(context) {
   var players = [];
   const date = Date.now();
 
-  if (puzzleType == "multi") {
-    for (var player in leaderboard) {
-      players.push([player, leaderboard[player].score]);
+  for (var player in leaderboard) {
+    players.push([player, leaderboard[player].score ?? leaderboard[player]]);
 
-      await update(ref(db, "users/" + player + "/solved/" + title), {
-        completedOn: date,
-        points: leaderboard[player].score,
-      });
-    }
-  } else {
-    for (var player in leaderboard) {
-      players.push([player, leaderboard[player]]);
-      await update(ref(db, "users/" + player + "/solved/" + title), {
-        completedOn: date,
-        points: leaderboard[player],
-      });
-
-      console.log(player);
-    }
+    await get(ref(db, "users/" + player + "/solved/" + title)).then(
+      async (snapshot) => {
+        if (!snapshot.exists()) {
+          await update(ref(db, "users/" + player + "/solved/" + title), {
+            completedOn: date,
+            points: leaderboard[player].score ?? leaderboard[player],
+          });
+        }
+      }
+    );
   }
 
   players.sort(function (a, b) {
-    return a[1] - b[1];
+    return b[1] - a[1];
   });
-
-  players = players.reverse();
 
   return { props: { players } };
 }

@@ -1,11 +1,8 @@
-import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get, update } from "firebase/database";
 import { use } from "react";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { firebaseApp } = require("@/modules/config.js"),
+  db = getDatabase(firebaseApp);
 var Filter = require("bad-words"),
   filter = new Filter();
 export default async function handler(req, res) {

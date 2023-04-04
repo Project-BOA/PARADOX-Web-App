@@ -1,12 +1,10 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get, update } from "firebase/database";
+import { getDatabase, ref, get } from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
-var config = require("@/modules/config.js");
+const { firebaseApp } = require("@/modules/config.js"),
+  db = getDatabase(firebaseApp);
 const bcrypt = require("bcrypt");
 
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
 export default withIronSessionApiRoute(
   async function handler(req, res) {
     var username = req.body.username;

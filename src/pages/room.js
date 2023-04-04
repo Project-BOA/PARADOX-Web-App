@@ -10,17 +10,15 @@ import {
   Grid,
 } from "@nextui-org/react";
 import { Spacer, Link } from "@nextui-org/react";
-import { initializeApp } from "firebase/app";
+
 import { getDatabase, ref, onValue, remove, get } from "firebase/database";
 import React, { useState } from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import Footer from "./footer";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { firebaseApp } = require("@/modules/config.js"),
+  db = getDatabase(firebaseApp);
 
 export default function Room(data) {
   const router = useRouter();

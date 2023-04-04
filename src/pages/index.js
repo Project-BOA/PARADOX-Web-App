@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Inter } from "@next/font/google";
-import { initializeApp } from "firebase/app";
+
 import { getDatabase, ref } from "firebase/database";
 import { useList } from "react-firebase-hooks/database";
 import styles from "@/styles/Home.module.css";
@@ -24,10 +24,8 @@ import {
 
 const inter = Inter({ subsets: ["latin"] });
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { firebaseApp } = require("@/modules/config.js"),
+  db = getDatabase(firebaseApp);
 
 export default function Home({ user }) {
   const router = useRouter();
