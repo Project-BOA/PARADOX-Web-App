@@ -1,7 +1,3 @@
-import { NextUIProvider } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-import { Container, Card, Row, Text, Col } from "@nextui-org/react";
-import { Spacer } from "@nextui-org/react";
 import {
   Button,
   Card,
@@ -12,8 +8,8 @@ import {
   Spacer,
   Text,
 } from "@nextui-org/react";
-import { getDatabase, ref, get, update } from "firebase/database";
-
+import { get, getDatabase, ref, update } from "firebase/database";
+import { Fragment } from "react";
 import { useRouter } from "next/router";
 
 const { firebaseApp } = require("@/modules/config.js"),
@@ -120,14 +116,15 @@ export async function getServerSideProps(context) {
       },
     };
   }
+
   var leaderboard;
   await get(ref(db, "room/" + context.query.roomID + "/leaderboard")).then(
     (snapshot) => {
       leaderboard = snapshot.val();
     }
   );
-  var puzzleID;
 
+  var puzzleID;
   await get(ref(db, "room/" + context.query.roomID + "/puzzleID")).then(
     (snapshot) => {
       puzzleID = snapshot.val();
