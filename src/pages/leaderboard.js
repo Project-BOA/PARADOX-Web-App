@@ -32,12 +32,12 @@ export default function Leaderboard(data) {
         check.push(name);
 
         return (
-          <React.Fragment key={name}>
+          <Fragment key={name}>
             <Text h3 size={25} align="center">
               {position++}. {name} - {score} points
             </Text>
             <Spacer y={2.5} />
-          </React.Fragment>
+          </Fragment>
         );
       }
     });
