@@ -1,2 +1,4 @@
 {
+    "thunder-client.saveToWorkspace": true,
+    "thunder-client.workspaceRelativePath": "test/"
 }

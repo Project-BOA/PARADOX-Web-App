@@ -9,61 +9,15 @@ import {
   Text,
 } from "@nextui-org/react";
 import { get, getDatabase, ref, update } from "firebase/database";
-import { Fragment } from "react";
 import { useRouter } from "next/router";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 
+const { LeaderboardMapper, endRoom } = require("@/modules/leaderboard");
 
-export default function Leaderboard(data) {
+export default function Leaderboard({ entries }) {
   const router = useRouter();
   const { roomID } = router.query;
-
-  function Leaderboard() {
-    var position = 1;
-    var check = [];
-
-    return data.players.map((item, index) => {
-      var name = data.players[index][0];
-      var score = data.players[index][1];
-
-      if (!check.includes(name)) {
-        check.push(name);
-
-        return (
-          <Fragment key={name}>
-            <Text h3 size={25} align="center">
-              {position++}. {name} - {score} points
-            </Text>
-            <Spacer y={2.5} />
-          </Fragment>
-        );
-      }
-    });
-  }
-
-  async function endRoom() {
-    const data = {
-      roomID: roomID,
-    };
-
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    };
-
-    const response = await fetch("api/room/remove", options);
-    const result = await response.json();
-    if (result.status == "OK") {
-      router.push("/");
-    } else {
-      alert("Status: " + result.status);
-    }
-  }
 
   return (
     <NextUIProvider>
@@ -87,10 +41,10 @@ export default function Leaderboard(data) {
           <Col>
             <Card css={{ $$cardColor: "#00764F" }}>
               <Card.Body>
-                <Leaderboard />
+                <LeaderboardMapper entries={entries} />
                 <Button
                   onPress={(event) => {
-                    endRoom();
+                    endRoom(router, roomID);
                   }}
                 >
                   End
@@ -118,21 +72,21 @@ export async function getServerSideProps(context) {
   }
 
   var leaderboard;
-  await get(ref(db, "room/" + context.query.roomID + "/leaderboard")).then(
-    (snapshot) => {
-      leaderboard = snapshot.val();
-    }
-  );
+  await get(
+    ref(database, "room/" + context.query.roomID + "/leaderboard")
+  ).then((snapshot) => {
+    leaderboard = snapshot.val();
+  });
 
   var puzzleID;
-  await get(ref(db, "room/" + context.query.roomID + "/puzzleID")).then(
+  await get(ref(database, "room/" + context.query.roomID + "/puzzleID")).then(
     (snapshot) => {
       puzzleID = snapshot.val();
     }
   );
 
   var title;
-  await get(ref(db, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
+  await get(ref(database, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
     if (snapshot.exists()) {
       title = snapshot.val();
     } else {
@@ -140,16 +94,16 @@ export async function getServerSideProps(context) {
     }
   });
 
-  var players = [];
+  var entries = [];
   const date = Date.now();
 
   for (var player in leaderboard) {
-    players.push([player, leaderboard[player].score ?? leaderboard[player]]);
+    entries.push([player, leaderboard[player].score ?? leaderboard[player]]);
 
-    await get(ref(db, "users/" + player + "/solved/" + title)).then(
+    await get(ref(database, "users/" + player + "/solved/" + title)).then(
       async (snapshot) => {
         if (!snapshot.exists()) {
-          await update(ref(db, "users/" + player + "/solved/" + title), {
+          await update(ref(database, "users/" + player + "/solved/" + title), {
             completedOn: date,
             points: leaderboard[player].score ?? leaderboard[player],
           });
@@ -158,9 +112,9 @@ export async function getServerSideProps(context) {
     );
   }
 
-  players.sort(function (a, b) {
+  entries.sort(function (a, b) {
     return b[1] - a[1];
   });
 
-  return { props: { players } };
+  return { props: { entries } };
 }

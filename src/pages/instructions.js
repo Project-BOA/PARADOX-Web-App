@@ -21,10 +21,10 @@ import {
 
 const inter = Inter({ subsets: ["latin"] });
 
-var config = require("@/modules/config.js");
+var config = require("@/modules/firebase-config.js");
 
 const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const database = getDatabase(app);
 
 export default function Home({ user }) {
   const router = useRouter();

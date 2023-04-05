@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 
-import { getDatabase, ref } from "firebase/database";
+import { ref } from "firebase/database";
 import { useList } from "react-firebase-hooks/database";
 import styles from "@/styles/Home.module.css";
 import { withIronSessionSsr } from "iron-session/next";
@@ -22,10 +22,7 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 
-const inter = Inter({ subsets: ["latin"] });
-
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 
 export default function Home({ user }) {
   const router = useRouter();
@@ -38,7 +35,7 @@ export default function Home({ user }) {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json ",
       },
       body: JSON.stringify(data),
     };
@@ -54,8 +51,7 @@ export default function Home({ user }) {
     }
   }
 
-  async function gottoComments(puzzleID) {
-    //puzzleID = "TU1";
+  async function goToComments(puzzleID) {
     const data = {
       puzzleID: puzzleID,
     };
@@ -93,7 +89,7 @@ export default function Home({ user }) {
               shadow
               color="error"
               onClick={(event) => {
-                gottoComments(puzzleID);
+                goToComments(puzzleID);
               }}
             >
               Check
@@ -105,7 +101,7 @@ export default function Home({ user }) {
   };
 
   function Puzzles() {
-    const [snapshots, loading, error] = useList(ref(db, "puzzle/"));
+    const [snapshots, loading, error] = useList(ref(database, "puzzle/"));
     return (
       <>
         {error && (
@@ -288,7 +284,7 @@ export const getServerSideProps = withIronSessionSsr(
         user: req.session.user,
       },
     };
-  }, // -------------------- All boilerplate code for sessions ------------------------------------
+  },
   {
     cookieName: process.env.COOKIE_NAME,
     password: process.env.SESSION_PASSWORD,

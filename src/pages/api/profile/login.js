@@ -1,8 +1,7 @@
-import { getDatabase, ref, get } from "firebase/database";
+import { ref, get, update } from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 const bcrypt = require("bcrypt");
 
 export default withIronSessionApiRoute(
@@ -23,7 +22,7 @@ export default withIronSessionApiRoute(
     password = password.trim();
 
     var user;
-    await get(ref(db, "users/" + username))
+    await get(ref(database, "users/" + username))
       .then((snapshot) => {
         user = snapshot.toJSON();
       })
@@ -42,7 +41,7 @@ export default withIronSessionApiRoute(
     }
 
     if (!loggedOnSite) {
-      update(ref(db, "users/" + username), {
+      update(ref(database, "users/" + username), {
         loggedIn: true,
       });
     }

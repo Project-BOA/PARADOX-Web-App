@@ -1,10 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get, update } from "firebase/database";
 import { use } from "react";
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 var Filter = require("bad-words"),
   filter = new Filter();
@@ -29,7 +26,7 @@ export default async function handler(req, res) {
 
   const date = Date.now();
 
-  await update(ref(db, "puzzle/" + puzzleID + "/comments/" + username), {
+  await update(ref(database, "puzzle/" + puzzleID + "/comments/" + username), {
     comment: comment,
     commentedOn: date,
   }).catch((error) => {

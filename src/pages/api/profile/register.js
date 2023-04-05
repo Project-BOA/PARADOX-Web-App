@@ -1,7 +1,6 @@
 import { getDatabase, ref, set, get } from "firebase/database";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 const bcrypt = require("bcrypt");
 var validator = require("validator");
 var Filter = require("bad-words"),
@@ -62,7 +61,7 @@ export default async function handler(req, res) {
   const salt = bcrypt.genSaltSync(saltRounds);
   const hashPassword = bcrypt.hashSync(password, salt);
 
-  await get(ref(db, "users/" + username))
+  await get(ref(database, "users/" + username))
     .then((snapshot) => {
       if (snapshot.exists()) {
         res.status(400).json({
@@ -70,7 +69,7 @@ export default async function handler(req, res) {
         });
         return;
       } else {
-        set(ref(db, "users/" + username), {
+        set(ref(database, "users/" + username), {
           password: hashPassword,
           biography: biography,
           email: email,

@@ -1,8 +1,7 @@
 import { getDatabase, ref, set, get, update } from "firebase/database";
 import { use } from "react";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 var Filter = require("bad-words"),
   filter = new Filter();
 export default async function handler(req, res) {
@@ -45,7 +44,7 @@ export default async function handler(req, res) {
 
   // get the room as a JSON object
   var room;
-  await get(ref(db, "room/" + roomID))
+  await get(ref(database, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {
         room = snapshot.toJSON();
@@ -71,7 +70,7 @@ export default async function handler(req, res) {
   );
 
   var puzzleType;
-  await get(ref(db, "puzzle/" + room.puzzleID + "/puzzleType"))
+  await get(ref(database, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
       if (snapshot.exists()) {
         puzzleType = snapshot.val().toUpperCase();
@@ -91,7 +90,7 @@ export default async function handler(req, res) {
   // check answer
   if (puzzleType == "MULTI") {
     var puzzleAnswers;
-    await get(ref(db, "puzzle/" + room.puzzleID + "/answers"))
+    await get(ref(database, "puzzle/" + room.puzzleID + "/answers"))
       .then((snapshot) => {
         if (snapshot.exists()) {
           puzzleAnswers = snapshot.toJSON();
@@ -110,7 +109,7 @@ export default async function handler(req, res) {
   } else {
     // check answer
     var puzzleAnswer;
-    await get(ref(db, "puzzle/" + room.puzzleID + "/answer"))
+    await get(ref(database, "puzzle/" + room.puzzleID + "/answer"))
       .then((snapshot) => {
         if (snapshot.exists()) {
           puzzleAnswer = snapshot.val();
@@ -131,7 +130,7 @@ export default async function handler(req, res) {
   if (puzzleType == "TIME") {
     if (answer == puzzleAnswer.toLowerCase()) {
       set(
-        ref(db, "room/" + roomID + "/leaderboard/" + username),
+        ref(database, "room/" + roomID + "/leaderboard/" + username),
         room.leaderboard[username] + room.points
       ).catch((error) => {
         res.status(500).json({
@@ -143,7 +142,7 @@ export default async function handler(req, res) {
   } else if (puzzleType == "SINGLE") {
     if (answer == puzzleAnswer.toLowerCase()) {
       set(
-        ref(db, "room/" + roomID + "/leaderboard/" + username),
+        ref(database, "room/" + roomID + "/leaderboard/" + username),
         room.leaderboard[username] + 100
       ).catch((error) => {
         res.status(500).json({
@@ -160,10 +159,13 @@ export default async function handler(req, res) {
     if (!room.leaderboard[username].solved.hasOwnProperty(answer)) {
       if (answer == puzzleAnswers.overall.toLowerCase()) {
         room.leaderboard[username].solved[answer] = answer;
-        set(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
-          score: room.leaderboard[username].score + 100,
-          solved: room.leaderboard[username].solved,
-        }).catch((error) => {
+        set(
+          ref(database, "room/" + roomID + "/leaderboard/" + username + "/"),
+          {
+            score: room.leaderboard[username].score + 100,
+            solved: room.leaderboard[username].solved,
+          }
+        ).catch((error) => {
           res.status(500).json({
             status: "ERROR with Multi Puzzle",
           });
@@ -173,11 +175,15 @@ export default async function handler(req, res) {
           room.leaderboard[username].solved[answer] =
             puzzleAnswers.partial[answer];
 
-          set(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
-            score:
-              room.leaderboard[username].score + puzzleAnswers.partial[answer],
-            solved: room.leaderboard[username].solved,
-          }).catch((error) => {
+          set(
+            ref(database, "room/" + roomID + "/leaderboard/" + username + "/"),
+            {
+              score:
+                room.leaderboard[username].score +
+                puzzleAnswers.partial[answer],
+              solved: room.leaderboard[username].solved,
+            }
+          ).catch((error) => {
             res.status(500).json({
               status: "ERROR with answer",
             });
@@ -190,9 +196,12 @@ export default async function handler(req, res) {
             score = 0;
           }
           room.leaderboard[username].score = score;
-          update(ref(db, "room/" + roomID + "/leaderboard/" + username + "/"), {
-            score: (room.leaderboard[username].score = score),
-          }).catch((error) => {
+          update(
+            ref(database, "room/" + roomID + "/leaderboard/" + username + "/"),
+            {
+              score: (room.leaderboard[username].score = score),
+            }
+          ).catch((error) => {
             res.status(500).json({
               status: "ERROR with answer",
             });

@@ -1,7 +1,6 @@
 import { getDatabase, ref, remove, get } from "firebase/database";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 
 export default async function create(req, res) {
   // TODO
@@ -27,12 +26,10 @@ export default async function create(req, res) {
     roomID = validation[0]; // first matched substring
   }
 
-
-
-  await get(ref(db, "room/" + roomID))
+  await get(ref(database, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        remove(ref(db, "room/" + roomID));
+        remove(ref(database, "room/" + roomID));
 
         console.log("Room removed at ID: '" + roomID + "'");
 

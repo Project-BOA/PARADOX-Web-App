@@ -1,7 +1,6 @@
 import { getDatabase, ref, get, remove } from "firebase/database";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 const bcrypt = require("bcrypt");
 
 export default async function handler(req, res) {
@@ -16,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   var user;
-  await get(ref(db, "users/" + username))
+  await get(ref(database, "users/" + username))
     .then((snapshot) => {
       user = snapshot.toJSON();
     })
@@ -35,7 +34,7 @@ export default async function handler(req, res) {
   }
 
   // after authentication remove user
-  remove(ref(db, "users/" + username));
+  remove(ref(database, "users/" + username));
 
   res.status(200).json({
     status: "OK",

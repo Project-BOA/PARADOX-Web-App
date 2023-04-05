@@ -1,9 +1,8 @@
 import { getDatabase, ref, get } from "firebase/database";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 
-const { leaderboardMapper } = require("@/modules/Leaderboard");
+const { leaderboardMapper } = require("@/modules/leaderboard");
 
 export default async function handler(req, res) {
   var roomID = req.body.roomID;
@@ -27,7 +26,7 @@ export default async function handler(req, res) {
   }
 
   var room;
-  await get(ref(db, "room/" + roomID))
+  await get(ref(database, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {
         room = snapshot.toJSON();
@@ -45,7 +44,7 @@ export default async function handler(req, res) {
     });
 
   var leaderboard;
-  await get(ref(db, "room/" + roomID + "/leaderboard"))
+  await get(ref(database, "room/" + roomID + "/leaderboard"))
     .then((snapshot) => {
       leaderboard = leaderboardMapper(snapshot.toJSON());
     })

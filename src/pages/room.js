@@ -17,8 +17,7 @@ import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import Footer from "./footer";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 
 export default function Room(data) {
   const router = useRouter();
@@ -49,10 +48,10 @@ export default function Room(data) {
   function Room() {
     var players = [];
     const [snapshots, loading, error] = useListKeys(
-      ref(db, "room/" + roomID + "/leaderboard")
+      ref(database, "room/" + roomID + "/leaderboard")
     );
     const removePlayer = (event, roomID, player) => {
-      remove(ref(db, "room/" + roomID + "/leaderboard/" + player));
+      remove(ref(database, "room/" + roomID + "/leaderboard/" + player));
       console.log("Room removed at ID: '" + roomID + " player at " + player);
       players.pop();
       if (players.length == 0) {
@@ -221,24 +220,26 @@ export async function getServerSideProps(context) {
     };
   }
 
-  await get(ref(db, "room/" + context.query.roomID + "/puzzleID")).then(
+  await get(ref(database, "room/" + context.query.roomID + "/puzzleID")).then(
     (snapshot) => {
       puzzleID = snapshot.val();
     }
   );
 
   var puzzleType = "None";
-  await get(ref(db, "puzzle/" + puzzleID + "/puzzleType")).then((snapshot) => {
-    if (snapshot.exists()) {
-      puzzleType = snapshot.val();
-    } else {
-      console.log("No puzzle type available");
+  await get(ref(database, "puzzle/" + puzzleID + "/puzzleType")).then(
+    (snapshot) => {
+      if (snapshot.exists()) {
+        puzzleType = snapshot.val();
+      } else {
+        console.log("No puzzle type available");
+      }
     }
-  });
+  );
 
   var title;
 
-  await get(ref(db, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
+  await get(ref(database, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
     if (snapshot.exists()) {
       title = snapshot.val();
     } else {

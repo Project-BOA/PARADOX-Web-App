@@ -1,7 +1,6 @@
 import { getDatabase, ref, set, get } from "firebase/database";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
+const { database } = require("@/modules/firebase-config.js");
 
 export default async function create(req, res) {
   // TODO:
@@ -34,7 +33,7 @@ export default async function create(req, res) {
   console.log("User: '" + username + "' joined room with ID: '" + roomID + "'");
 
   var room;
-  await get(ref(db, "room/" + roomID))
+  await get(ref(database, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {
         room = snapshot.toJSON();
@@ -49,7 +48,7 @@ export default async function create(req, res) {
       console.error(error);
     });
   var puzzleType;
-  await get(ref(db, "puzzle/" + room.puzzleID + "/puzzleType"))
+  await get(ref(database, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
       if (snapshot.exists()) {
         puzzleType = snapshot.val();
@@ -67,9 +66,11 @@ export default async function create(req, res) {
     });
 
   if (puzzleType == "multi") {
-    set(ref(db, "room/" + roomID + "/leaderboard/" + username), { score: 0 });
+    set(ref(database, "room/" + roomID + "/leaderboard/" + username), {
+      score: 0,
+    });
   } else {
-    set(ref(db, "room/" + roomID + "/leaderboard/" + username), 0);
+    set(ref(database, "room/" + roomID + "/leaderboard/" + username), 0);
   }
 
   res.status(200).json({

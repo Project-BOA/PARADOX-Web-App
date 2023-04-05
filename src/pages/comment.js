@@ -23,10 +23,7 @@ import {
 } from "@nextui-org/react";
 const inter = Inter({ subsets: ["latin"] });
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 export default function Home({ user, comments }) {
   const router = useRouter();
@@ -142,7 +139,7 @@ export const getServerSideProps = withIronSessionSsr(
     console.log(id);
 
     var comments;
-    await get(ref(db, "puzzle/" + id + "/comments")).then((snapshot) => {
+    await get(ref(database, "puzzle/" + id + "/comments")).then((snapshot) => {
       if (snapshot.exists()) {
         comments = snapshot.toJSON();
       } else {

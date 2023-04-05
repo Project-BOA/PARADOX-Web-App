@@ -13,9 +13,7 @@ import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-const { firebaseApp } = require("@/modules/config.js"),
-  db = getDatabase(firebaseApp);
-const storage = getStorage(firebaseApp);
+const { database, storage } = require("@/modules/firebase-config.js");
 
 var time = 5;
 var getPoints,
@@ -35,7 +33,7 @@ export default function Gameplay({
 
   function BioToolTip({ name }) {
     const [snapshot, loading, error] = useObject(
-      ref_database(db, "users/" + name + "/biography")
+      ref_database(database, "users/" + name + "/biography")
     );
 
     return (
@@ -99,7 +97,7 @@ export default function Gameplay({
 
   function Leaderboard() {
     const [snapshots, loading, error] = useList(
-      ref_database(db, "room/" + roomID + "/leaderboard")
+      ref_database(database, "room/" + roomID + "/leaderboard")
     );
 
     return (
@@ -179,7 +177,7 @@ export default function Gameplay({
               if (puzzleType == "time") {
                 if (getPoints <= 0) getPoints = 0;
                 getPoints = getPoints - decrement;
-                update(ref_database(db, "room/" + roomID), {
+                update(ref_database(database, "room/" + roomID), {
                   points: getPoints,
                 });
                 document.getElementById("availPoints").innerHTML = getPoints;
@@ -228,14 +226,14 @@ export async function getServerSideProps(context) {
   }
 
   await get(
-    ref_database(db, "room/" + context.query.roomID + "/puzzleID")
+    ref_database(database, "room/" + context.query.roomID + "/puzzleID")
   ).then((snapshot) => {
     puzzleID = snapshot.val();
   });
 
   var puzzleName;
 
-  await get(ref_database(db, "puzzle/" + puzzleID + "/title")).then(
+  await get(ref_database(database, "puzzle/" + puzzleID + "/title")).then(
     (snapshot) => {
       if (snapshot.exists()) {
         puzzleName = snapshot.val();
@@ -245,7 +243,7 @@ export async function getServerSideProps(context) {
     }
   );
   var puzzleType;
-  await get(ref_database(db, "puzzle/" + puzzleID + "/puzzleType")).then(
+  await get(ref_database(database, "puzzle/" + puzzleID + "/puzzleType")).then(
     (snapshot) => {
       if (snapshot.exists()) {
         puzzleType = snapshot.val();
@@ -254,7 +252,7 @@ export async function getServerSideProps(context) {
       }
     }
   );
-  await get(ref_database(db, "puzzle/" + puzzleID + "/pieceTime")).then(
+  await get(ref_database(database, "puzzle/" + puzzleID + "/pieceTime")).then(
     (snapshot) => {
       if (snapshot.exists()) {
         var pieceTime = snapshot.toJSON();
@@ -266,11 +264,11 @@ export async function getServerSideProps(context) {
     }
   );
 
-  await get(ref_database(db, "room/" + context.query.roomID + "/points")).then(
-    (snapshot) => {
-      getPoints = snapshot.val();
-    }
-  );
+  await get(
+    ref_database(database, "room/" + context.query.roomID + "/points")
+  ).then((snapshot) => {
+    getPoints = snapshot.val();
+  });
 
   const listRef = ref(storage, puzzleID);
   var puzzlePieces = [];

@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "colName": "Profile",
+    "created": "2023-04-05T16:50:23.962Z",
+    "sortNum": 10000,
+    "folders": [],
+    "settings": {
+      "options": {
+        "baseUrl": "http://localhost:3000/api/profile/"
+      }
+    }
+  },
+  {
+    "_id": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "colName": "Room",
+    "created": "2023-04-05T16:50:46.764Z",
+    "sortNum": 20000,
+    "folders": [],
+    "settings": {
+      "options": {
+        "baseUrl": "http://localhost:3000/api/room/"
+      }
+    }
+  },
+  {
+    "_id": "bee4ca6a-63cd-4bbe-a5f2-81bcdeecb358",
+    "colName": "Puzzle",
+    "created": "2023-04-05T16:51:29.041Z",
+    "sortNum": 30000,
+    "folders": [],
+    "settings": {
+      "options": {
+        "baseUrl": "http://localhost:3000/api/puzzle/"
+      }
+    }
+  }
+]
