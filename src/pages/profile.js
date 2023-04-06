@@ -21,6 +21,9 @@ import {
 
 import { theme } from "@/themes/theme.js";
 
+const { Navigation } = require("@/components/Navigation.js");
+const { Footer } = require("@/components/Footer.js");
+
 export default function Profile({ user }) {
   const router = useRouter();
 
@@ -69,36 +72,7 @@ export default function Profile({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navbar isBordered variant="floating">
-          <Navbar.Brand>
-            <Link href="/">
-              <Image
-                width={188}
-                height={75}
-                src="/image/penrose-triangle-PARADOX-text.png"
-                alt=" Logo"
-                style={{ objectFit: "cover" }}
-              />
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Content hideIn="xs" variant="highlight-rounded">
-            <Navbar.Link href="/">Profile</Navbar.Link>
-            <Navbar.Link href="/">Puzzle</Navbar.Link>
-            <Navbar.Link href="/leaderboard">LeaderBoard</Navbar.Link>
-          </Navbar.Content>
-          <Navbar.Content>
-            <Navbar.Item>
-              <Text h6 align="right" size={25} color="white" css={{ m: 0 }}>
-                <User src="/image/user_icon.png" name={user.username} />
-              </Text>
-            </Navbar.Item>
-            <Navbar.Item>
-              <Button auto flat as={Link} href="logout">
-                Logout
-              </Button>
-            </Navbar.Item>
-          </Navbar.Content>
-        </Navbar>
+        <Navigation username={user.username} />
 
         <Spacer y={1} />
 
@@ -172,6 +146,7 @@ export default function Profile({ user }) {
             </Card>
           </Row>
         </Container>
+        <Footer />
       </NextUIProvider>
     </>
   );

@@ -25,6 +25,7 @@ import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
 const { Navigation } = require("@/components/Navigation.js");
+const { Footer } = require("@/components/Footer.js");
 
 export default function Home({ user }) {
   const router = useRouter();
@@ -234,6 +235,7 @@ export default function Home({ user }) {
         <Spacer y={1} />
 
         <Puzzles />
+        <Footer />
       </NextUIProvider>
     </>
   );
