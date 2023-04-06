@@ -84,7 +84,9 @@ export default function Home() {
         <Spacer y={1} />
         <Row gap={1}>
           <Col>
-            <Card css={{ $$cardColor: "$colors$primary" }}>
+            <Card
+              css={{ $$cardColor: "lightGreen", mw: "600px", margin: "auto" }}
+            >
               <Card.Body>
                 <Text h6 align="center" size={36} css={{ m: 0 }}>
                   Register

@@ -103,18 +103,7 @@ export default function Login() {
               <Grid.Container justify="center">
                 <Grid>
                   <Col>
-                    <Button
-                      size="lg"
-                      type="submit"
-                      css={{
-                        color: "$powder",
-                        background: "$secondary",
-                        "&:hover": {
-                          background: "$powder",
-                          color: "$secondary",
-                        },
-                      }}
-                    >
+                    <Button color="secondary" size="lg" type="submit">
                       Sign In
                     </Button>
                     <Spacer />
