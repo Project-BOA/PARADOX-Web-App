@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, update } from "firebase/database";
 import { useList } from "react-firebase-hooks/database";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
@@ -137,12 +137,13 @@ export const getServerSideProps = withIronSessionSsr(
 
     console.log(id);
 
-    var comments;
-    await get(ref(database, "puzzle/" + id + "/comments")).then((snapshot) => {
+    var comments = "There are no comments";
+    await get(ref(database, "comments/" + id)).then((snapshot) => {
       if (snapshot.exists()) {
         comments = snapshot.toJSON();
       } else {
         console.log("No comments available");
+        update(ref(database, "comments/" + id), {});
       }
     });
 

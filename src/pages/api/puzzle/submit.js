@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
   const date = Date.now();
 
-  await update(ref(database, "puzzle/" + puzzleID + "/comments/" + username), {
+  await update(ref(database, "comments/" + puzzleID + "/" + username), {
     comment: comment,
     commentedOn: date,
   }).catch((error) => {
