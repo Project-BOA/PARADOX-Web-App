@@ -5,19 +5,19 @@ function Footer() {
   return (
     <NextUIProvider theme={theme}>
       <Container>
-        <Row justify="left" align="left">
-          <Image
-            width={75}
-            height={75}
-            src="/image/penrose-triangle-coloured-circled.png"
-            alt=" Logo"
-            style={{ objectFit: "cover" }}
-          />
-        </Row>
+        <Image
+          width={75}
+          height={75}
+          src="/image/penrose-triangle-coloured-circled.png"
+          alt=" Logo"
+          style={{ objectFit: "cover" }}
+        />
+
+        <Text h3 size={20} align="center">
+          Contacts Privacy
+        </Text>
       </Container>
-      <Text h3 size={20} align="center">
-        Contacts Privacy
-      </Text>
+
       <Text h3 size={20} align="center">
         @ PARADOX 2023
       </Text>

@@ -29,7 +29,7 @@ export default function Home({ user }) {
   const router = useRouter();
 
   const multiDescritption =
-    "These puzzles have multiple answers, that will score you a low amount of points. These LOW point answers will hin towards the big ticket answer";
+    "These puzzles have multiple answers, that will score you a low amount of points. These LOW point answers will hint towards the big ticket answer";
 
   const timeDescritption =
     "Better answer quick these puzzles require quick thinking or you will lose so many points";
@@ -53,6 +53,9 @@ export default function Home({ user }) {
         <Grid.Container gap={2} justify="center">
           <Grid xs={4}>
             <Card css={{ $$cardColor: "#B6EB7A" }}>
+              <Text h4 align="center">
+                Multi Puzzles
+              </Text>
               <Text size={20} align="center" color="green" css={{ m: 0 }}>
                 {multiDescritption}
               </Text>
@@ -60,6 +63,9 @@ export default function Home({ user }) {
           </Grid>
           <Grid xs={4}>
             <Card css={{ $$cardColor: "#B6EB7A" }}>
+              <Text h4 align="center">
+                Single Puzzles
+              </Text>
               <Text size={20} align="center" color="green" css={{ m: 0 }}>
                 {singleDescritption}
               </Text>
@@ -68,22 +74,27 @@ export default function Home({ user }) {
           <Grid xs={4}>
             <Card css={{ $$cardColor: "#B6EB7A" }}>
               <Text size={20} align="center" color="green" css={{ m: 0 }}>
+                <Text h4 align="center">
+                  Timed Puzzles
+                </Text>
                 {timeDescritption}
               </Text>
             </Card>
           </Grid>
         </Grid.Container>
-        <Grid xs={4}>
-          <Card css={{ $$cardColor: "#B6EB7A" }}>
-            <Text size={20} align="center" color="green" css={{ m: 0 }}>
-              Obtain our app{" "}
-              <Link color href="#">
-                here
-              </Link>{" "}
-              and get ready to play
-            </Text>
-          </Card>
-        </Grid>
+        <Grid.Container gap={2} justify="center">
+          <Grid xs={4}>
+            <Card css={{ $$cardColor: "#B6EB7A" }}>
+              <Text size={20} align="center" color="green" css={{ m: 0 }}>
+                Obtain our app{" "}
+                <Link color href="#">
+                  here
+                </Link>{" "}
+                and get ready to play
+              </Text>
+            </Card>
+          </Grid>
+        </Grid.Container>
         <Spacer y={1} />
         <Footer />
       </NextUIProvider>
