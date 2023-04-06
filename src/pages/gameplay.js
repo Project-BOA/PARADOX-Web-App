@@ -1,11 +1,6 @@
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { getStorage, getDownloadURL, listAll, ref } from "firebase/storage";
-import {
-  getDatabase,
-  get,
-  ref as ref_database,
-  update,
-} from "firebase/database";
+import { getDownloadURL, listAll, ref } from "firebase/storage";
+import { get, ref as ref_database, update } from "firebase/database";
 import { NextUIProvider } from "@nextui-org/react";
 import { Grid, Image, Text, Spacer, Tooltip, Button } from "@nextui-org/react";
 import React from "react";

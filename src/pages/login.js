@@ -81,6 +81,7 @@ export default function Login() {
                   id="username"
                   clearable
                   labelPlaceholder="Username"
+                  minLength={3}
                 />
               </Row>
 
@@ -95,6 +96,8 @@ export default function Login() {
                   id="password"
                   clearable
                   labelPlaceholder="Password"
+                  minLength={3}
+                  maxLength={10}
                 />
               </Row>
 

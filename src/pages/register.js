@@ -101,6 +101,8 @@ export default function Home() {
                       id="username"
                       clearable
                       labelPlaceholder="Username"
+                      minLength={3}
+                      maxLength={10}
                     />
                   </Row>
                   <Spacer y={1.5} />
@@ -113,6 +115,7 @@ export default function Home() {
                       clearable
                       type={"password"}
                       labelPlaceholder="Password"
+                      minLength={3}
                     />
                   </Row>
                   <Spacer y={1.5} />

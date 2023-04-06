@@ -3,6 +3,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 
 const { database } = require("@/modules/firebase-config.js");
 const bcrypt = require("bcrypt");
+var validator = require("validator");
 
 export default withIronSessionApiRoute(
   async function handler(req, res) {
@@ -11,6 +12,16 @@ export default withIronSessionApiRoute(
     var loggedOnSite = req.body.website;
 
     if (username == null || password == null) {
+      res.status(400).json({
+        status: "Invalid input",
+      });
+      return;
+    }
+
+    if (
+      !validator.isAlphanumeric(username) ||
+      !validator.isAlphanumeric(password)
+    ) {
       res.status(400).json({
         status: "Invalid input",
       });
