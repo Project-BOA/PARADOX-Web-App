@@ -16,7 +16,10 @@ import {
   Grid,
   Image,
 } from "@nextui-org/react";
+
 import { theme } from "@/modules/theme.js";
+
+import { User, Lock, Message, Document } from "react-iconly";
 
 export default function Home() {
   const router = useRouter();
@@ -67,54 +70,82 @@ export default function Home() {
     <NextUIProvider theme={theme}>
       <Container>
         <Row gap={1}>
-          <Card css={{ $$cardColor: "$colors$primary" }}>
-            <Card.Body>
-              <Text h6 align="center" size={25} color="white" css={{ m: 0 }}>
-                PARADOX
-              </Text>
-            </Card.Body>
-          </Card>
+          <Container>
+            <Row>
+              <Image
+                height={192}
+                src="/image/penrose-triangle-PARADOX.png"
+                alt=" Logo"
+                style={{ objectFit: "cover" }}
+              />
+            </Row>
+          </Container>
         </Row>
         <Spacer y={1} />
         <Row gap={1}>
           <Col>
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>
-                <Text h6 align="center" size={18} color="white" css={{ m: 0 }}>
+                <Text h6 align="center" size={36} css={{ m: 0 }}>
                   Register
                 </Text>
                 <Spacer y={1} />
                 <form onSubmit={handleSubmit}>
-                  <Input
-                    fullWidth
-                    id="username"
-                    clearable
-                    labelPlaceholder="Username"
-                  />
+                  <Row>
+                    <User set="bold" primaryColor="blueviolet" size="xlarge" />
+                    <Spacer />
+                    <Input
+                      fullWidth
+                      id="username"
+                      clearable
+                      labelPlaceholder="Username"
+                    />
+                  </Row>
                   <Spacer y={1.5} />
-                  <Input
-                    fullWidth
-                    id="password"
-                    clearable
-                    type={"password"}
-                    labelPlaceholder="Password"
-                  />
+                  <Row>
+                    <Lock set="bold" primaryColor="blueviolet" size="xlarge" />
+                    <Spacer />
+                    <Input
+                      fullWidth
+                      id="password"
+                      clearable
+                      type={"password"}
+                      labelPlaceholder="Password"
+                    />
+                  </Row>
+                  <Spacer y={1.5} />
+                  <Row>
+                    <Message
+                      set="bold"
+                      primaryColor="blueviolet"
+                      size="xlarge"
+                    />
+                    <Spacer />
+                    <Input
+                      fullWidth
+                      id="email"
+                      clearable
+                      labelPlaceholder="Email"
+                    />
+                  </Row>
+
                   <Spacer y={1.5} />
 
-                  <Input
-                    fullWidth
-                    id="email"
-                    clearable
-                    labelPlaceholder="Email"
-                  />
+                  <Row>
+                    <Document
+                      set="bold"
+                      primaryColor="blueviolet"
+                      size="xlarge"
+                    />
 
-                  <Spacer y={1.5} />
-                  <Input
-                    fullWidth
-                    id="bio"
-                    clearable
-                    labelPlaceholder="Biography"
-                  />
+                    <Spacer />
+                    <Input
+                      fullWidth
+                      id="bio"
+                      clearable
+                      labelPlaceholder="Biography"
+                    />
+                  </Row>
                   <Spacer y={1.5} />
                   <Grid.Container gap={1} justify="center">
                     <Grid>
