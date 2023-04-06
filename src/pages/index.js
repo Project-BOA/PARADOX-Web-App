@@ -1,9 +1,5 @@
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-
 import { ref } from "firebase/database";
 import { useList } from "react-firebase-hooks/database";
-import styles from "@/styles/Home.module.css";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {
@@ -15,10 +11,7 @@ import {
   Col,
   Spacer,
   Button,
-  Link,
   Grid,
-  User,
-  Navbar,
   Tooltip,
 } from "@nextui-org/react";
 import { theme } from "@/themes/theme.js";
@@ -53,14 +46,6 @@ export default function Home({ user }) {
     }
   }
 
-  async function goToComments(puzzleID) {
-    const data = {
-      puzzleID: puzzleID,
-    };
-
-    router.push({ pathname: "/comment", query: { puzzleID: puzzleID } });
-  }
-
   const GetComment = ({ puzzleID }) => {
     return (
       <Grid.Container
@@ -90,8 +75,11 @@ export default function Home({ user }) {
               size="sm"
               shadow
               color="error"
-              onClick={(event) => {
-                goToComments(puzzleID);
+              onClick={() => {
+                router.push({
+                  pathname: "/comment",
+                  query: { puzzleID: puzzleID },
+                });
               }}
             >
               Check

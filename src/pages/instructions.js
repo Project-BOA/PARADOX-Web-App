@@ -3,7 +3,6 @@ import { Inter } from "@next/font/google";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref } from "firebase/database";
 import { useList } from "react-firebase-hooks/database";
-import styles from "@/styles/Home.module.css";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {
