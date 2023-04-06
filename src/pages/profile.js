@@ -19,7 +19,7 @@ import {
   Navbar,
 } from "@nextui-org/react";
 
-import { theme } from "@/modules/theme.js";
+import { theme } from "@/themes/theme.js";
 
 export default function Profile({ user }) {
   const router = useRouter();

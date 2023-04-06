@@ -1,5 +1,5 @@
 import { NextUIProvider, Text } from "@nextui-org/react";
-import { theme } from "@/modules/theme.js";
+import { theme } from "@/themes/theme.js";
 export default function Footer() {
   return (
     <NextUIProvider theme={theme}>

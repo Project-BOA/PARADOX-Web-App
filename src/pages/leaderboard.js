@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/react";
 import { get, getDatabase, ref, update } from "firebase/database";
 import { useRouter } from "next/router";
-import { theme } from "@/modules/theme.js";
+import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
 

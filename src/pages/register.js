@@ -17,7 +17,7 @@ import {
   Image,
 } from "@nextui-org/react";
 
-import { theme } from "@/modules/theme.js";
+import { theme } from "@/themes/theme.js";
 
 import { User, Lock, Message, Document } from "react-iconly";
 

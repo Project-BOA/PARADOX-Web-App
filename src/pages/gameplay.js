@@ -12,7 +12,7 @@ import React from "react";
 import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { theme } from "@/modules/theme.js";
+import { theme } from "@/themes/theme.js";
 
 const { database, storage } = require("@/modules/firebase-config.js");
 
