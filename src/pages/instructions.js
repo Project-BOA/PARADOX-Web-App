@@ -19,12 +19,9 @@ import {
   Card,
 } from "@nextui-org/react";
 
-const inter = Inter({ subsets: ["latin"] });
+import { theme } from "@/modules/theme.js";
 
-var config = require("@/modules/firebase-config.js");
-
-const app = initializeApp(config.firebase);
-const database = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 export default function Home({ user }) {
   const router = useRouter();
@@ -39,7 +36,7 @@ export default function Home({ user }) {
 
   return (
     <>
-      <NextUIProvider>
+      <NextUIProvider theme={theme}>
         <Navbar isBordered variant="floating">
           <Navbar.Brand>
             <Link href="/">

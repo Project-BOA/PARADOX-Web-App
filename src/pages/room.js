@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import Footer from "./footer";
+import { theme } from "@/modules/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
 
@@ -106,7 +107,7 @@ export default function Room(data) {
   }
 
   return (
-    <NextUIProvider>
+    <NextUIProvider theme={theme}>
       <Container gap={0}>
         <Row gap={0}>
           <Col>

@@ -19,7 +19,7 @@ import {
   Navbar,
 } from "@nextui-org/react";
 
-const inter = Inter({ subsets: ["latin"] });
+import { theme } from "@/modules/theme.js";
 
 export default function Profile({ user }) {
   const router = useRouter();
@@ -68,7 +68,7 @@ export default function Profile({ user }) {
 
   return (
     <>
-      <NextUIProvider>
+      <NextUIProvider theme={theme}>
         <Navbar isBordered variant="floating">
           <Navbar.Brand>
             <Link href="/">

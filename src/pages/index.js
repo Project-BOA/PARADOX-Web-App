@@ -21,6 +21,7 @@ import {
   Navbar,
   Tooltip,
 } from "@nextui-org/react";
+import { theme } from "@/modules/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
 
@@ -221,7 +222,7 @@ export default function Home({ user }) {
 
   return (
     <>
-      <NextUIProvider>
+      <NextUIProvider theme={theme}>
         <Navbar isBordered variant="floating">
           <Navbar.Brand>
             <Link href="/">

@@ -1,4 +1,8 @@
 {
     "thunder-client.saveToWorkspace": true,
-    "thunder-client.workspaceRelativePath": "test/"
+    "thunder-client.workspaceRelativePath": "test/",
+    "cSpell.words": [
+        "blueviolet",
+        "xlarge"
+    ]
 }

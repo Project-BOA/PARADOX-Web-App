@@ -1,6 +1,16 @@
+import { Container } from "@nextui-org/react";
 import "../styles/globals.css";
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
-}
+import { Rubik } from "@next/font/google";
 
-export default MyApp;
+const alkatra = Rubik({
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+export default function MyApp({ Component, pageProps }) {
+  return (
+    <main className={alkatra.className}>
+      <Component {...pageProps} />
+    </main>
+  );
+}

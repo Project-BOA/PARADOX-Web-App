@@ -16,6 +16,7 @@ import {
   Grid,
   Image,
 } from "@nextui-org/react";
+import { theme } from "@/modules/theme.js";
 
 export default function Home() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function Home() {
   }
 
   return (
-    <NextUIProvider>
+    <NextUIProvider theme={theme}>
       <Container>
         <Row gap={1}>
           <Card css={{ $$cardColor: "$colors$primary" }}>

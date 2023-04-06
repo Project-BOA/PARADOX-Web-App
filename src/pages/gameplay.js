@@ -12,6 +12,7 @@ import React from "react";
 import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { theme } from "@/modules/theme.js";
 
 const { database, storage } = require("@/modules/firebase-config.js");
 
@@ -140,7 +141,7 @@ export default function Gameplay({
   });
 
   return (
-    <NextUIProvider>
+    <NextUIProvider theme={theme}>
       <Grid.Container gap={2} justify="center">
         <Grid xs={4}>
           <Text h1 size={30} css={{ m: 0 }} weight="bold" align="left">
