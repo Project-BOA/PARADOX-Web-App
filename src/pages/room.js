@@ -73,7 +73,7 @@ export default function Room(data) {
         )}
         {!loading && snapshots && (
           <React.Fragment>
-            <Text h2 size={30} color="#17706E" align="center">
+            <Text h2 size={30} color="#8A2BE2" align="center">
               Players
             </Text>
             <Spacer y={2.5} />
@@ -111,7 +111,7 @@ export default function Room(data) {
       <Container gap={0}>
         <Row gap={0}>
           <Col>
-            <Card variant="bordered" css={{ $$cardColor: "#17706E" }}>
+            <Card css={{ $$cardColor: "#17706E" }}>
               <Card.Body>
                 <Row>
                   <Col>
@@ -132,6 +132,8 @@ export default function Room(data) {
                   </Col>
                   <Col>
                     <Container>
+                      <Spacer y={1} />
+
                       <Text
                         h1
                         size={30}
@@ -161,29 +163,40 @@ export default function Room(data) {
                     </Container>
                   </Col>
                 </Row>
-                <Container>
-                  <Button
-                    onPress={(event) => {
-                      router.push("/gameplay?roomID=" + roomID);
-                    }}
-                    size="lg"
-                    css={{
-                      color: "#17706E",
-                      fontSize: "35px",
-                      backgroundColor: "#FB7813",
-                      marginInline: "auto",
-                    }}
-                  >
-                    Start
-                  </Button>
-                  <Button
-                    onPress={(event) => {
-                      endRoom();
-                    }}
-                  >
-                    End
-                  </Button>
-                </Container>
+
+                <Row>
+                  <Col>
+                    <Button
+                      css={{
+                        color: "#17706E",
+                        backgroundColor: "#BB2297",
+                      }}
+                      onPress={(event) => {
+                        endRoom();
+                      }}
+                    >
+                      End
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button
+                      onPress={(event) => {
+                        router.push("/gameplay?roomID=" + roomID);
+                      }}
+                      size="lg"
+                      css={{
+                        color: "#17706E",
+                        backgroundColor: "#BB2297",
+                        marginInline: "auto",
+                      }}
+                    >
+                      Start
+                    </Button>
+                  </Col>
+
+                  <Col></Col>
+                </Row>
+                <Container></Container>
               </Card.Body>
             </Card>
           </Col>
@@ -193,7 +206,7 @@ export default function Room(data) {
         <Row gap={1}>
           <Col></Col>
           <Col>
-            <Card css={{ $$cardColor: "#B6EB7A" }}>
+            <Card css={{ $$cardColor: "#90EE90" }}>
               <Card.Body>
                 <Room />
               </Card.Body>
