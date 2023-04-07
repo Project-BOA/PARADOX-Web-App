@@ -7,6 +7,8 @@ import {
   Row,
   Spacer,
   Text,
+  Image,
+  Navbar,
 } from "@nextui-org/react";
 import { get, getDatabase, ref, update } from "firebase/database";
 import { useRouter } from "next/router";
@@ -16,34 +18,70 @@ const { database } = require("@/modules/firebase-config.js");
 
 const { LeaderboardMapper, endRoom } = require("@/modules/leaderboard");
 
-export default function Leaderboard({ entries }) {
+export default function Leaderboard({ title, entries }) {
   const router = useRouter();
   const { roomID } = router.query;
 
   return (
     <NextUIProvider theme={theme}>
       <Container gap={0}>
-        <Row gap={1}>
+        <Row gap={0}>
           <Col>
-            <Card css={{ $$cardColor: "#CC083E" }}>
+            <Card css={{ $$cardColor: "#17706E" }}>
               <Card.Body>
-                <Text h1 size={60} css={{ m: 0 }} weight="bold" align="center">
-                  {"Room ID: " + roomID}
-                </Text>
+                <Row>
+                  <Col>
+                    <Container>
+                      <Image
+                        height={192}
+                        src="/image/penrose-triangle-PARADOX.png"
+                        alt=" Logo"
+                      />
+                    </Container>
+                  </Col>
+                  <Col>
+                    <Spacer y={2} />
+
+                    <Text
+                      h1
+                      size={60}
+                      css={{ m: 0 }}
+                      weight="bold"
+                      align="center"
+                    >
+                      {title}
+                    </Text>
+                  </Col>
+                  <Col></Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
         </Row>
+      </Container>
+
+      <Container gap={0}>
         <Spacer y={1} />
         <Row gap={1}>
           <Col>
             <Card css={{ $$cardColor: "#00764F" }}></Card>
           </Col>
           <Col>
-            <Card css={{ $$cardColor: "#00764F" }}>
+            <Card css={{ $$cardColor: "#90EE90" }}>
+              <Text
+                h1
+                size={60}
+                css={{ m: 0 }}
+                weight="bold"
+                color="#8A2BE2"
+                align="center"
+              >
+                Leaderboard
+              </Text>
               <Card.Body>
                 <LeaderboardMapper entries={entries} />
                 <Button
+                  css={{ backgroundColor: "#BB2297" }}
                   onPress={(event) => {
                     endRoom(router, roomID);
                   }}
@@ -117,5 +155,5 @@ export async function getServerSideProps(context) {
     return b[1] - a[1];
   });
 
-  return { props: { entries } };
+  return { props: { title, entries } };
 }
