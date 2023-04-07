@@ -81,35 +81,81 @@ export default function Profile({ user }) {
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>
                 <Text h4 align="center">
-                  Profile Info
+                  Email/Bio Info
                 </Text>
                 <Grid.Container gap={2} justify="center">
-                  <Spacer y={1.5} />
-                  {user.biography}
-                  <Spacer y={1.5} />
-
-                  <Spacer y={4} />
-                  <Button
-                    auto
-                    type="edit"
-                    color="secondary"
-                    as={Link}
-                    href="edit"
-                    css={{ marginLeft: "auto", marginRight: "auto" }}
-                  >
-                    Edit
-                  </Button>
+                  <Spacer x={4} />
+                  <form onSubmit={handleSubmit}>
+                    <Input
+                      fullWidth
+                      id="email"
+                      clearable
+                      labelPlaceholder="Email"
+                    />
+                    <Spacer y={1.5} />
+                    <Input
+                      fullWidth
+                      id="biography"
+                      clearable
+                      labelPlaceholder="Biography"
+                    />
+                    <Spacer y={1.5} />
+                    <Grid.Container gap={1} justify="center">
+                      <Grid>
+                        <Button
+                          auto
+                          type="submit"
+                          color="secondary"
+                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                        >
+                          Submit
+                        </Button>
+                      </Grid>
+                    </Grid.Container>
+                  </form>
                 </Grid.Container>
               </Card.Body>
             </Card>
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>
                 <Text h4 align="center">
-                  Solved Puzzles
+                  Change Password
                 </Text>
-                Solved Puzzles:
-                {JSON.stringify(user.completedPuzzles)}
-                <Grid.Container gap={2} justify="center"></Grid.Container>
+                <Grid.Container gap={2} justify="center">
+                  <Spacer x={4} />
+                  <form onSubmit={handleSubmit}>
+                    <Input
+                      fullWidth
+                      id="newPassword"
+                      clearable
+                      type={"password"}
+                      labelPlaceholder="newPassword"
+                    />
+                    <Spacer y={1.5} />
+
+                    <Input
+                      fullWidth
+                      id="password"
+                      clearable
+                      type={"password"}
+                      labelPlaceholder="Password"
+                    />
+
+                    <Spacer y={1.5} />
+                    <Grid.Container gap={1} justify="center">
+                      <Grid>
+                        <Button
+                          auto
+                          type="submit"
+                          color="secondary"
+                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                        >
+                          Submit
+                        </Button>
+                      </Grid>
+                    </Grid.Container>
+                  </form>
+                </Grid.Container>
               </Card.Body>
             </Card>
           </Row>

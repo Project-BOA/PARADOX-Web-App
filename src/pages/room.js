@@ -15,10 +15,11 @@ import { getDatabase, ref, onValue, remove, get } from "firebase/database";
 import React, { useState } from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
-import Footer from "./footer";
+
 import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
+const { Footer } = require("@/components/Footer.js");
 
 export default function Room(data) {
   const router = useRouter();
@@ -201,9 +202,6 @@ export default function Room(data) {
           </Col>
           <Col></Col>
         </Row>
-      </Container>
-      <Container id="footer">
-        <Footer />
       </Container>
     </NextUIProvider>
   );

@@ -41,14 +41,15 @@ export default function Home({ user }) {
       <NextUIProvider theme={theme}>
         <Navigation username={user.username} />
         <Container>
-          <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
-            Welcome {user.username}! Check out these Rules
-          </Text>
+          <Card css={{ $$cardColor: "#B6EB7A" }}>
+            <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
+              Welcome {user.username}! Check out these Rules
+            </Text>
+            <Text h3 size={40} align="center" color="green" css={{ m: 0 }}>
+              There are 3 Types of puzzles
+            </Text>
+          </Card>
         </Container>
-
-        <Text h3 size={40} align="center" color="green" css={{ m: 0 }}>
-          There are 3 Types of puzzles
-        </Text>
 
         <Grid.Container gap={2} justify="center">
           <Grid xs={4}>
