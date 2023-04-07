@@ -43,7 +43,7 @@ export default function Home({ user }) {
         <Container>
           <Card css={{ $$cardColor: "#B6EB7A" }}>
             <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
-              Welcome {user.username}! Check out these Rules
+              How To Play
             </Text>
             <Text h3 size={40} align="center" color="green" css={{ m: 0 }}>
               There are 3 Types of puzzles
@@ -96,6 +96,13 @@ export default function Home({ user }) {
             </Card>
           </Grid>
         </Grid.Container>
+
+        <Card css={{ $$cardColor: "#B6EB7A" }}>
+          <Text size={20} align="center" color="green" css={{ m: 0 }}>
+            GamePlay
+          </Text>
+        </Card>
+
         <Spacer y={1} />
         <Footer />
       </NextUIProvider>
