@@ -20,8 +20,7 @@ const database = getDatabase(app);
 const storage = getStorage(app);
 
 module.exports = {
-  config,
-  app,
   database,
   storage,
+  config,
 };

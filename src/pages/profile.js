@@ -8,7 +8,6 @@ import {
   Card,
   Row,
   Text,
-  Col,
   Spacer,
   Button,
   Input,

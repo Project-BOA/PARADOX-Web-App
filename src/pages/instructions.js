@@ -1,8 +1,4 @@
 import Image from "next/image";
-import { Inter } from "@next/font/google";
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref } from "firebase/database";
-import { useList } from "react-firebase-hooks/database";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {

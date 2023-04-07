@@ -1,21 +1,14 @@
 import Image from "next/image";
-import { Inter } from "@next/font/google";
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get, update } from "firebase/database";
-import { useList } from "react-firebase-hooks/database";
+import { ref, get, update } from "firebase/database";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {
   NextUIProvider,
   Container,
-  Card,
-  Row,
   Text,
-  Col,
   Spacer,
   Button,
   Link,
-  Grid,
   User,
   Navbar,
   Textarea,

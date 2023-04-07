@@ -1,15 +1,23 @@
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
-import { get, ref as ref_database, update } from "firebase/database";
+import {
+  getStorage,
+  ref as ref_storage,
+  getDownloadURL,
+  listAll,
+} from "firebase/storage";
+import { ref as ref_database, get, update } from "firebase/database";
 import { NextUIProvider } from "@nextui-org/react";
 import { Grid, Image, Text, Spacer, Tooltip, Button } from "@nextui-org/react";
-import React from "react";
+import { Fragment } from "react";
 import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { theme } from "@/themes/theme.js";
+import { initializeApp } from "firebase/app";
 
-const { database, storage } = require("@/modules/firebase-config.js");
+const { config, database } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const storage = getStorage(app);
 
 var time = 5;
 var getPoints,
@@ -77,14 +85,14 @@ export default function Gameplay({
           players.push(name);
           if (index < 3) {
             return (
-              <React.Fragment key={name}>
+              <Fragment key={name}>
                 <Tooltip content={<BioToolTip name={name} />}>
                   <Text h3 size={25} style={{ margin: "auto" }}>
                     {position++}. {name} - {score} points
                   </Text>
                 </Tooltip>
                 <Spacer y={2.5} />
-              </React.Fragment>
+              </Fragment>
             );
           }
         }
@@ -115,13 +123,13 @@ export default function Gameplay({
           </Text>
         )}
         {!loading && snapshots && (
-          <React.Fragment>
+          <Fragment>
             <Text h2 size={30} align="center" style={{ margin: "auto" }}>
               Leaderboard:
             </Text>
             <Spacer y={4} />
             {UpdateLeaderboard(snapshots)}
-          </React.Fragment>
+          </Fragment>
         )}
       </>
     );
@@ -266,13 +274,13 @@ export async function getServerSideProps(context) {
     getPoints = snapshot.val();
   });
 
-  const listRef = ref(storage, puzzleID);
+  const listRef = ref_storage(storage, puzzleID);
   var puzzlePieces = [];
 
   await listAll(listRef).then(async (res) => {
     await Promise.all(
       res.items.map(async (itemRef) => {
-        await getDownloadURL(ref(storage, itemRef)).then((url) => {
+        await getDownloadURL(ref_storage(storage, itemRef)).then((url) => {
           puzzlePieces.push(url);
         });
       })
@@ -287,7 +295,6 @@ export async function getServerSideProps(context) {
       getPoints,
       puzzleType,
       decrement,
-      puzzleID,
       puzzlePieces,
       puzzleName,
     }, // will be passed to the page component as props

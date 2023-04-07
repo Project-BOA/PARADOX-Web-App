@@ -20,6 +20,8 @@ export const theme = createTheme({
       powder: "#F7F7EF",
     },
     space: {},
-    fonts: {},
+    fonts: {
+      rubik: "Rubik",
+    },
   },
 });
