@@ -15,15 +15,25 @@ import { useRouter } from "next/router";
 import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
+const { NavigationGamePlay } = require("@/components/Navigation.js");
 
 const { LeaderboardMapper, endRoom } = require("@/modules/leaderboard");
 
-export default function Leaderboard({ title, entries }) {
+export default function Leaderboard({ title, entries, type }) {
   const router = useRouter();
   const { roomID } = router.query;
 
+  console.log(endRoom);
   return (
     <NextUIProvider theme={theme}>
+      <NavigationGamePlay
+        roomID={roomID}
+        puzzleName={title}
+        puzzleType={type}
+        Endfunction={() => {
+          endRoom(router, roomID);
+        }}
+      />
       <Container gap={0}>
         <Row gap={0}>
           <Col>
@@ -80,14 +90,6 @@ export default function Leaderboard({ title, entries }) {
               </Text>
               <Card.Body>
                 <LeaderboardMapper entries={entries} />
-                <Button
-                  css={{ backgroundColor: "#BB2297" }}
-                  onPress={(event) => {
-                    endRoom(router, roomID);
-                  }}
-                >
-                  End
-                </Button>
               </Card.Body>
             </Card>
           </Col>
@@ -133,6 +135,17 @@ export async function getServerSideProps(context) {
     }
   });
 
+  var type;
+  await get(ref(database, "puzzle/" + puzzleID + "/puzzleType")).then(
+    (snapshot) => {
+      if (snapshot.exists()) {
+        type = snapshot.val();
+      } else {
+        console.log("No puzzle type available");
+      }
+    }
+  );
+
   var entries = [];
   const date = Date.now();
 
@@ -155,5 +168,5 @@ export async function getServerSideProps(context) {
     return b[1] - a[1];
   });
 
-  return { props: { title, entries } };
+  return { props: { title, entries, type } };
 }
