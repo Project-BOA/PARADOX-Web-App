@@ -1,0 +1,241 @@
+{
+  "comments": {
+    "A97": {
+      "alan": {
+        "comment": "hi",
+        "commentedOn": 1680802526803
+      }
+    },
+    "T45": {
+      "alan": {
+        "comment": "Hi",
+        "commentedOn": 1680801297454
+      },
+      "ola": {
+        "comment": "this puzzle great7y7",
+        "commentedOn": "1680183613759"
+      }
+    }
+  },
+  "puzzle": {
+    "A97": {
+      "answer": "batman",
+      "comments": [
+        null,
+        ""
+      ],
+      "description": "under development",
+      "pieceTime": {
+        "decrement": 10,
+        "interval": 10
+      },
+      "points": 10,
+      "puzzleType": "time",
+      "title": "THE CHARACTER!"
+    },
+    "F19": {
+      "answer": "sterling",
+      "description": "broke college students we do not have a million",
+      "pieceTime": {
+        "decrement": 1000,
+        "interval": 15
+      },
+      "points": 100000,
+      "puzzleType": "time",
+      "title": "Currency"
+    },
+    "GH16": {
+      "answers": {
+        "overall": "humanity",
+        "partial": {
+          "Didgeridoo": 40,
+          "boomerang": 20,
+          "milk": 50,
+          "tamale": 30
+        }
+      },
+      "description": "Can you guess the stuff!",
+      "pieceTime": {
+        "interval": 25
+      },
+      "puzzleType": "multi",
+      "title": "Stuff from Around the World!"
+    },
+    "OA19": {
+      "answer": "mongolia",
+      "comments": [
+        null,
+        ""
+      ],
+      "description": "I wonder whats the country",
+      "pieceTime": {
+        "decrement": 10,
+        "interval": 15
+      },
+      "points": 300,
+      "puzzleType": "time",
+      "title": "Guess The Country"
+    },
+    "RG23": {
+      "answer": "easter",
+      "comments": [
+        null,
+        ""
+      ],
+      "description": "What's the holiday",
+      "hints": {
+        "hint1": "buzz"
+      },
+      "pieceTime": {
+        "interval": 3
+      },
+      "puzzleType": "single",
+      "title": "Holiday Theme"
+    },
+    "T45": {
+      "answers": {
+        "overall": "santa",
+        "partial": {
+          "milk": 50,
+          "red": 10,
+          "tea": 50
+        }
+      },
+      "comments": {
+        "alan": {
+          "comment": "easter",
+          "commentedOn": 1680183613759
+        },
+        "ola": {
+          "comment": "this puzzle great",
+          "commentedOn": "2023-03-29T17:27:36.064Z"
+        }
+      },
+      "description": "ST.",
+      "hints": {
+        "hint1": "buzz",
+        "hint2": "flash"
+      },
+      "pieceTime": {
+        "interval": 25
+      },
+      "puzzleType": "multi",
+      "title": "Ho"
+    },
+    "TU1": {
+      "answers": {
+        "overall": "tud",
+        "partial": {
+          "camera": 10,
+          "cipher": 10,
+          "converter": 10,
+          "morse": 10,
+          "notes": 10,
+          "submit": 10
+        }
+      },
+      "description": "Learn the ways of the Puzzle Master",
+      "pieceTime": {
+        "interval": 3000
+      },
+      "puzzleType": "multi",
+      "title": "Tutorial"
+    }
+  },
+  "room": {
+    "X3T84": {
+      "leaderboard": {
+        "alan": {
+          "score": 10,
+          "solved": {
+            "cipher": 10
+          }
+        },
+        "ola": {
+          "score": 0
+        }
+      },
+      "puzzleID": "TU1"
+    }
+  },
+  "users": {
+    "SuperUser": {
+      "solved": {
+        "Holiday Theme": {
+          "completedOn": 1680569862089,
+          "points": 0
+        }
+      }
+    },
+    "akkshi1010": {
+      "biography": "im cool",
+      "email": "akkshitas10@gmail.com",
+      "loggedIn": false,
+      "password": "$2b$12$8Xf0whExk8EPdnvKjphA6Ol7/OdR7Z24fKurhRpIhaR9pipg2VL/G"
+    },
+    "alan": {
+      "biography": "EZ W",
+      "loggedIn": true,
+      "password": "$2b$12$LBHb5bp0OQPFkCmDPrW3FeA1ns8pnl2ryeJezAMPcyfi1L9OxiuZa",
+      "solved": {
+        "Ho": {
+          "completedOn": 1680576207975,
+          "points": 100
+        },
+        "Holiday Theme": {
+          "completedOn": 1680569951027,
+          "points": 0
+        }
+      }
+    },
+    "alan1": {
+      "solved": {
+        "Holiday Theme": {
+          "completedOn": 1680569862089,
+          "points": 20
+        }
+      }
+    },
+    "benji": {
+      "biography": "I wuv puzzles",
+      "loggedIn": true,
+      "password": "$2b$12$iS3koftFTCu.C6A7IfdMc.PhRDIQB1ppTaGvsZ7lmdusmZNDQ/hwG",
+      "solved": {
+        "Holiday Theme": {
+          "completedOn": 1680569862089,
+          "points": 0
+        }
+      }
+    },
+    "ola": {
+      "biography": "hiee",
+      "email": "ola@gmail.com",
+      "loggedIn": true,
+      "password": "$2b$12$wZdrRPezJv4MUzdCa12GIO0D7iT9HFh0c1rKvxfLXjaAX9q83X.Cu",
+      "solved": {
+        "Ho": {
+          "completedOn": 1680883707750,
+          "points": 0
+        },
+        "Holiday Theme": {
+          "completedOn": 1680569862089,
+          "points": 0
+        },
+        "Tutorial": {
+          "completedOn": 1680884728889,
+          "points": 0
+        },
+        "undefined": {
+          "completedOn": 1680883308132,
+          "points": 0
+        }
+      }
+    },
+    "ola1": {
+      "biography": "hiee",
+      "email": "ola@gmail.com",
+      "loggedIn": true,
+      "password": "$2b$12$y6wpLCqUQNk7OkAMWuWXEeCXm7.QAe5oWfAEmSKvDqMfzWFfxFJFy"
+    }
+  }
+}
