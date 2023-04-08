@@ -7,13 +7,25 @@ import {
 } from "firebase/storage";
 import { ref as ref_database, get, update } from "firebase/database";
 import { NextUIProvider } from "@nextui-org/react";
-import { Grid, Image, Text, Spacer, Tooltip, Button } from "@nextui-org/react";
+import {
+  Grid,
+  Image,
+  Text,
+  Spacer,
+  Tooltip,
+  Button,
+  Col,
+  Row,
+  Container,
+  Card,
+} from "@nextui-org/react";
 import { Fragment } from "react";
 import { useList, useObject } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { theme } from "@/themes/theme.js";
 import { initializeApp } from "firebase/app";
+const { NavigationGamePlay } = require("@/components/Navigation.js");
 
 const { config, database } = require("@/modules/firebase-config.js");
 const app = initializeApp(config);
@@ -142,29 +154,31 @@ export default function Gameplay({
       event.returnValue = "You have unsaved changes.";
     });
   });
+  function endGame() {
+    router.push("/leaderboard?roomID=" + roomID);
+  }
 
   return (
     <NextUIProvider theme={theme}>
-      <Grid.Container gap={2} justify="center">
-        <Grid xs={4}>
-          <Text h1 size={30} css={{ m: 0 }} weight="bold" align="left">
-            RoomID: {roomID}
-          </Text>
-        </Grid>
-        <Grid xs={4}>
-          <Text h1 size={50} css={{ m: 0 }} weight="bold" align="center">
-            {puzzleName}
-          </Text>
-          <Button
-            onPress={(event) => {
-              router.push("/leaderboard?roomID=" + roomID);
-            }}
-          >
-            End Game
-          </Button>
-          <Text h3 size={25} align="center" id="availPoints"></Text>
-        </Grid>
+      <NavigationGamePlay
+        roomID={roomID}
+        puzzleName={puzzleName}
+        puzzleType={puzzleType}
+        Endfunction={endGame}
+      />
 
+      <Row gap={0}>
+        <Col>
+          <Card css={{ $$cardColor: "#17706E" }}>
+            <Card.Body>
+              <Row>
+                <Text h3 size={25} align="center" id="availPoints"></Text>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Grid.Container gap={2} justify="center">
         <Grid xs={1}>
           <CountdownCircleTimer
             isPlaying
