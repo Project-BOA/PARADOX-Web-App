@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   Link,
@@ -7,12 +8,19 @@ import {
   Container,
   Text,
   User,
+  Modal,
 } from "@nextui-org/react";
 
 function Navigation({ username }) {
+  const [visible, setVisible] = React.useState(false);
+  const handler = () => setVisible(true);
+
+  const closeHandler = () => {
+    setVisible(false);
+  };
   return (
     <>
-      <Navbar css={{ background: "$primary" }} isBordered variant="floating">
+      <Navbar css={{ background: "$background" }} isBordered variant="floating">
         <Navbar.Brand>
           <Link href="/">
             <Image
@@ -36,9 +44,32 @@ function Navigation({ username }) {
             </Text>
           </Navbar.Item>
           <Navbar.Item>
-            <Button auto flat as={Link} href="logout">
-              Logout
-            </Button>
+            <React.Fragment>
+              <Button auto flat onPress={handler}>
+                Logout
+              </Button>
+              <Modal
+                closeButton
+                aria-labelledby="modal-title"
+                open={visible}
+                onClose={closeHandler}
+              >
+                {" "}
+                <Modal.Header>
+                  <Text id="modal-title" size={18}>
+                    Are you sure you want to logout?
+                  </Text>
+                </Modal.Header>
+                <Modal.Footer justify="center">
+                  <Button auto flat color="error" onPress={closeHandler}>
+                    Exit
+                  </Button>
+                  <Button auto as={Link} href="logout" onPress={closeHandler}>
+                    Logout
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </React.Fragment>
           </Navbar.Item>
         </Navbar.Content>
       </Navbar>

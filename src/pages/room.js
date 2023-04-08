@@ -1,5 +1,6 @@
-import { NextUIProvider } from "@nextui-org/react";
+import { Modal, NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
+
 import {
   createTheme,
   Container,
@@ -19,11 +20,18 @@ import { useRouter } from "next/router";
 import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
-const { Footer } = require("@/components/Footer.js");
 
 export default function Room(data) {
   const router = useRouter();
   const { roomID } = router.query;
+
+  //Modal functionality
+  const [visible, setVisible] = React.useState(false);
+  const handler = () => setVisible(true);
+
+  const closeHandler = () => {
+    setVisible(false);
+  };
 
   async function endRoom() {
     const data = {
@@ -177,13 +185,36 @@ export default function Room(data) {
                   >
                     Start
                   </Button>
-                  <Button
-                    onPress={(event) => {
-                      endRoom();
-                    }}
-                  >
-                    End
-                  </Button>
+                  <React.Fragment>
+                    <Button onPress={handler}>End</Button>
+                    <Modal
+                      closeButton
+                      aria-labelledby="modal-title"
+                      open={visible}
+                      onClose={closeHandler}
+                    >
+                      {" "}
+                      <Modal.Header>
+                        <Text id="modal-title" size={18}>
+                          Are you sure you want to end the room?
+                        </Text>
+                      </Modal.Header>
+                      <Modal.Footer justify="center">
+                        <Button auto flat color="error" onPress={closeHandler}>
+                          Exit
+                        </Button>
+                        <Button
+                          auto
+                          onPress={(event) => {
+                            endRoom();
+                            closeHandler();
+                          }}
+                        >
+                          Leave
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  </React.Fragment>
                 </Container>
               </Card.Body>
             </Card>

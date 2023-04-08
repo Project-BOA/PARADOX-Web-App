@@ -1,26 +1,71 @@
 import { ref, get } from "firebase/database";
 import { compareSync, hashSync } from "bcrypt";
+
 const { database } = require("@/modules/firebase-config.js");
+
+const validator = require("validator");
 
 // wrapper for hashing new passwords
 function hashPassword(plain_password) {
   return hashSync(plain_password, 12);
 }
 
-// authenticating username and password
+// authenticating username and hashed password
+// if user authenticated return profile otherwise return false
 async function auth(username, password) {
+  if (username == undefined || password == undefined) {
+    return false;
+  }
+
+  // sanitization checks
+
+  // if username or password are not ascii
+  if (!validator.isAscii(username) || !validator.isAscii(password)) {
+    return false;
+  }
+
+  // trim whitespace
+  username = username.trim();
+  password = password.trim();
+
+  var profile;
+  await get(ref(database, "users/" + username))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        if (password == snapshot.val().password) {
+          profile = snapshot.toJSON();
+        }
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  return profile ?? false;
+}
+
+// check if username exists
+async function userExists(username) {
   var authenticated = false;
 
-  if (username == null || password == null) {
+  if (username == null) {
     return authenticated;
   }
+
+  // sanitization checks
+
+  // if username or password are not ascii
+  if (!validator.isAscii(username)) {
+    return authenticated;
+  }
+
+  // trim whitespace
+  username = username.trim();
 
   await get(ref(database, "users/" + username))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        if (compareSync(password, snapshot.val().password)) {
-          authenticated = true;
-        }
+        authenticated = true;
       }
     })
     .catch((error) => {
@@ -33,4 +78,5 @@ async function auth(username, password) {
 module.exports = {
   hashPassword,
   auth,
+  userExists,
 };

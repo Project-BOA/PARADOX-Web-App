@@ -18,6 +18,8 @@ import { theme } from "@/themes/theme.js";
 
 import { User, Lock } from "react-iconly";
 
+// const { hashPassword } = require("@/modules/authentication.js");
+
 export default function Login() {
   const router = useRouter();
 
@@ -26,6 +28,7 @@ export default function Login() {
 
     const data = {
       username: event.target.username.value,
+      // password: hashPassword(event.target.password.value),
       password: event.target.password.value,
       website: true,
     };
@@ -41,7 +44,6 @@ export default function Login() {
     const response = await fetch("api/profile/login", options);
     const result = await response.json();
     if (result.status == "OK") {
-      console.log("Sign in");
       router.push("/");
     } else {
       alert("Status: " + result.status);

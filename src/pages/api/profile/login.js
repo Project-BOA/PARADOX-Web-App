@@ -2,43 +2,26 @@ import { ref, get, update } from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
 const { database } = require("@/modules/firebase-config.js");
-const bcrypt = require("bcrypt");
+const { auth } = require("@/modules/authentication.js");
 
 export default withIronSessionApiRoute(
   async function handler(req, res) {
+    // authentication
     var username = req.body.username;
     var password = req.body.password;
-    var loggedOnSite = req.body.website;
 
-    if (username == null || password == null) {
-      res.status(400).json({
-        status: "Invalid input",
-      });
-      return;
-    }
-
-    // sanitation
-    username = username.trim();
-    password = password.trim();
-
+    // check authentication
     var user;
-    await get(ref(database, "users/" + username))
-      .then((snapshot) => {
-        user = snapshot.toJSON();
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).json({
-          status: "ERROR",
-        });
-      });
-
-    if (user == null || !bcrypt.compareSync(password, user.password)) {
+    if (!(user = await auth(username, password))) {
       res.status(400).json({
-        status: "Username or Password Incorrect",
+        status: "Incorrect Username or Password",
       });
       return;
     }
+
+    // ================ after authentication ================
+
+    var loggedOnSite = req.body.website;
 
     if (!loggedOnSite) {
       update(ref(database, "users/" + username), {
@@ -53,19 +36,15 @@ export default withIronSessionApiRoute(
       return;
     }
 
-    // save user to session
-    req.session.user = {
-      username,
-      biography: user.biography,
-      email: user.email,
-      completedPuzzles: user.solved,
-    };
+    // save user to session for website usage
+    req.session.user = user;
 
     await req.session.save();
 
     res.status(200).json({
       status: "OK",
       biography: user.biography,
+      email: user.email,
       completedPuzzles: user.solved,
     });
   },

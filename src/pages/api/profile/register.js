@@ -1,97 +1,84 @@
 import { getDatabase, ref, set, get } from "firebase/database";
 
 const { database } = require("@/modules/firebase-config.js");
-const bcrypt = require("bcrypt");
-var validator = require("validator");
+const { userExists, hashPassword } = require("@/modules/authentication.js");
+const validator = require("validator");
 var Filter = require("bad-words"),
   filter = new Filter();
-export default async function handler(req, res) {
-  var username = req.body.username;
-  var password = req.body.password;
-  var biography = req.body.biography;
-  var email = req.body.email;
 
-  if (username == null || password == null) {
+export default async function handler(req, res) {
+  var username = req.body.username; // mandatory
+  var password = req.body.password; // mandatory
+  var email = req.body.email; // mandatory
+  var biography = req.body.biography; // non mandatory
+
+  // if missing mandatory fields
+  if (username == null || password == null || email == null) {
+    res.status(400).json({
+      status: "Missing mandatory fields",
+    });
+    return;
+  }
+
+  // if missing non mandatory fields then set defaults
+  if (biography == null) {
+    biography = "Edit your profile to set your biography";
+  }
+
+  // sanitization
+
+  if (!userExists(username)) {
+    res.status(400).json({
+      status: "Username is already in use",
+    });
+    return;
+  }
+
+  if (!validator.isEmail(email) || !validator.isAscii(biography)) {
     res.status(400).json({
       status: "Invalid input",
     });
     return;
   }
-  // sanitation
+
+  if (biography.length >= 50) {
+    res.status(400).json({
+      status: "Max Biography length is 50 characters",
+    });
+    return;
+  }
+
   username = username.trim();
   password = password.trim();
+  email = email.trim();
+  biography = biography.trim();
 
   if (
     filter.isProfane(username) ||
-    filter.isProfane(password) ||
+    filter.isProfane(email) ||
     filter.isProfane(biography)
   ) {
     res.status(400).json({
-      status: "Only Text",
+      status: "Invalid input",
     });
     return;
   }
 
-  if (!validator.isAscii(username) || !validator.isAscii(password)) {
-    res.status(400).json({
-      status: "Only Text",
+  // loggedIn is set to false since the user just registered
+  await set(ref(database, "users/" + username), {
+    password: hashPassword(password),
+    biography: biography,
+    email: email,
+    loggedIn: false,
+  }).catch((error) => {
+    console.error(error);
+    res.status(500).json({
+      status: "ERROR",
     });
     return;
-  }
+  });
 
-  if (!validator.isEmail(email)) {
-    res.status(400).json({
-      status: "Valid Email",
-    });
-    return;
-  }
-
-  if (biography.length > 50) {
-    res.status(400).json({
-      status: "Max Biography length is less than 50",
-    });
-    return;
-  }
-  // biography not mandatory: default is "No Biography"
-  if (biography == null) {
-    biography = "No Biography";
-  }
-  const saltRounds = 12;
-
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hashPassword = bcrypt.hashSync(password, salt);
-
-  await get(ref(database, "users/" + username))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        res.status(400).json({
-          status: "Name is already in use",
-        });
-        return;
-      } else {
-        set(ref(database, "users/" + username), {
-          password: hashPassword,
-          biography: biography,
-          email: email,
-          loggedIn: false,
-        }).catch((error) => {
-          console.error(error);
-          res.status(500).json({
-            status: "ERROR",
-          });
-          return;
-        });
-        res.status(200).json({
-          status: "OK",
-        });
-        return;
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({
-        status: "ERROR",
-      });
-      return;
-    });
+  res.status(200).json({
+    status: "OK",
+  });
 }
