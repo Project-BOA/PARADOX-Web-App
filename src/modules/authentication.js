@@ -40,7 +40,6 @@ async function auth(username, password) {
     .catch((error) => {
       console.error(error);
     });
-  console.log("authentication api: " + profile);
 
   return profile ?? false;
 }

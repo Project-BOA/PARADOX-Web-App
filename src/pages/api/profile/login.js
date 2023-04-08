@@ -10,8 +10,6 @@ export default withIronSessionApiRoute(
     var username = req.body.username;
     var password = req.body.password;
 
-    console.log("login api: " + username + " " + password);
-
     // check authentication
     var user = await auth(username, password);
 
