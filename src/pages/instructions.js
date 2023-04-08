@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {
@@ -12,9 +11,13 @@ import {
   Navbar,
   Grid,
   Card,
+  Col,
+  Row,
+  Image,
 } from "@nextui-org/react";
 
 import { theme } from "@/themes/theme.js";
+const { Navigation } = require("@/components/Navigation.js");
 
 const { database } = require("@/modules/firebase-config.js");
 
@@ -32,83 +35,145 @@ export default function Home({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navbar isBordered variant="floating">
-          <Navbar.Brand>
-            <Link href="/">
-              <Image
-                width={188}
-                height={75}
-                src="/image/penrose-triangle-PARADOX-text.png"
-                alt=" Logo"
-                style={{ objectFit: "cover" }}
-              />
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Content hideIn="xs" variant="highlight-rounded">
-            <Navbar.Link href="/profile">Profile</Navbar.Link>
-            <Navbar.Link href="/">Home</Navbar.Link>
-            <Navbar.Link href="/instructions">Instruction</Navbar.Link>
-          </Navbar.Content>
-          <Navbar.Content>
-            <Navbar.Item>
-              <Text h6 align="right" size={25} color="black" css={{ m: 0 }}>
-                <User src="/image/user_icon.png" name={user.username} />
-              </Text>
-            </Navbar.Item>
-            <Navbar.Item>
-              <Button auto flat as={Link} href="logout">
-                Logout
-              </Button>
-            </Navbar.Item>
-          </Navbar.Content>
-        </Navbar>
+        <Navigation username={user.username} />
+
         <Spacer y={1} />
 
         <Container>
-          <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
-            Welcome {user.username}! Check out these Rules
-          </Text>
-        </Container>
+          <Card css={{ $$cardColor: "#90EE90" }}>
+            <Text h2 size={40} align="center" color="#8A2BE2" css={{ m: 0 }}>
+              How to Play
+            </Text>
 
-        <Text h3 size={40} align="center" color="green" css={{ m: 0 }}>
-          There are 3 Types of puzzles
-        </Text>
+            <Text h3 size={40} align="center" color="white" css={{ m: 0 }}>
+              There are 3 Types of puzzles...
+            </Text>
+          </Card>
+        </Container>
 
         <Grid.Container gap={2} justify="center">
           <Grid xs={4}>
-            <Card css={{ $$cardColor: "#B6EB7A" }}>
-              <Text size={20} align="center" color="green" css={{ m: 0 }}>
+            <Card css={{ $$cardColor: "#90EE90" }}>
+              <Text size={40} align="center" color="#8A2BE2" css={{ m: 0 }}>
+                Multi Puzzles
+              </Text>
+              <Text size={20} align="center" color="white" css={{ m: 0 }}>
                 {multiDescritption}
               </Text>
             </Card>
           </Grid>
           <Grid xs={4}>
-            <Card css={{ $$cardColor: "#B6EB7A" }}>
-              <Text size={20} align="center" color="green" css={{ m: 0 }}>
+            <Card css={{ $$cardColor: "#90EE90" }}>
+              <Text size={40} align="center" color="#8A2BE2" css={{ m: 0 }}>
+                Single Puzzles
+              </Text>
+              <Text size={20} align="center" color="white" css={{ m: 0 }}>
                 {singleDescritption}
               </Text>
             </Card>
           </Grid>
           <Grid xs={4}>
-            <Card css={{ $$cardColor: "#B6EB7A" }}>
-              <Text size={20} align="center" color="green" css={{ m: 0 }}>
+            <Card css={{ $$cardColor: "#90EE90" }}>
+              <Text size={40} align="center" color="#8A2BE2" css={{ m: 0 }}>
+                Timed Puzzles
+              </Text>
+              <Text size={20} align="center" color="white" css={{ m: 0 }}>
                 {timeDescritption}
               </Text>
             </Card>
           </Grid>
         </Grid.Container>
-        <Grid xs={4}>
-          <Card css={{ $$cardColor: "#B6EB7A" }}>
-            <Text size={20} align="center" color="green" css={{ m: 0 }}>
-              Obtain our app{" "}
-              <Link color href="#">
-                here
-              </Link>{" "}
-              and get ready to play
+        <Container>
+          <Card css={{ $$cardColor: "#90EE90" }}>
+            <Text size={40} align="center" color="#8A2BE2" css={{ m: 0 }}>
+              Gameplay
             </Text>
+            <div class="box">
+              <Col>
+                {" "}
+                <Text size={20} align="right" color="white" css={{ m: 0 }}>
+                  Users can join a room by inputting the room ID that appears in
+                  the corner, once a user joins their username will be dipslayed
+                  in the room. Click on the username of a user to kick them out
+                  of the room. Click on the start button to start the game and
+                  begin your puzzle journey
+                </Text>
+              </Col>
+              <Col>
+                <Image
+                  src="/image/default_puzzle_image.png"
+                  width="auto"
+                  height="auto"
+                  alt="puzzle image"
+                />
+              </Col>
+            </div>
+            <Spacer y={1} />
+
+            <div class="box">
+              <Col>
+                <Text size={20} align="right" color="white" css={{ m: 0 }}>
+                  Once a room starts a time will countdown till the next puzzle
+                  piece. The timer will vary from puzzle to puzzle. The puzzle
+                  piece will display front and center. Under the timer you can
+                  check the top players in the room, hover of their names to
+                  find out some fun info. You can either end the room ealry or
+                  went for it to tick down to be brough to the leaderboord page.
+                </Text>
+              </Col>
+              <Col>
+                <Image
+                  src="/image/default_puzzle_image.png"
+                  width="auto"
+                  height="auto"
+                  alt="puzzle image"
+                />
+              </Col>
+            </div>
+
+            <Spacer y={1} />
+            <div class="box">
+              <Col>
+                <Text size={20} align="right" color="white" css={{ m: 0 }}>
+                  Make sure to download the app to experience the the fun
+                  puzzles and begin your puzzle journey
+                </Text>
+              </Col>
+              <Col>
+                <Image
+                  src="/image/default_puzzle_image.png"
+                  width="auto"
+                  height="auto"
+                  alt="puzzle image"
+                />
+              </Col>
+            </div>
           </Card>
-        </Grid>
-        <Spacer y={1} />
+        </Container>
+        <Spacer y={2} />
+
+        <Container>
+          <Card css={{ $$cardColor: "#90EE90" }}>
+            <div class="box">
+              <Col>
+                {" "}
+                <Text size={20} align="right" color="#8A2BE2" css={{ m: 0 }}>
+                  Get the PARAD0X App
+                </Text>
+              </Col>
+              <Col>
+                <Link a href="#">
+                  <Image
+                    src="/image/googleplay.png"
+                    width="auto"
+                    height="auto"
+                    alt="GooglePlay icon"
+                  />
+                </Link>
+              </Col>
+            </div>
+          </Card>
+        </Container>
       </NextUIProvider>
     </>
   );

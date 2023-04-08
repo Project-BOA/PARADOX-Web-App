@@ -11,6 +11,13 @@ body {
   overflow-x: hidden;
 }
 
+.box {
+  display: flex;
+  align-items:center;
+  text-align: justify;
+
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient (
