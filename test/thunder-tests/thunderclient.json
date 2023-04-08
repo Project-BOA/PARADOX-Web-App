@@ -46,7 +46,7 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2023-04-05T16:50:24.027Z",
-    "modified": "2023-04-05T18:26:46.688Z",
+    "modified": "2023-04-08T22:39:23.584Z",
     "headers": [],
     "params": [],
     "body": {
@@ -65,7 +65,7 @@
     "method": "POST",
     "sortNum": 40000,
     "created": "2023-04-05T16:50:24.028Z",
-    "modified": "2023-04-05T16:50:24.028Z",
+    "modified": "2023-04-08T19:02:46.726Z",
     "headers": [],
     "params": [],
     "body": {
@@ -73,7 +73,14 @@
       "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\"\n\n}",
       "form": []
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
   },
   {
     "_id": "cf456c52-6b41-4e17-a3d1-52f29568a074",
@@ -179,7 +186,7 @@
     "method": "POST",
     "sortNum": 60000,
     "created": "2023-04-05T16:50:24.034Z",
-    "modified": "2023-04-05T18:22:04.676Z",
+    "modified": "2023-04-08T18:59:06.063Z",
     "headers": [],
     "params": [],
     "body": {

@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { Inter } from "@next/font/google";
+import React from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {
@@ -13,25 +12,34 @@ import {
   Input,
   Link,
   Grid,
-  User,
-  Navbar,
+  Modal,
 } from "@nextui-org/react";
 
 import { theme } from "@/themes/theme.js";
 
+import { Lock, Message, Document } from "react-iconly";
+
+const { Navigation } = require("@/components/Navigation.js");
+const { Footer } = require("@/components/Footer.js");
+
 export default function Profile({ user }) {
   const router = useRouter();
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  const [visible, setVisible] = React.useState(false);
+  const handler = () => setVisible(true);
 
+  const closeHandler = () => {
+    setVisible(false);
+    console.log("closed");
+  };
+
+  async function handleSubmitPass(event) {
+    event.preventDefault();
     // Send the data to the server in JSON format.
     const data = JSON.stringify({
       username: user.username,
       password: event.target.password.value,
       newPassword: event.target.newPassword.value,
-      biography: event.target.biography.value,
-      //email: event.target.email.value,
     });
 
     // API endpoint where we send form data.
@@ -56,9 +64,50 @@ export default function Profile({ user }) {
     // If server returns the name submitted, that means the form works.
     const result = await response.json();
 
-    // redirect based on the result
+    // redirect or display based on the result
     if (result.status == "OK") {
-      router.push("/profile");
+      router.push("/logout");
+    } else {
+      alert(result.status);
+    }
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    // Send the data to the server in JSON format.
+    const data = JSON.stringify({
+      username: user.username,
+      password: user.password,
+      biography: event.target.biography.value,
+      email: event.target.email.value,
+    });
+
+    // API endpoint where we send form data.
+    const endpoint = "/api/profile/edit";
+
+    // Form the request for sending data to the server.
+    const options = {
+      // The method is POST because we are sending data.
+      method: "POST",
+      // Tell the server we're sending JSON.
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // Body of the request is the JSON data we created above.
+      body: data,
+    };
+
+    // Send the form data to our forms API on Vercel and get a response.
+    const response = await fetch(endpoint, options);
+
+    // Get the response data from server as JSON.
+    // If server returns the name submitted, that means the form works.
+    const result = await response.json();
+
+    // reload or display based on the result
+    if (result.status == "OK") {
+      router.reload();
     } else {
       alert(result.status);
     }
@@ -67,36 +116,7 @@ export default function Profile({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navbar isBordered variant="floating">
-          <Navbar.Brand>
-            <Link href="/">
-              <Image
-                width={188}
-                height={75}
-                src="/image/penrose-triangle-PARADOX-text.png"
-                alt=" Logo"
-                style={{ objectFit: "cover" }}
-              />
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Content hideIn="xs" variant="highlight-rounded">
-            <Navbar.Link href="/">Profile</Navbar.Link>
-            <Navbar.Link href="/">Puzzle</Navbar.Link>
-            <Navbar.Link href="/leaderboard">LeaderBoard</Navbar.Link>
-          </Navbar.Content>
-          <Navbar.Content>
-            <Navbar.Item>
-              <Text h6 align="right" size={25} color="white" css={{ m: 0 }}>
-                <User src="/image/user_icon.png" name={user.username} />
-              </Text>
-            </Navbar.Item>
-            <Navbar.Item>
-              <Button auto flat as={Link} href="logout">
-                Logout
-              </Button>
-            </Navbar.Item>
-          </Navbar.Content>
-        </Navbar>
+        <Navigation username={user.username} />
 
         <Spacer y={1} />
 
@@ -104,54 +124,49 @@ export default function Profile({ user }) {
           <Row gap={1}>
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>
+                <Text h4 align="center">
+                  Profile Info
+                </Text>
                 <Grid.Container gap={2} justify="center">
-                  {user.email}
-                  <Spacer y={1.5} />
-                  {user.biography}
-                  <Spacer y={1.5} />
-                  Solved Puzzles:
-                  {JSON.stringify(user.completedPuzzles)}
-                  <Spacer x={4} />
-                </Grid.Container>
-              </Card.Body>
-            </Card>
-            <Card css={{ $$cardColor: "$colors$primary" }}>
-              <Card.Body>
-                <Grid.Container gap={2} justify="center">
-                  <Spacer x={4} />
-                  <form onSubmit={handleSubmit}>
-                    <Input
-                      fullWidth
-                      id="newPassword"
-                      clearable
-                      type={"password"}
-                      labelPlaceholder="newPassword"
-                    />
-                    <Spacer y={1.5} />
+                  <form
+                    id="profile-info-form"
+                    onSubmit={(event) => {
+                      handleSubmit(event);
+                    }}
+                  >
+                    <Row>
+                      <Message
+                        set="bold"
+                        label="email icon"
+                        primaryColor="blueviolet"
+                        size="xlarge"
+                      />
+                      <Spacer />
+                      <Input
+                        fullWidth
+                        id="email"
+                        clearable
+                        initialValue={user.email}
+                      />
+                    </Row>
+                    <Spacer y={1} />
+                    <Row>
+                      <Document
+                        set="bold"
+                        label="biography icon"
+                        primaryColor="blueviolet"
+                        size="xlarge"
+                      />
 
-                    <Input
-                      fullWidth
-                      id="password"
-                      clearable
-                      type={"password"}
-                      labelPlaceholder="Password"
-                    />
-                    <Spacer y={1.5} />
+                      <Spacer />
+                      <Input
+                        fullWidth
+                        id="biography"
+                        clearable
+                        initialValue={user.biography}
+                      />
+                    </Row>
 
-                    <Input
-                      fullWidth
-                      id="email"
-                      clearable
-                      labelPlaceholder="Email"
-                    />
-                    <Spacer y={1.5} />
-                    <Input
-                      fullWidth
-                      id="biography"
-                      clearable
-                      labelPlaceholder="Biography"
-                    />
-                    <Spacer y={1.5} />
                     <Grid.Container gap={1} justify="center">
                       <Grid>
                         <Button
@@ -160,16 +175,97 @@ export default function Profile({ user }) {
                           color="secondary"
                           css={{ marginLeft: "auto", marginRight: "auto" }}
                         >
-                          Submit
+                          Update
                         </Button>
                       </Grid>
                     </Grid.Container>
                   </form>
                 </Grid.Container>
+
+                <Link
+                  auto
+                  type="edit"
+                  color="secondary"
+                  onPress={handler}
+                  css={{ marginLeft: "auto", marginRight: "auto" }}
+                >
+                  Change Password
+                </Link>
+                <Modal
+                  closeButton
+                  aria-labelledby="modal-title"
+                  open={visible}
+                  onClose={closeHandler}
+                >
+                  <form
+                    onSubmit={(event) => {
+                      handleSubmitPass(event);
+                    }}
+                  >
+                    <Modal.Header>
+                      <Text h4>Change Password</Text>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                      <Row>
+                        <Lock
+                          set="bold"
+                          label="lock icon"
+                          primaryColor="blueviolet"
+                          size="xlarge"
+                        />
+                        <Spacer />
+                        <Input
+                          fullWidth
+                          id="password"
+                          clearable
+                          type={"password"}
+                          labelPlaceholder="Password"
+                        />
+                      </Row>
+                      <Row>
+                        <Lock
+                          set="bold"
+                          label="lock icon"
+                          primaryColor="blueviolet"
+                          size="xlarge"
+                        />
+                        <Spacer />
+                        <Input
+                          fullWidth
+                          id="newPassword"
+                          clearable
+                          type={"password"}
+                          labelPlaceholder="New Password"
+                        />
+                      </Row>
+                    </Modal.Body>
+
+                    <Modal.Footer justify="center">
+                      <Button auto flat color="error" onPress={closeHandler}>
+                        Cancel
+                      </Button>
+                      <Button auto onPress={closeHandler}>
+                        Change
+                      </Button>
+                    </Modal.Footer>
+                  </form>
+                </Modal>
+              </Card.Body>
+            </Card>
+            <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card.Body>
+                <Text h4 align="center">
+                  Solved Puzzles
+                </Text>
+                Solved Puzzles:
+                {JSON.stringify(user.completedPuzzles)}
+                <Grid.Container gap={2} justify="center"></Grid.Container>
               </Card.Body>
             </Card>
           </Row>
         </Container>
+        <Footer />
       </NextUIProvider>
     </>
   );

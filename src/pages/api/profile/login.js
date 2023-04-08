@@ -2,54 +2,29 @@ import { ref, get, update } from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
 const { database } = require("@/modules/firebase-config.js");
-const bcrypt = require("bcrypt");
-var validator = require("validator");
+const { auth } = require("@/modules/authentication.js");
 
 export default withIronSessionApiRoute(
   async function handler(req, res) {
+    // authentication
     var username = req.body.username;
     var password = req.body.password;
+
+    console.log("login api: " + username + " " + password);
+
+    // check authentication
+    var user = await auth(username, password);
+
+    if (user == false) {
+      res.status(400).json({
+        status: "Incorrect Username or Password",
+      });
+      return;
+    }
+
+    // ================ after authentication ================
+
     var loggedOnSite = req.body.website;
-
-    if (username == null || password == null) {
-      res.status(400).json({
-        status: "Invalid input",
-      });
-      return;
-    }
-
-    if (
-      !validator.isAlphanumeric(username) ||
-      !validator.isAlphanumeric(password)
-    ) {
-      res.status(400).json({
-        status: "Invalid input",
-      });
-      return;
-    }
-
-    // sanitation
-    username = username.trim();
-    password = password.trim();
-
-    var user;
-    await get(ref(database, "users/" + username))
-      .then((snapshot) => {
-        user = snapshot.toJSON();
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).json({
-          status: "ERROR",
-        });
-      });
-
-    if (user == null || !bcrypt.compareSync(password, user.password)) {
-      res.status(400).json({
-        status: "Username or Password Incorrect",
-      });
-      return;
-    }
 
     if (!loggedOnSite) {
       update(ref(database, "users/" + username), {
@@ -64,9 +39,10 @@ export default withIronSessionApiRoute(
       return;
     }
 
-    // save user to session
+    // save user to session for website usage
     req.session.user = {
       username,
+      password,
       biography: user.biography,
       email: user.email,
       completedPuzzles: user.solved,
@@ -77,6 +53,7 @@ export default withIronSessionApiRoute(
     res.status(200).json({
       status: "OK",
       biography: user.biography,
+      email: user.email,
       completedPuzzles: user.solved,
     });
   },

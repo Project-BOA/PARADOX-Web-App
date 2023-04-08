@@ -22,16 +22,8 @@ const { database } = require("@/modules/firebase-config.js");
 const { Navigation } = require("@/components/Navigation.js");
 const { Footer } = require("@/components/Footer.js");
 
-export default function Home({ user }) {
+export default function Contacts({ user }) {
   const router = useRouter();
-
-  const multiDescritption =
-    "These puzzles have multiple answers, that will score you a low amount of points. These LOW point answers will hint towards the big ticket answer";
-
-  const timeDescritption =
-    "Better answer quick these puzzles require quick thinking or you will lose so many points";
-  const singleDescritption =
-    "Simple, answer the puzzles single answer and get points";
 
   return (
     <>
@@ -42,13 +34,21 @@ export default function Home({ user }) {
 
         <Container>
           <Card css={{ $$cardColor: "#90EE90" }}>
-            <Text h2 size={40} align="center" color="#8A2BE2" css={{ m: 0 }}>
-              How to Play
-            </Text>
+            <Text
+              h2
+              size={40}
+              align="center"
+              color="#8A2BE2"
+              css={{ m: 0 }}
+            ></Text>
 
-            <Text h3 size={40} align="center" color="white" css={{ m: 0 }}>
-              There are 3 Types of puzzles...
-            </Text>
+            <Text
+              h3
+              size={40}
+              align="center"
+              color="white"
+              css={{ m: 0 }}
+            ></Text>
           </Card>
         </Container>
 

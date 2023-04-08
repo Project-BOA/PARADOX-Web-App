@@ -41,7 +41,6 @@ export default function Login() {
     const response = await fetch("api/profile/login", options);
     const result = await response.json();
     if (result.status == "OK") {
-      console.log("Sign in");
       router.push("/");
     } else {
       alert("Status: " + result.status);
@@ -118,9 +117,7 @@ export default function Login() {
                           marginRight: "auto",
                           fontWeight: "bold",
                         }}
-                        onPress={(event) => {
-                          router.push("/register");
-                        }}
+                        href="/register"
                       >
                         Register
                       </Link>
