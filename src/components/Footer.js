@@ -1,14 +1,4 @@
-import {
-  NextUIProvider,
-  Text,
-  Image,
-  Container,
-  Grid,
-  Col,
-  Link,
-  Row,
-  Spacer,
-} from "@nextui-org/react";
+import { NextUIProvider, Text, Image, Grid, Link } from "@nextui-org/react";
 import { theme } from "@/themes/theme.js";
 
 function Footer() {

@@ -1,28 +1,19 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import {
-  createTheme,
-  Container,
-  Card,
-  Row,
-  Text,
-  Col,
-  Grid,
-} from "@nextui-org/react";
+import { Container, Card, Row, Text, Col } from "@nextui-org/react";
 import { Spacer, Link } from "@nextui-org/react";
 
 import { getDatabase, ref, onValue, remove, get } from "firebase/database";
-import React, { useState } from "react";
+import React from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
-import Footer from "@/components/Footer";
+import { Footer } from "@/components/Footer";
 import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
 
-export default function Room(data) {
+export default function Room({ roomID, title, puzzleType }) {
   const router = useRouter();
-  const { roomID } = router.query;
 
   async function endRoom() {
     const data = {
@@ -125,7 +116,7 @@ export default function Room(data) {
                           align="left"
                           color="#F7F7EE"
                         >
-                          {data.title}
+                          {title}
                         </Text>
                       </Card.Body>
                     </Container>
@@ -157,14 +148,38 @@ export default function Room(data) {
                           align="right"
                           color="#F7F7EE"
                         >
-                          {"Type: " + data.puzzleType}
+                          {"Type: " + puzzleType}
                         </Text>
                       </Card.Body>
                     </Container>
                   </Col>
                 </Row>
 
-                <Row>
+                {/* <Container>
+                  <Button
+                    onPress={(event) => {
+                      router.push("/gameplay?roomID=" + roomID);
+                    }}
+                    size="lg"
+                    css={{
+                      color: "#17706E",
+                      fontSize: "35px",
+                      backgroundColor: "#FB7813",
+                      marginInline: "auto",
+                    }}
+                  >
+                    Start
+                  </Button>
+                  <Button
+                    onPress={(event) => {
+                      endRoom();
+                    }}
+                  >
+                    End
+                  </Button>
+                </Container> */}
+
+                {/* <Row>
                   <Col>
                     <Button
                       css={{
@@ -193,10 +208,7 @@ export default function Room(data) {
                       Start
                     </Button>
                   </Col>
-
-                  <Col></Col>
-                </Row>
-                <Container></Container>
+                </Row> */}
               </Card.Body>
             </Card>
           </Col>
@@ -224,8 +236,9 @@ export default function Room(data) {
 
 export async function getServerSideProps(context) {
   var puzzleID;
+  var roomID = context.query.roomID;
 
-  if (context.query.roomID == undefined) {
+  if (roomID == undefined) {
     return {
       redirect: {
         permanent: false,
@@ -233,6 +246,8 @@ export async function getServerSideProps(context) {
       },
     };
   }
+
+  roomID = roomID.toUpperCase();
 
   await get(ref(database, "room/" + context.query.roomID + "/puzzleID")).then(
     (snapshot) => {
@@ -257,7 +272,7 @@ export async function getServerSideProps(context) {
     if (snapshot.exists()) {
       title = snapshot.val();
     } else {
-      title = "No Ttile";
+      title = "No Title";
       console.log("No puzzle piece available");
     }
   });
@@ -266,6 +281,6 @@ export async function getServerSideProps(context) {
   puzzleType = puzzleType.toUpperCase();
 
   return {
-    props: { puzzleType, title }, // will be passed to the page component as props
+    props: { roomID, puzzleType, title }, // will be passed to the page component as props
   };
 }
