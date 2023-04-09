@@ -68,120 +68,110 @@ export default function Home() {
 
   return (
     <NextUIProvider theme={theme}>
-      <Container>
-        <Row gap={1}>
-          <Container>
-            <Row>
-              <Image
-                height={192}
-                src="/image/penrose-triangle-PARADOX.png"
-                alt=" Logo"
-                style={{ objectFit: "cover" }}
-              />
-            </Row>
-          </Container>
-        </Row>
-        <Spacer y={1} />
-        <Row gap={1}>
-          <Col>
-            <Card
-              css={{ $$cardColor: "lightGreen", mw: "600px", margin: "auto" }}
-            >
-              <Card.Body>
-                <Text h6 align="center" size={36} css={{ m: 0 }}>
-                  Register
-                </Text>
-                <Spacer y={1} />
-                <form onSubmit={handleSubmit}>
-                  <Row>
-                    <User set="bold" primaryColor="blueviolet" size="xlarge" />
-                    <Spacer />
-                    <Input
-                      fullWidth
-                      id="username"
-                      clearable
-                      labelPlaceholder="Username"
-                      minLength={3}
-                      maxLength={10}
-                    />
-                  </Row>
-                  <Spacer y={1.5} />
-                  <Row>
-                    <Lock set="bold" primaryColor="blueviolet" size="xlarge" />
-                    <Spacer />
-                    <Input
-                      fullWidth
-                      id="password"
-                      clearable
-                      type={"password"}
-                      labelPlaceholder="Password"
-                      minLength={3}
-                    />
-                  </Row>
-                  <Spacer y={1.5} />
-                  <Row>
-                    <Message
-                      set="bold"
-                      primaryColor="blueviolet"
-                      size="xlarge"
-                    />
-                    <Spacer />
-                    <Input
-                      fullWidth
-                      id="email"
-                      clearable
-                      labelPlaceholder="Email"
-                    />
-                  </Row>
+      <Spacer y={1} />
+      <Row gap={1}>
+        <Image
+          height={192}
+          src="/image/penrose-triangle-PARADOX.png"
+          alt=" Logo"
+          style={{ objectFit: "cover" }}
+        />
+      </Row>
+      <Spacer y={2.5} />
+      <Row gap={1}>
+        <Card css={{ $$cardColor: "lightGreen", mw: "600px", margin: "auto" }}>
+          <Card.Body>
+            <Text h6 align="center" size={36} css={{ m: 0 }}>
+              Register
+            </Text>
+            <Spacer y={2.5} />
+            <form onSubmit={handleSubmit}>
+              <Row>
+                <User set="bold" primaryColor="blueviolet" size="xlarge" />
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="username"
+                  clearable
+                  labelPlaceholder="Username"
+                  minLength={3}
+                  maxLength={10}
+                />
+              </Row>
+              <Spacer y={2} />
+              <Row>
+                <Lock set="bold" primaryColor="blueviolet" size="xlarge" />
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="password"
+                  clearable
+                  type={"password"}
+                  labelPlaceholder="Password"
+                  minLength={3}
+                />
+              </Row>
 
-                  <Spacer y={1.5} />
+              <Spacer y={2} />
 
-                  <Row>
-                    <Document
-                      set="bold"
-                      primaryColor="blueviolet"
-                      size="xlarge"
-                    />
+              <Row>
+                <Message set="bold" primaryColor="blueviolet" size="xlarge" />
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="email"
+                  clearable
+                  labelPlaceholder="Email"
+                />
+              </Row>
 
+              <Spacer y={2} />
+
+              <Row>
+                <Document set="bold" primaryColor="blueviolet" size="xlarge" />
+
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="bio"
+                  clearable
+                  labelPlaceholder="Biography"
+                />
+              </Row>
+
+              <Spacer y={2.5} />
+
+              <Grid.Container justify="center">
+                <Grid>
+                  <Col>
+                    <Button color="secondary" size="lg" type="submit">
+                      Register
+                    </Button>
                     <Spacer />
-                    <Input
-                      fullWidth
-                      id="bio"
-                      clearable
-                      labelPlaceholder="Biography"
-                    />
-                  </Row>
-                  <Spacer y={1.5} />
-                  <Grid.Container gap={1} justify="center">
-                    <Grid>
-                      <Button
-                        auto
-                        type="submit"
-                        color="secondary"
-                        css={{ marginLeft: "auto", marginRight: "auto" }}
-                      >
-                        Submit
-                      </Button>
-                    </Grid>
-                    <Grid>
-                      <Button
-                        auto
-                        color="secondary"
-                        bordered
-                        as={Link}
-                        href="login"
-                        css={{ marginLeft: "auto", marginRight: "auto" }}
+                    <Text align="center" size={20}>
+                      or{" "}
+                      <Link
+                        css={{
+                          marginLeft: "auto",
+                          marginRight: "auto",
+                          fontWeight: "bold",
+                        }}
+                        href="/login"
                       >
                         Back
-                      </Button>
-                    </Grid>
-                  </Grid.Container>
-                </form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                      </Link>
+                    </Text>
+                  </Col>
+                </Grid>
+              </Grid.Container>
+            </form>
+          </Card.Body>
+        </Card>
+      </Row>
     </NextUIProvider>
   );
 }

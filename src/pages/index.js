@@ -4,12 +4,11 @@ import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {
   NextUIProvider,
-  Container,
   Card,
   Row,
   Text,
   Col,
-  Spacer,
+  Link,
   Button,
   Grid,
   Tooltip,
@@ -106,95 +105,103 @@ export default function Home({ user }) {
         {!loading && snapshots && (
           <Row gap={1}>
             <Grid.Container gap={2} justify="center">
-              {snapshots.map((snap, index) => {
+              {snapshots.map((snap) => {
                 var puzzleID = snap.key;
                 var puzzle = snap.val();
                 return (
                   <>
                     <Card
-                      key={puzzleID}
-                      css={{ w: "30em", h: "50vh", margin: "1em" }}
+                      isHoverable
+                      isPressable
+                      onPress={() => {
+                        getRoom(puzzleID);
+                      }}
+                      css={{
+                        width: "auto",
+                        background: "$green",
+                        margin: "1em",
+                      }}
                     >
-                      <Card.Header
-                        css={{ marginLeft: "auto", marginRight: "auto" }}
+                      <Card
+                        key={puzzleID}
+                        css={{ w: "30em", h: "50vh", margin: "1em" }}
                       >
-                        <Col>
-                          <Text
-                            size={28}
-                            weight="bold"
-                            transform="uppercase"
-                            color="black"
-                          >
-                            {puzzle.title}
-                          </Text>
-                          <Text
-                            size={18}
-                            weight="bold"
-                            transform="uppercase"
-                            color="black"
-                          >
-                            {puzzle.description}
-                          </Text>
-                        </Col>
-                      </Card.Header>
-                      <Card.Body css={{ p: 0, border: "#17706E" }}>
-                        <Card.Image
-                          src="/image/default_puzzle_image.png"
-                          objectFit="cover"
-                          width="100%"
-                          height="100%"
-                          alt="puzzle image"
-                        />
-                      </Card.Body>
-                      <Card.Footer
-                        isBlurred
-                        css={{
-                          position: "absolute",
-                          bgBlur: "#0f111466",
-                          borderTop: "$borderWeights$light solid $gray800",
-                          bottom: 0,
-                          zIndex: 1,
-                        }}
-                      >
-                        <Row>
-                          <Row justify="center">
-                            <Button
-                              flat
-                              auto
-                              rounded
-                              css={{
-                                color: "#94f9f0",
-                                bg: "#94f9f026",
-                              }}
-                              onClick={(event) => {
-                                getRoom(puzzleID);
-                              }}
+                        <Card.Header
+                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                        >
+                          <Col>
+                            <Text
+                              size={28}
+                              weight="bold"
+                              transform="uppercase"
+                              color="black"
                             >
-                              <Text
-                                css={{ color: "inherit" }}
-                                size={12}
-                                weight="bold"
-                                transform="uppercase"
-                              >
-                                Start
-                              </Text>
-                            </Button>
+                              {puzzle.title}
+                            </Text>
+                            <Text
+                              size={18}
+                              weight="bold"
+                              transform="uppercase"
+                              color="black"
+                            >
+                              {puzzle.description}
+                            </Text>
+                          </Col>
+                        </Card.Header>
+                        <Card.Body css={{ p: 0, border: "#17706E" }}>
+                          <Card.Image
+                            src="/image/default_puzzle_image.png"
+                            objectFit="cover"
+                            width="100%"
+                            height="100%"
+                            alt="puzzle image"
+                          />
+                        </Card.Body>
+                        <Card.Footer
+                          isBlurred
+                          css={{
+                            position: "absolute",
+                            bgBlur: "#0f111466",
+                            borderTop: "$borderWeights$light solid $gray800",
+                            bottom: 0,
+                            zIndex: 1,
+                          }}
+                        >
+                          <Row>
                             <Tooltip
                               trigger="click"
                               content={<GetComment puzzleID={puzzleID} />}
                             >
-                              <Text
-                                css={{ color: "inherit" }}
-                                size={12}
-                                weight="bold"
-                                transform="uppercase"
+                              <Button
+                                light
+                                css={{
+                                  fontWeight: "bold",
+                                  "&:hover": {
+                                    textDecoration: "underline",
+                                  },
+                                }}
                               >
-                                Comments
-                              </Text>
+                                Details
+                              </Button>
                             </Tooltip>
                           </Row>
-                        </Row>
-                      </Card.Footer>
+
+                          <Row justify="center">
+                            <Button
+                              auto
+                              css={{
+                                color: "$buttonSecondary",
+                                backgroundColor: "$buttonPrimary",
+                              }}
+                              onClick={() => {
+                                getRoom(puzzleID);
+                              }}
+                            >
+                              Start
+                            </Button>
+                          </Row>
+                        </Card.Footer>
+                      </Card>
                     </Card>
                   </>
                 );
@@ -209,15 +216,7 @@ export default function Home({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation username={user.username} />
-        <Container>
-          <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
-            Welcome {user.username}! Check out these puzzles
-          </Text>
-        </Container>
-
-        <Spacer y={1} />
-
+        <Navigation activePage="puzzles" username={user.username} />
         <Puzzles />
         <Footer />
       </NextUIProvider>

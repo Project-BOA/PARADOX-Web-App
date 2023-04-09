@@ -68,7 +68,7 @@ export default function Home({ user, comments }) {
           <Navbar.Content hideIn="xs" variant="highlight-rounded">
             <Navbar.Link href="/profile">Profile</Navbar.Link>
             <Navbar.Link href="/">Home</Navbar.Link>
-            <Navbar.Link href="/instructions">Instruction</Navbar.Link>
+            <Navbar.Link href="/instructions">Instructions</Navbar.Link>
           </Navbar.Content>
           <Navbar.Content>
             <Navbar.Item>
@@ -93,7 +93,7 @@ export default function Home({ user, comments }) {
         </Container>
         <form onSubmit={handleSubmit}>
           <Textarea
-            label="Write your thoughts"
+            aria-label="Write your thoughts"
             placeholder="Enter your amazing ideas."
             id="comment"
           />

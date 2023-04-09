@@ -5,15 +5,8 @@ import {
   Container,
   Text,
   Spacer,
-  Button,
-  Link,
-  User,
-  Navbar,
   Grid,
   Card,
-  Col,
-  Row,
-  Image,
 } from "@nextui-org/react";
 
 import { theme } from "@/themes/theme.js";
@@ -27,7 +20,7 @@ export default function Contacts({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation username={user.username} />
+        <Navigation activePage="contact" username={user.username} />
 
         <Spacer y={1} />
 

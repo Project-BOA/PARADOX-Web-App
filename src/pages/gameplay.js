@@ -13,10 +13,8 @@ import {
   Text,
   Spacer,
   Tooltip,
-  Button,
   Col,
   Row,
-  Container,
   Card,
 } from "@nextui-org/react";
 import { Fragment } from "react";
@@ -164,7 +162,7 @@ export default function Gameplay({
         roomID={roomID}
         puzzleName={puzzleName}
         puzzleType={puzzleType}
-        Endfunction={endGame}
+        action={endGame}
       />
 
       <Row gap={0}>

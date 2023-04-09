@@ -1,9 +1,9 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import { Container, Card, Row, Text, Col } from "@nextui-org/react";
-import { Spacer, Link } from "@nextui-org/react";
+import { Container, Card, Row, Text, Col, Grid } from "@nextui-org/react";
+import { Spacer } from "@nextui-org/react";
 
-import { getDatabase, ref, onValue, remove, get } from "firebase/database";
+import { ref, remove, get } from "firebase/database";
 import React from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
@@ -11,8 +11,9 @@ import { Footer } from "@/components/Footer";
 import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
+const { NavigationGamePlay } = require("@/components/Navigation.js");
 
-export default function Room({ roomID, title, puzzleType }) {
+export default function Room({ roomID, puzzleTitle, puzzleType }) {
   const router = useRouter();
 
   async function endRoom() {
@@ -30,11 +31,10 @@ export default function Room({ roomID, title, puzzleType }) {
 
     const response = await fetch("api/room/remove", options);
     const result = await response.json();
-    if (result.status == "OK") {
-      router.push("/");
-    } else {
-      alert("Status: " + result.status);
+    if (result.status != "OK") {
+      alert(result.status);
     }
+    router.push("/");
   }
 
   function Room() {
@@ -42,9 +42,8 @@ export default function Room({ roomID, title, puzzleType }) {
     const [snapshots, loading, error] = useListKeys(
       ref(database, "room/" + roomID + "/leaderboard")
     );
-    const removePlayer = (event, roomID, player) => {
+    const removePlayer = (roomID, player) => {
       remove(ref(database, "room/" + roomID + "/leaderboard/" + player));
-      console.log("Room removed at ID: '" + roomID + " player at " + player);
       players.pop();
       if (players.length == 0) {
         router.push("/");
@@ -53,45 +52,48 @@ export default function Room({ roomID, title, puzzleType }) {
     return (
       <>
         {error && (
-          <Text h2 size={30} weight="bold" align="center">
+          <Text h2 size={32} color="$secondary" align="center">
             Error: {error}
           </Text>
         )}
         {loading && (
-          <Text h2 size={30} align="center">
+          <Text h2 size={32} color="$secondary" align="center">
             Loading Room...
           </Text>
         )}
         {!loading && snapshots && (
-          <React.Fragment>
-            <Text h2 size={30} color="#8A2BE2" align="center">
-              Players
+          <>
+            <Text h2 size={32} color="$secondary" align="center">
+              Players in Room...
             </Text>
             <Spacer y={2.5} />
-            {snapshots.map((v) => {
-              if (!players.includes(v)) {
-                players.push(v);
-                return (
-                  <React.Fragment key={v}>
-                    <Button
-                      align="center"
-                      color="#F7F7EE"
-                      style={{
-                        color: "#F7F7EE",
-                        margin: "auto",
-                        fontSize: "20px",
-                        backgroundColor: "#FB7813",
-                      }}
-                      onPress={(event) => removePlayer(event, roomID, v)}
-                    >
-                      {v}
-                    </Button>
-                    <Spacer y={2.5} />
-                  </React.Fragment>
-                );
-              }
-            })}
-          </React.Fragment>
+            <Grid.Container gap={1} justify="center">
+              {snapshots.map((v) => {
+                if (!players.includes(v)) {
+                  players.push(v);
+                  return (
+                    <Grid key={v}>
+                      <Button
+                        align="center"
+                        css={{
+                          color: "$primaryButton",
+                          marginInline: "auto",
+                          fontSize: "28px",
+                          "&:hover": {
+                            textDecoration: "line-through",
+                          },
+                        }}
+                        onPress={(event) => removePlayer(event, roomID, v)}
+                      >
+                        {v}
+                      </Button>
+                      <Spacer y={2.5} />
+                    </Grid>
+                  );
+                }
+              })}
+            </Grid.Container>
+          </>
         )}
       </>
     );
@@ -99,132 +101,66 @@ export default function Room({ roomID, title, puzzleType }) {
 
   return (
     <NextUIProvider theme={theme}>
+      <NavigationGamePlay
+        roomID={roomID}
+        puzzleName={puzzleTitle}
+        puzzleType={puzzleType}
+        logoAction={endRoom}
+        actionText="Start"
+        action={() => {
+          router.push("/gameplay?roomID=" + roomID);
+        }}
+        secondaryActionText="Exit"
+        secondaryAction={endRoom}
+      />
+      <Spacer y={1} />
       <Container gap={0}>
-        <Row gap={0}>
-          <Col>
-            <Card css={{ $$cardColor: "#17706E" }}>
-              <Card.Body>
-                <Row>
-                  <Col>
-                    <Container>
-                      <Card.Body>
-                        <Text
-                          h1
-                          size={30}
-                          css={{ m: 0 }}
-                          weight="bold"
-                          align="left"
-                          color="#F7F7EE"
-                        >
-                          {title}
-                        </Text>
-                      </Card.Body>
-                    </Container>
-                  </Col>
-                  <Col>
-                    <Container>
-                      <Spacer y={1} />
-
-                      <Text
-                        h1
-                        size={30}
-                        css={{ m: 0 }}
-                        weight="bold"
-                        align="center"
-                        color="#F7F7EE"
-                      >
-                        {"Room ID: " + roomID}
-                      </Text>
-                    </Container>
-                  </Col>
-                  <Col>
-                    <Container>
-                      <Card.Body>
-                        <Text
-                          h1
-                          size={30}
-                          css={{ m: 0 }}
-                          weight="bold"
-                          align="right"
-                          color="#F7F7EE"
-                        >
-                          {"Type: " + puzzleType}
-                        </Text>
-                      </Card.Body>
-                    </Container>
-                  </Col>
-                </Row>
-
-                {/* <Container>
-                  <Button
-                    onPress={(event) => {
-                      router.push("/gameplay?roomID=" + roomID);
-                    }}
-                    size="lg"
-                    css={{
-                      color: "#17706E",
-                      fontSize: "35px",
-                      backgroundColor: "#FB7813",
-                      marginInline: "auto",
-                    }}
-                  >
-                    Start
-                  </Button>
-                  <Button
-                    onPress={(event) => {
-                      endRoom();
-                    }}
-                  >
-                    End
-                  </Button>
-                </Container> */}
-
-                {/* <Row>
-                  <Col>
-                    <Button
-                      css={{
-                        color: "#17706E",
-                        backgroundColor: "#BB2297",
-                      }}
-                      onPress={(event) => {
-                        endRoom();
-                      }}
-                    >
-                      End
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      onPress={(event) => {
-                        router.push("/gameplay?roomID=" + roomID);
-                      }}
-                      size="lg"
-                      css={{
-                        color: "#17706E",
-                        backgroundColor: "#BB2297",
-                        marginInline: "auto",
-                      }}
-                    >
-                      Start
-                    </Button>
-                  </Col>
-                </Row> */}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-
-        <Spacer y={1} />
         <Row gap={1}>
-          <Col></Col>
-          <Col>
-            <Card css={{ $$cardColor: "#90EE90" }}>
-              <Card.Body>
-                <Room />
-              </Card.Body>
+          <Card
+            css={{
+              width: "auto",
+              background: "$green",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <Card
+              css={{
+                width: "40vw",
+                background: "$primary",
+                margin: "1em",
+              }}
+            >
+              <Spacer y={1} />
+              <Text h2 size={32} color="$secondary" align="center">
+                Type: {puzzleType}
+              </Text>
+              <Spacer y={1} />
             </Card>
-          </Col>
-          <Col></Col>
+          </Card>
+        </Row>
+        <Spacer y={2} />
+        <Row gap={1}>
+          <Card
+            css={{
+              width: "60vw",
+              background: "$green",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <Card
+              css={{
+                width: "auto",
+                background: "$primary",
+                margin: "1em",
+              }}
+            >
+              <Spacer y={1} />
+              <Room />
+              <Spacer y={2.5} />
+            </Card>
+          </Card>
         </Row>
       </Container>
       <Container id="footer">
@@ -249,11 +185,9 @@ export async function getServerSideProps(context) {
 
   roomID = roomID.toUpperCase();
 
-  await get(ref(database, "room/" + context.query.roomID + "/puzzleID")).then(
-    (snapshot) => {
-      puzzleID = snapshot.val();
-    }
-  );
+  await get(ref(database, "room/" + roomID + "/puzzleID")).then((snapshot) => {
+    puzzleID = snapshot.val();
+  });
 
   var puzzleType = "None";
   await get(ref(database, "puzzle/" + puzzleID + "/puzzleType")).then(
@@ -261,26 +195,23 @@ export async function getServerSideProps(context) {
       if (snapshot.exists()) {
         puzzleType = snapshot.val();
       } else {
-        console.log("No puzzle type available");
       }
     }
   );
 
-  var title;
+  var puzzleTitle;
 
   await get(ref(database, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
     if (snapshot.exists()) {
-      title = snapshot.val();
+      puzzleTitle = snapshot.val();
     } else {
-      title = "No Title";
-      console.log("No puzzle piece available");
+      puzzleTitle = "No Title";
     }
   });
-  console.log(title);
 
   puzzleType = puzzleType.toUpperCase();
 
   return {
-    props: { roomID, puzzleType, title }, // will be passed to the page component as props
+    props: { roomID, puzzleType, puzzleTitle }, // will be passed to the page component as props
   };
 }

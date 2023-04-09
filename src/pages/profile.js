@@ -116,7 +116,7 @@ export default function Profile({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation username={user.username} />
+        <Navigation activePage="profile" username={user.username} />
 
         <Spacer y={1} />
 
@@ -137,7 +137,7 @@ export default function Profile({ user }) {
                     <Row>
                       <Message
                         set="bold"
-                        label="email icon"
+                        aria-label="email icon"
                         primaryColor="blueviolet"
                         size="xlarge"
                       />
@@ -153,7 +153,7 @@ export default function Profile({ user }) {
                     <Row>
                       <Document
                         set="bold"
-                        label="biography icon"
+                        aria-label="biography icon"
                         primaryColor="blueviolet"
                         size="xlarge"
                       />
@@ -210,7 +210,7 @@ export default function Profile({ user }) {
                       <Row>
                         <Lock
                           set="bold"
-                          label="lock icon"
+                          aria-label="lock icon"
                           primaryColor="blueviolet"
                           size="xlarge"
                         />
@@ -226,7 +226,7 @@ export default function Profile({ user }) {
                       <Row>
                         <Lock
                           set="bold"
-                          label="lock icon"
+                          aria-label="lock icon"
                           primaryColor="blueviolet"
                           size="xlarge"
                         />
@@ -242,10 +242,15 @@ export default function Profile({ user }) {
                     </Modal.Body>
 
                     <Modal.Footer justify="center">
-                      <Button auto flat color="error" onPress={closeHandler}>
+                      <Button
+                        auto
+                        flat
+                        color="secondary"
+                        onPress={closeHandler}
+                      >
                         Cancel
                       </Button>
-                      <Button auto onPress={closeHandler}>
+                      <Button auto color="secondary" onPress={closeHandler}>
                         Change
                       </Button>
                     </Modal.Footer>

@@ -5,14 +5,10 @@ import {
   Container,
   Text,
   Spacer,
-  Button,
   Link,
-  User,
-  Navbar,
   Grid,
   Card,
   Col,
-  Row,
   Image,
 } from "@nextui-org/react";
 
@@ -36,7 +32,7 @@ export default function Home({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation username={user.username} />
+        <Navigation activePage="instructions" username={user.username} />
 
         <Spacer y={1} />
 

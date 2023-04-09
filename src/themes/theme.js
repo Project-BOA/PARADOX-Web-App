@@ -4,20 +4,24 @@ export const theme = createTheme({
   type: "light",
   theme: {
     colors: {
-      // overrides
-      background: "#17706E",
-      default: "#F7F7EF",
-      primary: "#B6EB79",
-      secondary: "#BB2297",
-      text: "#8A2BE2",
-      link: "#BB2297",
-
       // custom
       darkGreen: "#17706E",
-      lightGreen: "#B6EB79",
+      green: "#08a04b",
+      lightGreen: "#90ee90",
       blueViolet: "#8A2BE2",
       pink: "#BB2297",
       powder: "#F7F7EF",
+
+      buttonPrimary: "#BB2297",
+      buttonSecondary: "#F7F7EF",
+
+      // overrides
+      background: "#17706E",
+      default: "#F7F7EF",
+      primary: "#90ee90",
+      secondary: "#8A2BE2",
+      text: "#BB2297",
+      link: "#BB2297",
     },
     space: {},
     fonts: {

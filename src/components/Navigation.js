@@ -1,4 +1,3 @@
-import handler from "@/pages/api/room";
 import React from "react";
 import {
   Button,
@@ -6,61 +5,90 @@ import {
   Image,
   Navbar,
   Spacer,
-  Container,
   Text,
-  User,
   Modal,
 } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
-function Navigation({ username }) {
+function Navigation({ activePage, username }) {
   const [visible, setVisible] = React.useState(false);
+
   const handler = () => setVisible(true);
 
   const closeHandler = () => {
     setVisible(false);
   };
+
   return (
     <>
-      <Navbar css={{ background: "$background" }} isBordered variant="floating">
+      <Navbar
+        containerCss={{ background: "$primary", color: "$primary" }}
+        disableShadow
+        disableBlur
+        isBordered={false}
+        variant="floating"
+      >
         <Navbar.Brand>
           <Link href="/">
             <Image
               width={188}
               height={75}
-              src="/image/penrose-triangle-PARADOX.png"
+              src="/image/penrose-triangle-PARADOX-dark.png"
               alt=" Logo"
               style={{ objectFit: "cover" }}
             />
           </Link>
         </Navbar.Brand>
-        <Navbar.Content hideIn="xs" variant="highlight-rounded">
-          <Navbar.Link href="/profile">Profile</Navbar.Link>
-          <Navbar.Link href="/">Puzzles</Navbar.Link>
-          <Navbar.Link href="/instructions">Instruction</Navbar.Link>
+        <Navbar.Content variant="underline-rounded">
+          <Navbar.Link isActive={activePage == "profile"} href="/profile">
+            <Text weight="bold" size={24}>
+              Profile
+            </Text>
+          </Navbar.Link>
+
+          <Spacer />
+
+          <Navbar.Link href="/" isActive={activePage == "puzzles"}>
+            <Text weight="bold" size={24}>
+              Puzzles
+            </Text>
+          </Navbar.Link>
+          <Spacer />
+          <Navbar.Link
+            href="/instructions"
+            isActive={activePage == "instructions"}
+          >
+            <Text weight="bold" size={24}>
+              Instructions
+            </Text>
+          </Navbar.Link>
         </Navbar.Content>
         <Navbar.Content>
-          <Navbar.Item>
-            <Text h6 align="right" size={25} color="black" css={{ m: 0 }}>
-              <User src="/image/user_icon.png" name={username} />
+          <Navbar.Link isActive={activePage == "profile"} href="/profile">
+            <Text align="right" weight="bold" size={20}>
+              Hi, {username}
             </Text>
-          </Navbar.Item>
+          </Navbar.Link>
           <Navbar.Item>
             <React.Fragment>
-              <Button auto flat onPress={handler}>
+              <Button
+                auto
+                css={{
+                  color: "$buttonSecondary",
+                  backgroundColor: "$buttonPrimary",
+                }}
+                onPress={handler}
+              >
                 Logout
               </Button>
               <Modal
                 closeButton
-                aria-labelledby="modal-title"
+                aria-label="modal-logout-confirmation"
                 open={visible}
                 onClose={closeHandler}
               >
-                {" "}
                 <Modal.Header>
-                  <Text id="modal-title" size={18}>
-                    Are you sure you want to logout?
-                  </Text>
+                  <Text size={18}>Are you sure you want to logout?</Text>
                 </Modal.Header>
                 <Modal.Footer justify="center">
                   <Button auto flat color="error" onPress={closeHandler}>
@@ -80,58 +108,104 @@ function Navigation({ username }) {
   );
 }
 
-function NavigationGamePlay({ roomID, puzzleName, puzzleType, Endfunction }) {
+function NavigationGamePlay({
+  roomID,
+  puzzleName,
+  logoAction,
+  action,
+  actionText,
+  secondaryAction,
+  secondaryActionText,
+}) {
   const router = useRouter();
+
+  actionText = actionText ?? "End";
+
+  action =
+    action ??
+    function action() {
+      router.push("/");
+    };
+
+  logoAction =
+    logoAction ??
+    function logoAction() {
+      router.push("/");
+    };
 
   return (
     <>
       <Navbar
-        css={{ background: "$primary" }}
-        isBordered
+        containerCss={{ background: "$primary", color: "$primary" }}
         disableShadow
+        disableBlur
+        isBordered={false}
         variant="floating"
       >
         <Navbar.Brand>
-          <Link href="/">
+          <Link
+            onPress={() => {
+              logoAction();
+            }}
+          >
             <Image
               width={188}
               height={75}
-              src="/image/penrose-triangle-PARADOX.png"
+              src="/image/penrose-triangle-PARADOX-dark.png"
               alt=" Logo"
               style={{ objectFit: "cover" }}
             />
           </Link>
         </Navbar.Brand>
-        <Navbar.Content hideIn="xs" variant="highlight-rounded">
-          <Text h6 align="center" size={40} color="#8A2BE2" css={{ m: 0 }}>
-            RoomID: {roomID}
-          </Text>
-          <Spacer y={2} />
-          <Text h6 align="center" size={40} color="#8A2BE2" css={{ m: 0 }}>
-            {puzzleName}
-          </Text>
-          <Spacer y={2} />
 
-          <Text h6 align="center" size={40} color="#8A2BE2" css={{ m: 0 }}>
-            PuzzleType: {puzzleType}
+        <Navbar.Content>
+          <Text h6 size={40} color="#8A2BE2" css={{ m: 0 }}>
+            Room ID:
+          </Text>
+          <Text size={40} color="#8A2BE2" css={{ m: 0 }}>
+            {roomID}
           </Text>
         </Navbar.Content>
         <Navbar.Content>
+          <Text h6 align="center" size={40} color="#8A2BE2" css={{ m: 0 }}>
+            {puzzleName}
+          </Text>
+        </Navbar.Content>
+
+        <Navbar.Content>
           <Navbar.Item>
             <Button
+              auto
+              ghost
               align="right"
               css={{
-                color: "#17706E",
-                backgroundColor: "#BB2297",
-                marginInline: "auto",
+                color: "$buttonPrimary",
+                borderColor: "$buttonPrimary",
+                "&:hover": {
+                  color: "$buttonSecondary",
+                  backgroundColor: "$buttonPrimary",
+                },
               }}
-              onPress={(event) => {
-                //router.push("/leaderboard?roomID=" + roomID);
-                //console.log(Endfunction);
-                Endfunction();
+              onPress={() => {
+                secondaryAction();
               }}
             >
-              End
+              {secondaryActionText}
+            </Button>
+          </Navbar.Item>
+          <Navbar.Item>
+            <Button
+              auto
+              align="right"
+              css={{
+                color: "$buttonSecondary",
+                backgroundColor: "$buttonPrimary",
+              }}
+              onPress={() => {
+                action();
+              }}
+            >
+              {actionText}
             </Button>
           </Navbar.Item>
         </Navbar.Content>

@@ -51,25 +51,21 @@ export default function Login() {
     <NextUIProvider theme={theme}>
       <Spacer y={1} />
       <Row gap={1}>
-        <Container>
-          <Row>
-            <Image
-              height={192}
-              src="/image/penrose-triangle-PARADOX.png"
-              alt=" Logo"
-              style={{ objectFit: "cover" }}
-            />
-          </Row>
-        </Container>
+        <Image
+          height={192}
+          src="/image/penrose-triangle-PARADOX.png"
+          alt=" Logo"
+          style={{ objectFit: "cover" }}
+        />
       </Row>
-      <Spacer y={2} />
+      <Spacer y={2.5} />
       <Row gap={1}>
         <Card css={{ $$cardColor: "lightGreen", mw: "600px", margin: "auto" }}>
           <Card.Body>
             <Text h6 align="center" size={36} css={{ m: 0 }}>
               Login
             </Text>
-            <Spacer y={2} />
+            <Spacer y={2.5} />
             <form onSubmit={handleSubmit}>
               <Row>
                 <User set="bold" primaryColor="blueviolet" size="xlarge" />
@@ -100,7 +96,7 @@ export default function Login() {
                 />
               </Row>
 
-              <Spacer y={1.5} />
+              <Spacer y={2.5} />
 
               <Grid.Container justify="center">
                 <Grid>
