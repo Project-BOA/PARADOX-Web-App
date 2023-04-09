@@ -6,6 +6,9 @@ import {
   NextUIProvider,
   Container,
   Text,
+  Row,
+  Col,
+  Card,
   Spacer,
   Button,
   Link,
@@ -16,6 +19,8 @@ import {
 import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");
+const { Navigation } = require("@/components/Navigation.js");
+const { Footer } = require("@/components/Footer.js");
 
 export default function Home({ user, comments }) {
   const router = useRouter();
@@ -53,44 +58,56 @@ export default function Home({ user, comments }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navbar isBordered variant="floating">
-          <Navbar.Brand>
-            <Link href="/">
-              <Image
-                width={188}
-                height={75}
-                src="/image/penrose-triangle-PARADOX-text.png"
-                alt=" Logo"
-                style={{ objectFit: "cover" }}
-              />
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Content hideIn="xs" variant="highlight-rounded">
-            <Navbar.Link href="/profile">Profile</Navbar.Link>
-            <Navbar.Link href="/">Home</Navbar.Link>
-            <Navbar.Link href="/instructions">Instructions</Navbar.Link>
-          </Navbar.Content>
-          <Navbar.Content>
-            <Navbar.Item>
-              <Text h6 align="right" size={25} color="black" css={{ m: 0 }}>
-                <User src="/image/user_icon.png" name={user.username} />
-              </Text>
-            </Navbar.Item>
-            <Navbar.Item>
-              <Button auto flat as={Link} href="logout">
-                Logout
-              </Button>
-            </Navbar.Item>
-          </Navbar.Content>
-        </Navbar>
+        <Navigation activePage="comment" username={user.username} />
         <Spacer y={1} />
-
-        <Container>
+        {/* <Container>
           <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
             Welcome {user.username}! Check out these comments
           </Text>
-          {JSON.stringify(comments)}
+        </Container> */}
+
+        <Container>
+          <Row>
+            <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card.Body>
+                <Text h4 align="center">
+                  Puzzle title: puzzle type
+                </Text>
+                <Col>
+                  <Text h4 align="center">
+                    Description
+                  </Text>
+                  <div class="box">
+                    <Col>
+                      {" "}
+                      <Text size={20} align="left" color="white" css={{ m: 0 }}>
+                        Amount of time you have to answer each puzzle piece is
+                        INTERVAL seconds . IF MULTI, and you will lose DECREMENT
+                        points every INTERVAL seconds{" "}
+                      </Text>
+                    </Col>
+                  </div>
+                </Col>
+              </Card.Body>
+            </Card>
+            <Card css={{ $$cardColor: "$colors$primary" }}>
+              <Card.Body>
+                <Text h4 align="center">
+                  Comments
+                </Text>
+                <div class="box">
+                  <Col>
+                    {" "}
+                    <Text size={20} align="left" color="white" css={{ m: 0 }}>
+                      {JSON.stringify(comments)}
+                    </Text>
+                  </Col>
+                </div>
+              </Card.Body>
+            </Card>
+          </Row>
         </Container>
+
         <form onSubmit={handleSubmit}>
           <Textarea
             aria-label="Write your thoughts"
@@ -102,6 +119,7 @@ export default function Home({ user, comments }) {
           </Button>
         </form>
         <Spacer y={1} />
+        <Footer />
       </NextUIProvider>
     </>
   );
