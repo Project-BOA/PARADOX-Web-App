@@ -75,55 +75,10 @@ export default function Home({ user }) {
               </Card.Header>
               <Card.Body css={{ p: 0, border: "#17706E" }}>
                 <Text size={40} align="center" color="8A2BE2" css={{ m: 0 }}>
-                  Multi Puzzles
+                  Single Puzzles
                 </Text>
                 <Text size={20} align="center" color="8A2BE2" css={{ m: 0 }}>
-                  {multiDescription}
-                </Text>
-              </Card.Body>
-              <Card.Footer
-                isBlurred
-                css={{
-                  position: "absolute",
-                  bgBlur: "#0f111466",
-                  borderTop: "$borderWeights$light solid $gray800",
-                  bottom: 0,
-                  zIndex: 1,
-                }}
-              ></Card.Footer>
-            </Card>
-          </Card>
-
-          <Card
-            css={{
-              width: "auto",
-              background: "$green",
-              margin: "1em",
-            }}
-          >
-            <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
-              <Card.Header css={{ marginLeft: "auto", marginRight: "auto" }}>
-                <Col>
-                  <Text
-                    size={28}
-                    weight="bold"
-                    transform="uppercase"
-                    color="black"
-                  ></Text>
-                  <Text
-                    size={18}
-                    weight="bold"
-                    transform="uppercase"
-                    color="black"
-                  ></Text>
-                </Col>
-              </Card.Header>
-              <Card.Body css={{ p: 0, border: "#17706E" }}>
-                <Text size={40} align="center" color="8A2BE2" css={{ m: 0 }}>
-                  Multi Puzzles
-                </Text>
-                <Text size={20} align="center" color="8A2BE2" css={{ m: 0 }}>
-                  {multiDescription}
+                  {singleDescritption}
                 </Text>
               </Card.Body>
               <Card.Footer
@@ -139,6 +94,7 @@ export default function Home({ user }) {
             </Card>
           </Card>
         </Grid.Container>
+
         <Grid.Container gap={2} justify="center">
           <Grid xs={4}>
             <Card
