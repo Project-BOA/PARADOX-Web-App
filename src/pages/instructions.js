@@ -21,7 +21,7 @@ const { Footer } = require("@/components/Footer.js");
 export default function Home({ user }) {
   const router = useRouter();
 
-  const multiDescritption =
+  const multiDescription =
     "These puzzles have multiple answers, that will score you a low amount of points. These LOW point answers will hint towards the big ticket answer";
 
   const timeDescritption =
@@ -32,7 +32,7 @@ export default function Home({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation activePage="instructions" username={user.username} />
+        <Navigation page="instructions" username={user.username} />
 
         <Spacer y={1} />
 
@@ -49,13 +49,106 @@ export default function Home({ user }) {
         </Container>
 
         <Grid.Container gap={2} justify="center">
+          <Card
+            css={{
+              width: "auto",
+              background: "$green",
+              margin: "1em",
+            }}
+          >
+            <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
+              <Card.Header css={{ marginLeft: "auto", marginRight: "auto" }}>
+                <Col>
+                  <Text
+                    size={28}
+                    weight="bold"
+                    transform="uppercase"
+                    color="black"
+                  ></Text>
+                  <Text
+                    size={18}
+                    weight="bold"
+                    transform="uppercase"
+                    color="black"
+                  ></Text>
+                </Col>
+              </Card.Header>
+              <Card.Body css={{ p: 0, border: "#17706E" }}>
+                <Text size={40} align="center" color="8A2BE2" css={{ m: 0 }}>
+                  Multi Puzzles
+                </Text>
+                <Text size={20} align="center" color="8A2BE2" css={{ m: 0 }}>
+                  {multiDescription}
+                </Text>
+              </Card.Body>
+              <Card.Footer
+                isBlurred
+                css={{
+                  position: "absolute",
+                  bgBlur: "#0f111466",
+                  borderTop: "$borderWeights$light solid $gray800",
+                  bottom: 0,
+                  zIndex: 1,
+                }}
+              ></Card.Footer>
+            </Card>
+          </Card>
+
+          <Card
+            css={{
+              width: "auto",
+              background: "$green",
+              margin: "1em",
+            }}
+          >
+            <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
+              <Card.Header css={{ marginLeft: "auto", marginRight: "auto" }}>
+                <Col>
+                  <Text
+                    size={28}
+                    weight="bold"
+                    transform="uppercase"
+                    color="black"
+                  ></Text>
+                  <Text
+                    size={18}
+                    weight="bold"
+                    transform="uppercase"
+                    color="black"
+                  ></Text>
+                </Col>
+              </Card.Header>
+              <Card.Body css={{ p: 0, border: "#17706E" }}>
+                <Text size={40} align="center" color="8A2BE2" css={{ m: 0 }}>
+                  Multi Puzzles
+                </Text>
+                <Text size={20} align="center" color="8A2BE2" css={{ m: 0 }}>
+                  {multiDescription}
+                </Text>
+              </Card.Body>
+              <Card.Footer
+                isBlurred
+                css={{
+                  position: "absolute",
+                  bgBlur: "#0f111466",
+                  borderTop: "$borderWeights$light solid $gray800",
+                  bottom: 0,
+                  zIndex: 1,
+                }}
+              ></Card.Footer>
+            </Card>
+          </Card>
+        </Grid.Container>
+        <Grid.Container gap={2} justify="center">
           <Grid xs={4}>
-            <Card css={{ $$cardColor: "#90EE90" }}>
+            <Card
+              css={{ $$cardColor: "lightGreen", mw: "600px", margin: "auto" }}
+            >
               <Text size={40} align="center" color="#8A2BE2" css={{ m: 0 }}>
                 Multi Puzzles
               </Text>
               <Text size={20} align="center" color="white" css={{ m: 0 }}>
-                {multiDescritption}
+                {multiDescription}
               </Text>
             </Card>
           </Grid>

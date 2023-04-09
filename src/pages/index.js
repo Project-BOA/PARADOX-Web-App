@@ -8,7 +8,6 @@ import {
   Row,
   Text,
   Col,
-  Link,
   Button,
   Grid,
   Tooltip,
@@ -48,13 +47,16 @@ export default function Home({ user }) {
     return (
       <Grid.Container
         css={{
-          borderRadius: "14px",
-          padding: "0.75rem",
+          color: "$primary",
+          borderRadius: "18px",
+          padding: "1rem",
           maxWidth: "330px",
         }}
       >
         <Row justify="center" align="center">
-          <Text b>Confirm</Text>
+          <Text weight="bold" size={"$lg"}>
+            Confirm
+          </Text>
         </Row>
         <Row>
           <Text>
@@ -167,38 +169,23 @@ export default function Home({ user }) {
                             zIndex: 1,
                           }}
                         >
-                          <Row>
+                          <Row justify="center">
                             <Tooltip
                               trigger="click"
+                              color={"primary"}
                               content={<GetComment puzzleID={puzzleID} />}
                             >
                               <Button
-                                light
+                                size="lg"
+                                auto
                                 css={{
-                                  fontWeight: "bold",
-                                  "&:hover": {
-                                    textDecoration: "underline",
-                                  },
+                                  color: "$buttonSecondary",
+                                  backgroundColor: "$buttonPrimary",
                                 }}
                               >
                                 Details
                               </Button>
                             </Tooltip>
-                          </Row>
-
-                          <Row justify="center">
-                            <Button
-                              auto
-                              css={{
-                                color: "$buttonSecondary",
-                                backgroundColor: "$buttonPrimary",
-                              }}
-                              onClick={() => {
-                                getRoom(puzzleID);
-                              }}
-                            >
-                              Start
-                            </Button>
                           </Row>
                         </Card.Footer>
                       </Card>
@@ -216,7 +203,7 @@ export default function Home({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation activePage="puzzles" username={user.username} />
+        <Navigation page="puzzles" username={user.username} />
         <Puzzles />
         <Footer />
       </NextUIProvider>

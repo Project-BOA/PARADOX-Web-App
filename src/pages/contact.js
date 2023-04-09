@@ -20,7 +20,7 @@ export default function Contacts({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation activePage="contact" username={user.username} />
+        <Navigation page="contact" username={user.username} />
 
         <Spacer y={1} />
 

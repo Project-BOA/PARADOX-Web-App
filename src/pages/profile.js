@@ -116,147 +116,163 @@ export default function Profile({ user }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation activePage="profile" username={user.username} />
+        <Navigation page="profile" username={user.username} />
 
         <Spacer y={1} />
 
         <Container>
           <Row gap={1}>
-            <Card css={{ $$cardColor: "$colors$primary" }}>
-              <Card.Body>
-                <Text h4 align="center">
-                  Profile Info
-                </Text>
-                <Grid.Container gap={2} justify="center">
-                  <form
-                    id="profile-info-form"
-                    onSubmit={(event) => {
-                      handleSubmit(event);
-                    }}
+            <Card
+              css={{
+                width: "auto",
+                background: "$green",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              <Card
+                css={{
+                  width: "40vw",
+                  background: "$primary",
+                  margin: "1em",
+                }}
+              >
+                <Card.Body>
+                  <Text h4 align="center">
+                    Profile Info
+                  </Text>
+                  <Grid.Container gap={2} justify="center">
+                    <form
+                      id="profile-info-form"
+                      onSubmit={(event) => {
+                        handleSubmit(event);
+                      }}
+                    >
+                      <Row>
+                        <Message
+                          set="bold"
+                          aria-label="email icon"
+                          primaryColor="blueviolet"
+                          size="xlarge"
+                        />
+                        <Spacer />
+                        <Input
+                          fullWidth
+                          id="email"
+                          clearable
+                          initialValue={user.email}
+                        />
+                      </Row>
+                      <Spacer y={1} />
+                      <Row>
+                        <Document
+                          set="bold"
+                          aria-label="biography icon"
+                          primaryColor="blueviolet"
+                          size="xlarge"
+                        />
+
+                        <Spacer />
+                        <Input
+                          fullWidth
+                          id="biography"
+                          clearable
+                          initialValue={user.biography}
+                        />
+                      </Row>
+
+                      <Grid.Container gap={1} justify="center">
+                        <Grid>
+                          <Button
+                            auto
+                            type="submit"
+                            color="secondary"
+                            css={{ marginLeft: "auto", marginRight: "auto" }}
+                          >
+                            Update
+                          </Button>
+                        </Grid>
+                      </Grid.Container>
+                    </form>
+                  </Grid.Container>
+
+                  <Link
+                    auto
+                    type="edit"
+                    color="secondary"
+                    onPress={handler}
+                    css={{ marginLeft: "auto", marginRight: "auto" }}
                   >
-                    <Row>
-                      <Message
-                        set="bold"
-                        aria-label="email icon"
-                        primaryColor="blueviolet"
-                        size="xlarge"
-                      />
-                      <Spacer />
-                      <Input
-                        fullWidth
-                        id="email"
-                        clearable
-                        initialValue={user.email}
-                      />
-                    </Row>
-                    <Spacer y={1} />
-                    <Row>
-                      <Document
-                        set="bold"
-                        aria-label="biography icon"
-                        primaryColor="blueviolet"
-                        size="xlarge"
-                      />
+                    Change Password
+                  </Link>
+                  <Modal
+                    closeButton
+                    aria-labelledby="modal-title"
+                    open={visible}
+                    onClose={closeHandler}
+                  >
+                    <form
+                      onSubmit={(event) => {
+                        handleSubmitPass(event);
+                      }}
+                    >
+                      <Modal.Header>
+                        <Text h4>Change Password</Text>
+                      </Modal.Header>
+                      <Spacer y={1} />
 
-                      <Spacer />
-                      <Input
-                        fullWidth
-                        id="biography"
-                        clearable
-                        initialValue={user.biography}
-                      />
-                    </Row>
+                      <Modal.Body>
+                        <Row>
+                          <Lock
+                            set="bold"
+                            aria-label="lock icon"
+                            primaryColor="blueviolet"
+                            size="xlarge"
+                          />
+                          <Spacer />
+                          <Input
+                            fullWidth
+                            id="password"
+                            clearable
+                            type={"password"}
+                            labelPlaceholder="Password"
+                          />
+                        </Row>
+                        <Row>
+                          <Lock
+                            set="bold"
+                            aria-label="lock icon"
+                            primaryColor="blueviolet"
+                            size="xlarge"
+                          />
+                          <Spacer />
+                          <Input
+                            fullWidth
+                            id="newPassword"
+                            clearable
+                            type={"password"}
+                            labelPlaceholder="New Password"
+                          />
+                        </Row>
+                      </Modal.Body>
 
-                    <Grid.Container gap={1} justify="center">
-                      <Grid>
+                      <Modal.Footer justify="center">
                         <Button
                           auto
-                          type="submit"
+                          flat
                           color="secondary"
-                          css={{ marginLeft: "auto", marginRight: "auto" }}
+                          onPress={closeHandler}
                         >
-                          Update
+                          Cancel
                         </Button>
-                      </Grid>
-                    </Grid.Container>
-                  </form>
-                </Grid.Container>
-
-                <Link
-                  auto
-                  type="edit"
-                  color="secondary"
-                  onPress={handler}
-                  css={{ marginLeft: "auto", marginRight: "auto" }}
-                >
-                  Change Password
-                </Link>
-                <Modal
-                  closeButton
-                  aria-labelledby="modal-title"
-                  open={visible}
-                  onClose={closeHandler}
-                >
-                  <form
-                    onSubmit={(event) => {
-                      handleSubmitPass(event);
-                    }}
-                  >
-                    <Modal.Header>
-                      <Text h4>Change Password</Text>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                      <Row>
-                        <Lock
-                          set="bold"
-                          aria-label="lock icon"
-                          primaryColor="blueviolet"
-                          size="xlarge"
-                        />
-                        <Spacer />
-                        <Input
-                          fullWidth
-                          id="password"
-                          clearable
-                          type={"password"}
-                          labelPlaceholder="Password"
-                        />
-                      </Row>
-                      <Row>
-                        <Lock
-                          set="bold"
-                          aria-label="lock icon"
-                          primaryColor="blueviolet"
-                          size="xlarge"
-                        />
-                        <Spacer />
-                        <Input
-                          fullWidth
-                          id="newPassword"
-                          clearable
-                          type={"password"}
-                          labelPlaceholder="New Password"
-                        />
-                      </Row>
-                    </Modal.Body>
-
-                    <Modal.Footer justify="center">
-                      <Button
-                        auto
-                        flat
-                        color="secondary"
-                        onPress={closeHandler}
-                      >
-                        Cancel
-                      </Button>
-                      <Button auto color="secondary" onPress={closeHandler}>
-                        Change
-                      </Button>
-                    </Modal.Footer>
-                  </form>
-                </Modal>
-              </Card.Body>
+                        <Button auto color="secondary" onPress={closeHandler}>
+                          Change
+                        </Button>
+                      </Modal.Footer>
+                    </form>
+                  </Modal>
+                </Card.Body>
+              </Card>
             </Card>
             <Card css={{ $$cardColor: "$colors$primary" }}>
               <Card.Body>

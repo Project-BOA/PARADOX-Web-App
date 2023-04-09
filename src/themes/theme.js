@@ -20,7 +20,7 @@ export const theme = createTheme({
       default: "#F7F7EF",
       primary: "#90ee90",
       secondary: "#8A2BE2",
-      text: "#BB2297",
+      text: "#8A2BE2",
       link: "#BB2297",
     },
     space: {},

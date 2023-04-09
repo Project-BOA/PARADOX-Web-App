@@ -9,8 +9,10 @@ import {
   Modal,
 } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import { unescapeQuote } from "xss";
 
-function Navigation({ activePage, username }) {
+function Navigation({ page, username }) {
   const [visible, setVisible] = React.useState(false);
 
   const handler = () => setVisible(true);
@@ -21,6 +23,12 @@ function Navigation({ activePage, username }) {
 
   return (
     <>
+      <Head>
+        <title>
+          {page.charAt(0).toUpperCase() + page.slice(1).toLowerCase()}
+        </title>
+      </Head>
+
       <Navbar
         containerCss={{ background: "$primary", color: "$primary" }}
         disableShadow
@@ -40,7 +48,7 @@ function Navigation({ activePage, username }) {
           </Link>
         </Navbar.Brand>
         <Navbar.Content variant="underline-rounded">
-          <Navbar.Link isActive={activePage == "profile"} href="/profile">
+          <Navbar.Link isActive={page == "profile"} href="/profile">
             <Text weight="bold" size={24}>
               Profile
             </Text>
@@ -48,23 +56,20 @@ function Navigation({ activePage, username }) {
 
           <Spacer />
 
-          <Navbar.Link href="/" isActive={activePage == "puzzles"}>
+          <Navbar.Link href="/" isActive={page == "puzzles"}>
             <Text weight="bold" size={24}>
               Puzzles
             </Text>
           </Navbar.Link>
           <Spacer />
-          <Navbar.Link
-            href="/instructions"
-            isActive={activePage == "instructions"}
-          >
+          <Navbar.Link href="/instructions" isActive={page == "instructions"}>
             <Text weight="bold" size={24}>
               Instructions
             </Text>
           </Navbar.Link>
         </Navbar.Content>
         <Navbar.Content>
-          <Navbar.Link isActive={activePage == "profile"} href="/profile">
+          <Navbar.Link isActive={page == "profile"} href="/profile">
             <Text align="right" weight="bold" size={20}>
               Hi, {username}
             </Text>
@@ -159,40 +164,50 @@ function NavigationGamePlay({
         </Navbar.Brand>
 
         <Navbar.Content>
-          <Text h6 size={40} color="#8A2BE2" css={{ m: 0 }}>
+          <Text h6 size={40} color="$text" css={{ m: 0 }}>
             Room ID:
           </Text>
-          <Text size={40} color="#8A2BE2" css={{ m: 0 }}>
+          <Text size={40} color="$text" css={{ m: 0 }}>
             {roomID}
           </Text>
         </Navbar.Content>
         <Navbar.Content>
-          <Text h6 align="center" size={40} color="#8A2BE2" css={{ m: 0 }}>
+          <Text h6 align="center" size={40} color="$text" css={{ m: 0 }}>
             {puzzleName}
           </Text>
         </Navbar.Content>
 
         <Navbar.Content>
-          <Navbar.Item>
-            <Button
-              auto
-              ghost
-              align="right"
-              css={{
-                color: "$buttonPrimary",
-                borderColor: "$buttonPrimary",
-                "&:hover": {
-                  color: "$buttonSecondary",
-                  backgroundColor: "$buttonPrimary",
-                },
-              }}
-              onPress={() => {
-                secondaryAction();
-              }}
-            >
-              {secondaryActionText}
-            </Button>
-          </Navbar.Item>
+          {() => {
+            if (
+              secondaryActionText == undefined ||
+              secondaryAction == undefined
+            )
+              return (
+                <Navbar.Item>
+                  <Button
+                    css={{ visibility: "hidden" }}
+                    auto
+                    ghost
+                    align="right"
+                    css={{
+                      color: "$buttonPrimary",
+                      borderColor: "$buttonPrimary",
+                      "&:hover": {
+                        color: "$buttonSecondary",
+                        backgroundColor: "$buttonPrimary",
+                      },
+                    }}
+                    onPress={() => {
+                      secondaryAction();
+                    }}
+                  >
+                    {secondaryActionText}
+                  </Button>
+                </Navbar.Item>
+              );
+          }}
+
           <Navbar.Item>
             <Button
               auto

@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import { ref, get, update } from "firebase/database";
 import { withIronSessionSsr } from "iron-session/next";
@@ -15,6 +16,7 @@ import {
   User,
   Navbar,
   Textarea,
+  Modal,
 } from "@nextui-org/react";
 import { theme } from "@/themes/theme.js";
 
@@ -22,9 +24,18 @@ const { database } = require("@/modules/firebase-config.js");
 const { Navigation } = require("@/components/Navigation.js");
 const { Footer } = require("@/components/Footer.js");
 
-export default function Home({ user, comments }) {
+export default function Puzzle({ user, comments }) {
   const router = useRouter();
   const { puzzleID } = router.query;
+  var moment = require("moment");
+
+  const [visible, setVisible] = React.useState(false);
+  const handler = () => setVisible(true);
+
+  const closeHandler = () => {
+    setVisible(false);
+    console.log("closed");
+  };
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -58,7 +69,7 @@ export default function Home({ user, comments }) {
   return (
     <>
       <NextUIProvider theme={theme}>
-        <Navigation activePage="comment" username={user.username} />
+        <Navigation page="comment" username={user.username} />
         <Spacer y={1} />
         {/* <Container>
           <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
@@ -79,11 +90,10 @@ export default function Home({ user, comments }) {
                   </Text>
                   <div class="box">
                     <Col>
-                      {" "}
                       <Text size={20} align="left" color="white" css={{ m: 0 }}>
                         Amount of time you have to answer each puzzle piece is
                         INTERVAL seconds . IF MULTI, and you will lose DECREMENT
-                        points every INTERVAL seconds{" "}
+                        points every INTERVAL seconds
                       </Text>
                     </Col>
                   </div>
@@ -100,15 +110,73 @@ export default function Home({ user, comments }) {
                     {" "}
                     <Text size={20} align="left" color="white" css={{ m: 0 }}>
                       {JSON.stringify(comments)}
+                      {moment(comments).format()}
                     </Text>
                   </Col>
                 </div>
+                <Button
+                  auto
+                  type="edit"
+                  color="secondary"
+                  onPress={handler}
+                  css={{ marginLeft: "auto", marginRight: "auto" }}
+                >
+                  Create
+                </Button>
+                <Modal
+                  closeButton
+                  aria-labelledby="modal-title"
+                  open={visible}
+                  onClose={closeHandler}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <Modal.Header>
+                      <Text h4>Add Comment</Text>
+                    </Modal.Header>
+                    <Spacer y={1} />
+
+                    <Modal.Body>
+                      <Text
+                        size={18}
+                        align="center"
+                        color="green"
+                        css={{ m: 0 }}
+                      >
+                        {user.username}
+                      </Text>
+
+                      <Textarea
+                        aria-label="Write your thoughts"
+                        placeholder="Enter your comments here."
+                        id="comment"
+                      />
+                    </Modal.Body>
+
+                    <Modal.Footer justify="center">
+                      <Button
+                        auto
+                        flat
+                        color="secondary"
+                        onPress={closeHandler}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        auto
+                        color="secondary"
+                        onPress={(closeHandler, handleSubmit)}
+                      >
+                        Comment
+                      </Button>
+                    </Modal.Footer>
+                  </form>
+                </Modal>
               </Card.Body>
             </Card>
           </Row>
         </Container>
 
-        <form onSubmit={handleSubmit}>
+        {/* <form onSubmit={handleSubmit}>
           <Textarea
             aria-label="Write your thoughts"
             placeholder="Enter your amazing ideas."
@@ -117,7 +185,7 @@ export default function Home({ user, comments }) {
           <Button auto flat size="sm" type="submit">
             Submit
           </Button>
-        </form>
+        </form> */}
         <Spacer y={1} />
         <Footer />
       </NextUIProvider>
