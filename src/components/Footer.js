@@ -5,6 +5,7 @@ import {
   Container,
   Grid,
   Col,
+  Link,
   Row,
   Spacer,
 } from "@nextui-org/react";
@@ -25,14 +26,14 @@ function Footer() {
         </Grid>
 
         <Grid>
-          <Text h3 size={20} align="center">
+          <Link h3 size={20} align="center" href="/contact">
             Contacts Privacy
-          </Text>
+          </Link>
         </Grid>
       </Grid.Container>
 
       <Text h3 size={12} align="center">
-        @ PARADOX 2023
+        &copy; PARADOX 2023
       </Text>
     </NextUIProvider>
   );

@@ -15,7 +15,7 @@ import { getDatabase, ref, onValue, remove, get } from "firebase/database";
 import React, { useState } from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
-import Footer from "./footer";
+import Footer from "@/components/Footer";
 import { theme } from "@/themes/theme.js";
 
 const { database } = require("@/modules/firebase-config.js");

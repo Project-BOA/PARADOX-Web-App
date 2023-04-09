@@ -137,7 +137,7 @@ export default function Home({ user }) {
                           </Text>
                         </Col>
                       </Card.Header>
-                      <Card.Body css={{ p: 0 }}>
+                      <Card.Body css={{ p: 0, border: "#17706E" }}>
                         <Card.Image
                           src="/image/default_puzzle_image.png"
                           objectFit="cover"

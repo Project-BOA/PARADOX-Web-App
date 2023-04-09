@@ -175,6 +175,7 @@ export default function Home({ user }) {
             </div>
           </Card>
         </Container>
+        <Footer />
       </NextUIProvider>
     </>
   );
