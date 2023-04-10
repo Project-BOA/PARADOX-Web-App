@@ -7,19 +7,80 @@ import {
   Spacer,
   Text,
   Modal,
+  Card,
 } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { unescapeQuote } from "xss";
 
 function Navigation({ page, username }) {
   const [visible, setVisible] = React.useState(false);
+  const router = useRouter();
 
   const handler = () => setVisible(true);
 
   const closeHandler = () => {
     setVisible(false);
   };
+
+  const logoutHandler = () => {
+    setVisible(false);
+    router.push("/logout");
+  };
+
+  function LogoutModal() {
+    return (
+      <Modal
+        flat
+        aria-label="modal-logout-confirmation"
+        open={visible}
+        onClose={closeHandler}
+        css={{
+          color: "$green",
+          background: "$green",
+          padding: "1em",
+        }}
+      >
+        <Card
+          css={{
+            color: "$green",
+            background: "$green",
+          }}
+        >
+          <Card
+            css={{
+              background: "$primary",
+            }}
+          >
+            <Modal.Header>
+              <Text size={18}>Are you sure you want to logout?</Text>
+            </Modal.Header>
+            <Modal.Footer justify="center">
+              <Button
+                auto
+                css={{
+                  color: "$buttonSecondary",
+                  backgroundColor: "$buttonPrimary",
+                }}
+                onPress={closeHandler}
+              >
+                No
+              </Button>
+              <Button
+                auto
+                css={{
+                  color: "$buttonSecondary",
+                  backgroundColor: "$buttonPrimary",
+                }}
+                onPress={logoutHandler}
+              >
+                Logout
+              </Button>
+            </Modal.Footer>
+          </Card>
+        </Card>
+      </Modal>
+    );
+  }
 
   return (
     <>
@@ -86,24 +147,7 @@ function Navigation({ page, username }) {
               >
                 Logout
               </Button>
-              <Modal
-                closeButton
-                aria-label="modal-logout-confirmation"
-                open={visible}
-                onClose={closeHandler}
-              >
-                <Modal.Header>
-                  <Text size={18}>Are you sure you want to logout?</Text>
-                </Modal.Header>
-                <Modal.Footer justify="center">
-                  <Button auto flat color="error" onPress={closeHandler}>
-                    Exit
-                  </Button>
-                  <Button auto as={Link} href="logout" onPress={closeHandler}>
-                    Logout
-                  </Button>
-                </Modal.Footer>
-              </Modal>
+              <LogoutModal />
             </React.Fragment>
           </Navbar.Item>
         </Navbar.Content>
@@ -114,8 +158,9 @@ function Navigation({ page, username }) {
 }
 
 function NavigationGamePlay({
+  page,
   roomID,
-  puzzleName,
+  puzzleType,
   logoAction,
   action,
   actionText,
@@ -138,8 +183,39 @@ function NavigationGamePlay({
       router.push("/");
     };
 
+  function Secondary() {
+    if (secondaryActionText != undefined)
+      return (
+        <Navbar.Item>
+          <Button
+            auto
+            ghost
+            align="right"
+            css={{
+              color: "$buttonPrimary",
+              borderColor: "$buttonPrimary",
+              "&:hover": {
+                color: "$buttonSecondary",
+                backgroundColor: "$buttonPrimary",
+              },
+            }}
+            onPress={() => {
+              secondaryAction();
+            }}
+          >
+            {secondaryActionText}
+          </Button>
+        </Navbar.Item>
+      );
+  }
+
   return (
     <>
+      <Head>
+        <title>
+          {page.charAt(0).toUpperCase() + page.slice(1).toLowerCase()}
+        </title>
+      </Head>
       <Navbar
         containerCss={{ background: "$primary", color: "$primary" }}
         disableShadow
@@ -164,49 +240,25 @@ function NavigationGamePlay({
         </Navbar.Brand>
 
         <Navbar.Content>
-          <Text h6 size={40} color="$text" css={{ m: 0 }}>
+          <Text h6 weight="light" size={40} color="$text" css={{ m: 0 }}>
             Room ID:
           </Text>
-          <Text size={40} color="$text" css={{ m: 0 }}>
+          <Text h6 size={40} color="$text" css={{ m: 0 }}>
             {roomID}
           </Text>
         </Navbar.Content>
         <Navbar.Content>
-          <Text h6 align="center" size={40} color="$text" css={{ m: 0 }}>
-            {puzzleName}
+          <Text h6 weight="light" size={40} color="$text" css={{ m: 0 }}>
+            Type:
+          </Text>
+          <Text h6 size={40} color="$text" css={{ m: 0 }}>
+            {puzzleType.charAt(0).toUpperCase() +
+              puzzleType.slice(1).toLowerCase()}
           </Text>
         </Navbar.Content>
 
         <Navbar.Content>
-          {() => {
-            if (
-              secondaryActionText == undefined ||
-              secondaryAction == undefined
-            )
-              return (
-                <Navbar.Item>
-                  <Button
-                    css={{ visibility: "hidden" }}
-                    auto
-                    ghost
-                    align="right"
-                    css={{
-                      color: "$buttonPrimary",
-                      borderColor: "$buttonPrimary",
-                      "&:hover": {
-                        color: "$buttonSecondary",
-                        backgroundColor: "$buttonPrimary",
-                      },
-                    }}
-                    onPress={() => {
-                      secondaryAction();
-                    }}
-                  >
-                    {secondaryActionText}
-                  </Button>
-                </Navbar.Item>
-              );
-          }}
+          <Secondary />
 
           <Navbar.Item>
             <Button

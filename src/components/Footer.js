@@ -1,31 +1,33 @@
-import { NextUIProvider, Text, Image, Grid, Link } from "@nextui-org/react";
-import { theme } from "@/themes/theme.js";
+import { Container, Text, Image, Spacer, Link } from "@nextui-org/react";
 
 function Footer() {
   return (
-    <NextUIProvider theme={theme}>
-      <Grid.Container justify="center">
-        <Grid>
-          <Image
-            width={75}
-            height={75}
-            src="/image/penrose-triangle-coloured-circled.png"
-            alt=" Logo"
-            style={{ objectFit: "cover" }}
-          />
-        </Grid>
-
-        <Grid>
+    <footer id={"footer"}>
+      <Container css={{ backgroundColor: "$primary", padding: "5px" }}>
+        <Image
+          width={75}
+          height={75}
+          src="/image/penrose-triangle-coloured-circled.png"
+          alt=" Logo"
+          style={{ objectFit: "cover" }}
+        />
+        <Spacer y={1} />
+        <Container align="center">
           <Link h3 size={20} align="center" href="/contact">
-            Contacts Privacy
+            Contact Us
           </Link>
-        </Grid>
-      </Grid.Container>
+          {" - "}
+          <Link h3 size={20} align="center" href="/privacy">
+            Privacy
+          </Link>
+        </Container>
+        <Spacer y={1} />
 
-      <Text h3 size={12} align="center">
-        &copy; PARADOX 2023
-      </Text>
-    </NextUIProvider>
+        <Text h3 size={12} align="center">
+          &copy; PARADOX 2023
+        </Text>
+      </Container>
+    </footer>
   );
 }
 

@@ -21,7 +21,7 @@ import { theme } from "@/themes/theme.js";
 
 import { User, Lock, Message, Document } from "react-iconly";
 
-export default function Home() {
+export default function Register() {
   const router = useRouter();
 
   // Handle the submit for the form

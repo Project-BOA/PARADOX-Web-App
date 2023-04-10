@@ -5,6 +5,7 @@ import {
   Container,
   Text,
   Spacer,
+  Col,
   Grid,
   Card,
 } from "@nextui-org/react";

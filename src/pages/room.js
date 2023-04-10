@@ -37,6 +37,18 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
     router.push("/");
   }
 
+  function EmptyMessage({ display }) {
+    if (display == true) {
+      return (
+        <>
+          <Text h2 size={40}>
+            Use the app to join the room with the Room ID...
+          </Text>
+        </>
+      );
+    }
+  }
+
   function Room() {
     var players = [];
     const [snapshots, loading, error] = useListKeys(
@@ -64,28 +76,31 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
         {!loading && snapshots && (
           <>
             <Text h2 size={32} color="$secondary" align="center">
-              Players in Room...
+              Room for {puzzleTitle}
             </Text>
             <Spacer y={2.5} />
             <Grid.Container gap={1} justify="center">
-              {snapshots.map((v) => {
-                if (!players.includes(v)) {
-                  players.push(v);
+              <EmptyMessage display={snapshots.length == 0} />
+              {snapshots.map((username) => {
+                if (!players.includes(username)) {
+                  players.push(username);
                   return (
-                    <Grid key={v}>
+                    <Grid key={username}>
                       <Button
                         align="center"
                         css={{
-                          color: "$primaryButton",
+                          color: "$buttonPrimary",
                           marginInline: "auto",
                           fontSize: "28px",
                           "&:hover": {
                             textDecoration: "line-through",
                           },
                         }}
-                        onPress={(event) => removePlayer(event, roomID, v)}
+                        onPress={(event) =>
+                          removePlayer(event, roomID, username)
+                        }
                       >
-                        {v}
+                        {username}
                       </Button>
                       <Spacer y={2.5} />
                     </Grid>
@@ -100,10 +115,10 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
   }
 
   return (
-    <NextUIProvider theme={theme}>
+    <NextUIProvider id="page-container" theme={theme}>
       <NavigationGamePlay
+        page="room"
         roomID={roomID}
-        puzzleName={puzzleTitle}
         puzzleType={puzzleType}
         logoAction={endRoom}
         actionText="Start"
@@ -132,8 +147,8 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
               }}
             >
               <Spacer y={1} />
-              <Text h2 size={32} color="$secondary" align="center">
-                Type: {puzzleType}
+              <Text h1 size={40} color="$secondary" align="center">
+                {puzzleTitle}
               </Text>
               <Spacer y={1} />
             </Card>
@@ -162,9 +177,6 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
             </Card>
           </Card>
         </Row>
-      </Container>
-      <Container id="footer">
-        <Footer />
       </Container>
     </NextUIProvider>
   );

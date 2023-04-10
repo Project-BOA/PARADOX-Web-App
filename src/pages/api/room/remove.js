@@ -3,9 +3,6 @@ import { getDatabase, ref, remove, get } from "firebase/database";
 const { database } = require("@/modules/firebase-config.js");
 
 export default async function create(req, res) {
-  // TODO
-  // Validate input to only allow roomID values
-  // add authentication to who is allowed to destroy room
   var roomID = req.body.roomID;
 
   if (roomID == null) {

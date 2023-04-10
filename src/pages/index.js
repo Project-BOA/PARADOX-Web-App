@@ -77,7 +77,7 @@ export default function Home({ user }) {
               color="error"
               onClick={() => {
                 router.push({
-                  pathname: "/comment",
+                  pathname: "/puzzle",
                   query: { puzzleID: puzzleID },
                 });
               }}

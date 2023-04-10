@@ -85,7 +85,7 @@ function LeaderboardMapper({ entries }) {
       players.push(name);
       return (
         <Fragment key={name}>
-          <Text h3 size={25} align="center">
+          <Text h3 size={30} align="center">
             {getOrdinal(position++)}. {name} - {score} points
           </Text>
           <Spacer y={2.5} />

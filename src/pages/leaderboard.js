@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   Col,
   Container,
@@ -7,8 +6,6 @@ import {
   Row,
   Spacer,
   Text,
-  Image,
-  Navbar,
 } from "@nextui-org/react";
 import { get, getDatabase, ref, update } from "firebase/database";
 import { useRouter } from "next/router";
@@ -27,6 +24,7 @@ export default function Leaderboard({ title, entries, type }) {
   return (
     <NextUIProvider theme={theme}>
       <NavigationGamePlay
+        page="leaderboard"
         roomID={roomID}
         puzzleName={title}
         puzzleType={type}
@@ -35,49 +33,24 @@ export default function Leaderboard({ title, entries, type }) {
         }}
       />
       <Container gap={0}>
-        <Row gap={0}>
-          <Col>
-            <Card css={{ $$cardColor: "#17706E" }}>
-              <Card.Body>
-                <Row>
-                  <Col>
-                    <Container>
-                      <Image
-                        height={192}
-                        src="/image/penrose-triangle-PARADOX.png"
-                        alt=" Logo"
-                      />
-                    </Container>
-                  </Col>
-                  <Col>
-                    <Spacer y={2} />
-
-                    <Text
-                      h1
-                      size={60}
-                      css={{ m: 0 }}
-                      weight="bold"
-                      align="center"
-                    >
-                      {title}
-                    </Text>
-                  </Col>
-                  <Col></Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-
-      <Container gap={0}>
-        <Spacer y={1} />
+        <Spacer y={2} />
         <Row gap={1}>
-          <Col>
-            <Card css={{ $$cardColor: "#00764F" }}></Card>
-          </Col>
-          <Col>
-            <Card css={{ $$cardColor: "#90EE90" }}>
+          <Card
+            css={{
+              width: "60vw",
+              background: "$green",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <Card
+              css={{
+                width: "auto",
+                background: "$primary",
+                margin: "1em",
+              }}
+            >
+              <Spacer y={1} />{" "}
               <Text
                 h1
                 size={60}
@@ -86,16 +59,12 @@ export default function Leaderboard({ title, entries, type }) {
                 color="#8A2BE2"
                 align="center"
               >
-                Leaderboard
+                Leaderboard for {title}
               </Text>
-              <Card.Body>
-                <LeaderboardMapper entries={entries} />
-              </Card.Body>
+              <Spacer y={2} />
+              <LeaderboardMapper entries={entries} />
             </Card>
-          </Col>
-          <Col>
-            <Card css={{ $$cardColor: "#00764F" }}></Card>
-          </Col>
+          </Card>
         </Row>
       </Container>
     </NextUIProvider>

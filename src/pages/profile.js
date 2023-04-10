@@ -115,26 +115,24 @@ export default function Profile({ user }) {
 
   return (
     <>
-      <NextUIProvider theme={theme}>
-        <Navigation page="profile" username={user.username} />
+      <NextUIProvider id="page-container" theme={theme}>
+        <Container id="content-wrap">
+          <Navigation page="profile" username={user.username} />
 
-        <Spacer y={1} />
-
-        <Container>
+          <Spacer y={1} />
           <Row gap={1}>
             <Card
               css={{
-                width: "auto",
-                background: "$green",
-                marginLeft: "auto",
                 marginRight: "auto",
+                marginLeft: "auto",
+                background: "$green",
+                width: "40vw",
+                padding: "1em",
               }}
             >
               <Card
                 css={{
-                  width: "40vw",
                   background: "$primary",
-                  margin: "1em",
                 }}
               >
                 <Card.Body>
@@ -219,9 +217,9 @@ export default function Profile({ user }) {
                       <Modal.Header>
                         <Text h4>Change Password</Text>
                       </Modal.Header>
-                      <Spacer y={1} />
 
                       <Modal.Body>
+                        <Spacer y={0.1} />
                         <Row>
                           <Lock
                             set="bold"
@@ -229,7 +227,6 @@ export default function Profile({ user }) {
                             primaryColor="blueviolet"
                             size="xlarge"
                           />
-                          <Spacer />
                           <Input
                             fullWidth
                             id="password"
@@ -238,6 +235,8 @@ export default function Profile({ user }) {
                             labelPlaceholder="Password"
                           />
                         </Row>
+                        <Spacer y={0.1} />
+
                         <Row>
                           <Lock
                             set="bold"
@@ -245,7 +244,6 @@ export default function Profile({ user }) {
                             primaryColor="blueviolet"
                             size="xlarge"
                           />
-                          <Spacer />
                           <Input
                             fullWidth
                             id="newPassword"
@@ -260,12 +258,22 @@ export default function Profile({ user }) {
                         <Button
                           auto
                           flat
-                          color="secondary"
+                          css={{
+                            color: "$buttonSecondary",
+                            backgroundColor: "$buttonPrimary",
+                          }}
                           onPress={closeHandler}
                         >
                           Cancel
                         </Button>
-                        <Button auto color="secondary" onPress={closeHandler}>
+                        <Button
+                          auto
+                          css={{
+                            color: "$buttonSecondary",
+                            backgroundColor: "$buttonPrimary",
+                          }}
+                          onPress={closeHandler}
+                        >
                           Change
                         </Button>
                       </Modal.Footer>
@@ -274,15 +282,30 @@ export default function Profile({ user }) {
                 </Card.Body>
               </Card>
             </Card>
-            <Card css={{ $$cardColor: "$colors$primary" }}>
-              <Card.Body>
-                <Text h4 align="center">
-                  Solved Puzzles
-                </Text>
-                Solved Puzzles:
-                {JSON.stringify(user.completedPuzzles)}
-                <Grid.Container gap={2} justify="center"></Grid.Container>
-              </Card.Body>
+
+            <Card
+              css={{
+                marginRight: "auto",
+                marginLeft: "auto",
+                background: "$green",
+                width: "50vw",
+                padding: "1em",
+              }}
+            >
+              <Card
+                css={{
+                  background: "$primary",
+                }}
+              >
+                <Card.Body>
+                  <Text h4 align="center">
+                    Solved Puzzles
+                  </Text>
+                  Solved Puzzles:
+                  {JSON.stringify(user.completedPuzzles)}
+                  <Grid.Container gap={2} justify="center"></Grid.Container>
+                </Card.Body>
+              </Card>
             </Card>
           </Row>
         </Container>
