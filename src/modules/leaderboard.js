@@ -1,10 +1,13 @@
 import { Spacer, Text } from "@nextui-org/react";
 import { useList } from "react-firebase-hooks/database";
 import { Fragment } from "react";
-import { ref } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { ref, getDatabase } from "firebase/database";
 import { useRouter } from "next/router";
 
-const { database } = require("@/modules/firebase-config.js");
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
 
 function getOrdinal(n) {
   let ord = "th";

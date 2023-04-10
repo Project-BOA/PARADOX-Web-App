@@ -1,4 +1,4 @@
-import { ref, get, update } from "firebase/database";
+import { ref, update } from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
 const { database } = require("@/modules/firebase-config.js");

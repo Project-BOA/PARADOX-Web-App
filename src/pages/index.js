@@ -1,4 +1,5 @@
-import { ref } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { ref, getDatabase } from "firebase/database";
 import { useList } from "react-firebase-hooks/database";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
@@ -11,10 +12,14 @@ import {
   Button,
   Grid,
   Tooltip,
+  Spacer,
 } from "@nextui-org/react";
 import { theme } from "@/themes/theme.js";
 
-const { database } = require("@/modules/firebase-config.js");
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
+
 const { Navigation } = require("@/components/Navigation.js");
 const { Footer } = require("@/components/Footer.js");
 

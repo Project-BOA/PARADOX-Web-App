@@ -30,6 +30,7 @@ function Navigation({ page, username }) {
   function LogoutModal() {
     return (
       <Modal
+        closeButton
         flat
         aria-label="modal-logout-confirmation"
         open={visible}

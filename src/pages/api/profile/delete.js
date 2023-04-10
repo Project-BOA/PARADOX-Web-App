@@ -1,4 +1,4 @@
-import { getDatabase, ref, get, remove } from "firebase/database";
+import { ref, remove } from "firebase/database";
 
 const { database } = require("@/modules/firebase-config.js");
 const { auth } = require("@/modules/authentication.js");
@@ -21,7 +21,12 @@ export default async function handler(req, res) {
   // ================ after authentication ================
 
   // after authentication remove user
-  remove(ref(database, "users/" + username));
+  await remove(ref(database, "users/" + username)).catch(() => {
+    res.status(500).json({
+      status: "ERROR",
+    });
+    return;
+  });
 
   res.status(200).json({
     status: "OK",

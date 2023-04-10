@@ -1,7 +1,8 @@
 import React from "react";
-import Image from "next/image";
-import { ref, get, update } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { ref, get, update, getDatabase } from "firebase/database";
 import { withIronSessionSsr } from "iron-session/next";
+import { useList } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
 import {
   NextUIProvider,
@@ -14,14 +15,18 @@ import {
   Button,
   Textarea,
   Modal,
+  Grid,
 } from "@nextui-org/react";
 import { theme } from "@/themes/theme.js";
 
-const { database } = require("@/modules/firebase-config.js");
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
+
 const { Navigation } = require("@/components/Navigation.js");
 const { Footer } = require("@/components/Footer.js");
 
-export default function Puzzle({ user, comments, puzzle }) {
+export default function Puzzle({ user, puzzle }) {
   const router = useRouter();
   const { puzzleID } = router.query;
   let now = new Date();
@@ -60,7 +65,6 @@ export default function Puzzle({ user, comments, puzzle }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const comment = document.querySelector("#comment").value;
 
     const data = {
       comment: event.target.comment.value,
@@ -76,15 +80,55 @@ export default function Puzzle({ user, comments, puzzle }) {
       body: JSON.stringify(data),
     };
 
-    console.log(options);
-
     const response = await fetch("api/puzzle/submit", options);
     const result = await response.json();
+
     if (result.status == "OK") {
-      router.push({ pathname: "/" });
+      closeHandler();
     } else {
       alert("Status: " + result.status);
     }
+  }
+
+  function Comments() {
+    const [snapshots, loading, error] = useList(
+      ref(database, "comments/" + puzzleID)
+    );
+    return (
+      <>
+        {error && (
+          <Text h2 size={30} weight="bold" align="center">
+            Error: {error}
+          </Text>
+        )}
+        {loading && (
+          <Text h2 size={30} align="center">
+            Loading Comments...
+          </Text>
+        )}
+        {!loading &&
+          snapshots &&
+          snapshots.map((snap) => {
+            var username = snap.key;
+            var comment = snap.val().comment;
+            var date = new Date(snap.val().commentedOn).toLocaleDateString(
+              "en-IE"
+            );
+
+            return (
+              <>
+                <div className="box">
+                  <Text size={20} align="left" color="white" css={{ m: 0 }}>
+                    {username} - {date}
+                  </Text>
+
+                  <Text>{comment}</Text>
+                </div>
+              </>
+            );
+          })}
+      </>
+    );
   }
 
   return (
@@ -95,7 +139,7 @@ export default function Puzzle({ user, comments, puzzle }) {
 
           <Spacer y={1} />
 
-          <Row>
+          <Row gap={1}>
             <Card
               css={{
                 width: "auto",
@@ -124,77 +168,91 @@ export default function Puzzle({ user, comments, puzzle }) {
                 </Col>
               </Card>
             </Card>
-          </Row>
 
-          <Card
-            css={{
-              width: "auto",
-              background: "$green",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
             <Card
               css={{
-                width: "40vw",
-                background: "$primary",
-                margin: "1em",
+                width: "auto",
+                background: "$green",
+                marginLeft: "auto",
+                marginRight: "auto",
               }}
             >
-              <Text h4 align="center">
-                Comments
-              </Text>
-              <div className="box">
-                <Col>
-                  <Text
-                    size={20}
-                    align="left"
-                    color="white"
-                    css={{ m: 0 }}
-                  ></Text>
-                </Col>
-              </div>
-              <Button
-                type="edit"
-                color="secondary"
-                onPress={handler}
-                css={{ marginLeft: "auto", marginRight: "auto" }}
+              <Card
+                css={{
+                  width: "40vw",
+                  background: "$primary",
+                  margin: "1em",
+                }}
               >
-                Create
-              </Button>
+                <Text h4 align="center">
+                  Comments
+                </Text>
 
-              <Modal>
-                <form onSubmit={handleSubmit}>
-                  <Modal.Header>
-                    <Text h4>Add Comment</Text>
-                  </Modal.Header>
+                <Comments />
 
-                  <Spacer y={1} />
+                <Button
+                  type="edit"
+                  color="secondary"
+                  onPress={handler}
+                  css={{ marginLeft: "auto", marginRight: "auto" }}
+                >
+                  Create
+                </Button>
 
-                  <Modal.Body>
-                    <Text size={18} align="center" color="green" css={{ m: 0 }}>
-                      {user.username}
-                    </Text>
+                <Modal
+                  closeButton
+                  flat
+                  aria-label="modal-comments-creation"
+                  open={visible}
+                  onClose={closeHandler}
+                  css={{
+                    color: "$green",
+                    background: "$green",
+                    padding: "1em",
+                  }}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <Modal.Header>
+                      <Text h4>Add Comment</Text>
+                    </Modal.Header>
 
-                    <Textarea
-                      aria-label="Your comment"
-                      placeholder="Enter your comments here."
-                      id="comment"
-                    />
-                  </Modal.Body>
+                    <Spacer y={1} />
 
-                  <Modal.Footer justify="center">
-                    <Button auto flat color="secondary" onPress={closeHandler}>
-                      Cancel
-                    </Button>
-                    <Button auto color="secondary" type="submit">
-                      Comment
-                    </Button>
-                  </Modal.Footer>
-                </form>
-              </Modal>
+                    <Modal.Body>
+                      <Text
+                        size={18}
+                        align="center"
+                        color="green"
+                        css={{ m: 0 }}
+                      >
+                        {user.username} - {}
+                      </Text>
+
+                      <Textarea
+                        aria-label="Your comment"
+                        placeholder="Enter your comments here."
+                        id="comment"
+                      />
+                    </Modal.Body>
+
+                    <Modal.Footer justify="center">
+                      <Button
+                        auto
+                        flat
+                        color="secondary"
+                        onPress={closeHandler}
+                      >
+                        Cancel
+                      </Button>
+                      <Button auto color="secondary" type="submit">
+                        Comment
+                      </Button>
+                    </Modal.Footer>
+                  </form>
+                </Modal>
+              </Card>
             </Card>
-          </Card>
+          </Row>
         </Container>
         <Footer />
       </NextUIProvider>
@@ -204,6 +262,15 @@ export default function Puzzle({ user, comments, puzzle }) {
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req, query }) {
+    if (req.session.user == undefined) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "login",
+        },
+      };
+    }
+
     const id = query.puzzleID;
 
     var puzzle;

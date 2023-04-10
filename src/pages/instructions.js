@@ -15,7 +15,6 @@ import {
 
 import { theme } from "@/themes/theme.js";
 
-const { database } = require("@/modules/firebase-config.js");
 const { Navigation } = require("@/components/Navigation.js");
 const { Footer } = require("@/components/Footer.js");
 

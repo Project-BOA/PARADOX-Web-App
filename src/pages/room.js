@@ -2,15 +2,17 @@ import { NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { Container, Card, Row, Text, Col, Grid } from "@nextui-org/react";
 import { Spacer } from "@nextui-org/react";
-
-import { ref, remove, get } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { ref, remove, get, getDatabase } from "firebase/database";
 import React from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
-import { Footer } from "@/components/Footer";
 import { theme } from "@/themes/theme.js";
 
-const { database } = require("@/modules/firebase-config.js");
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
+
 const { NavigationGamePlay } = require("@/components/Navigation.js");
 
 export default function Room({ roomID, puzzleTitle, puzzleType }) {
@@ -54,12 +56,10 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
     const [snapshots, loading, error] = useListKeys(
       ref(database, "room/" + roomID + "/leaderboard")
     );
-    const removePlayer = (roomID, player) => {
-      remove(ref(database, "room/" + roomID + "/leaderboard/" + player));
+    const removePlayer = async (roomID, player) => {
+      console.log(roomID);
+      await remove(ref(database, "room/" + roomID + "/leaderboard/" + player));
       players.pop();
-      if (players.length == 0) {
-        router.push("/");
-      }
     };
     return (
       <>
@@ -76,7 +76,7 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
         {!loading && snapshots && (
           <>
             <Text h2 size={32} color="$secondary" align="center">
-              Room for {puzzleTitle}
+              {puzzleTitle} Room
             </Text>
             <Spacer y={2.5} />
             <Grid.Container gap={1} justify="center">
@@ -96,9 +96,7 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
                             textDecoration: "line-through",
                           },
                         }}
-                        onPress={(event) =>
-                          removePlayer(event, roomID, username)
-                        }
+                        onPress={() => removePlayer(roomID, username)}
                       >
                         {username}
                       </Button>
@@ -183,7 +181,6 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
 }
 
 export async function getServerSideProps(context) {
-  var puzzleID;
   var roomID = context.query.roomID;
 
   if (roomID == undefined) {
@@ -197,6 +194,7 @@ export async function getServerSideProps(context) {
 
   roomID = roomID.toUpperCase();
 
+  var puzzleID;
   await get(ref(database, "room/" + roomID + "/puzzleID")).then((snapshot) => {
     puzzleID = snapshot.val();
   });

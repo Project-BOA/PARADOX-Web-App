@@ -33,6 +33,87 @@ export default function Profile({ user }) {
     console.log("closed");
   };
 
+  function ChangePasswordModal() {
+    return (
+      <Modal
+        closeButton
+        aria-labelledby="modal-title"
+        open={visible}
+        onClose={closeHandler}
+      >
+        <form
+          onSubmit={(event) => {
+            handleSubmitPass(event);
+          }}
+        >
+          <Modal.Header>
+            <Text h4>Change Password</Text>
+          </Modal.Header>
+
+          <Modal.Body>
+            <Spacer y={0.1} />
+            <Row>
+              <Lock
+                set="bold"
+                aria-label="lock icon"
+                primaryColor="blueviolet"
+                size="xlarge"
+              />
+              <Input
+                fullWidth
+                id="password"
+                clearable
+                type={"password"}
+                labelPlaceholder="Password"
+              />
+            </Row>
+            <Spacer y={0.1} />
+
+            <Row>
+              <Lock
+                set="bold"
+                aria-label="lock icon"
+                primaryColor="blueviolet"
+                size="xlarge"
+              />
+              <Input
+                fullWidth
+                id="newPassword"
+                clearable
+                type={"password"}
+                labelPlaceholder="New Password"
+              />
+            </Row>
+          </Modal.Body>
+
+          <Modal.Footer justify="center">
+            <Button
+              auto
+              flat
+              css={{
+                color: "$buttonSecondary",
+                backgroundColor: "$buttonPrimary",
+              }}
+              onPress={closeHandler}
+            >
+              Cancel
+            </Button>
+            <Button
+              auto
+              css={{
+                color: "$buttonSecondary",
+                backgroundColor: "$buttonPrimary",
+              }}
+              onPress={closeHandler}
+            >
+              Change
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+    );
+  }
+
   async function handleSubmitPass(event) {
     event.preventDefault();
     // Send the data to the server in JSON format.
@@ -203,82 +284,6 @@ export default function Profile({ user }) {
                   >
                     Change Password
                   </Link>
-                  <Modal
-                    closeButton
-                    aria-labelledby="modal-title"
-                    open={visible}
-                    onClose={closeHandler}
-                  >
-                    <form
-                      onSubmit={(event) => {
-                        handleSubmitPass(event);
-                      }}
-                    >
-                      <Modal.Header>
-                        <Text h4>Change Password</Text>
-                      </Modal.Header>
-
-                      <Modal.Body>
-                        <Spacer y={0.1} />
-                        <Row>
-                          <Lock
-                            set="bold"
-                            aria-label="lock icon"
-                            primaryColor="blueviolet"
-                            size="xlarge"
-                          />
-                          <Input
-                            fullWidth
-                            id="password"
-                            clearable
-                            type={"password"}
-                            labelPlaceholder="Password"
-                          />
-                        </Row>
-                        <Spacer y={0.1} />
-
-                        <Row>
-                          <Lock
-                            set="bold"
-                            aria-label="lock icon"
-                            primaryColor="blueviolet"
-                            size="xlarge"
-                          />
-                          <Input
-                            fullWidth
-                            id="newPassword"
-                            clearable
-                            type={"password"}
-                            labelPlaceholder="New Password"
-                          />
-                        </Row>
-                      </Modal.Body>
-
-                      <Modal.Footer justify="center">
-                        <Button
-                          auto
-                          flat
-                          css={{
-                            color: "$buttonSecondary",
-                            backgroundColor: "$buttonPrimary",
-                          }}
-                          onPress={closeHandler}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          auto
-                          css={{
-                            color: "$buttonSecondary",
-                            backgroundColor: "$buttonPrimary",
-                          }}
-                          onPress={closeHandler}
-                        >
-                          Change
-                        </Button>
-                      </Modal.Footer>
-                    </form>
-                  </Modal>
                 </Card.Body>
               </Card>
             </Card>
@@ -308,6 +313,7 @@ export default function Profile({ user }) {
               </Card>
             </Card>
           </Row>
+          <ChangePasswordModal />
         </Container>
         <Footer />
       </NextUIProvider>

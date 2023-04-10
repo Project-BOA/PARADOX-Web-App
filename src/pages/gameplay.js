@@ -1,34 +1,38 @@
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import {
-  getStorage,
-  ref as ref_storage,
-  getDownloadURL,
-  listAll,
-} from "firebase/storage";
-import { ref as ref_database, get, update } from "firebase/database";
-import { NextUIProvider } from "@nextui-org/react";
-import {
+  Card,
   Grid,
   Image,
-  Text,
+  NextUIProvider,
   Spacer,
+  Text,
   Tooltip,
-  Col,
-  Row,
-  Card,
 } from "@nextui-org/react";
-import { Fragment } from "react";
-import { useList, useObject } from "react-firebase-hooks/database";
-import { useRouter } from "next/router";
-import React, { useRef, useState } from "react";
-
-import { useEffect } from "react";
-import { theme } from "@/themes/theme.js";
 import { initializeApp } from "firebase/app";
+import {
+  get,
+  ref as ref_database,
+  update,
+  getDatabase,
+} from "firebase/database";
+import {
+  getDownloadURL,
+  getStorage,
+  listAll,
+  ref as ref_storage,
+} from "firebase/storage";
+import { useRouter } from "next/router";
+import { Fragment, useRef, useState } from "react";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { useList, useObject } from "react-firebase-hooks/database";
+
+import { theme } from "@/themes/theme.js";
+import { initializeApp, initializeApp } from "firebase/app";
+import { useEffect } from "react";
 const { NavigationGamePlay } = require("@/components/Navigation.js");
 
-const { config, database } = require("@/modules/firebase-config.js");
+const { config } = require("@/modules/firebase-config.js");
 const app = initializeApp(config);
+const database = getDatabase(app);
 const storage = getStorage(app);
 
 var time = 5;
@@ -149,7 +153,15 @@ export default function Gameplay({
         }
       });
   }
-
+  function EmptyMessage({ display }) {
+    if (display == true) {
+      return (
+        <Text h2 align="center" size={23}>
+          No players
+        </Text>
+      );
+    }
+  }
   function Leaderboard() {
     const [snapshots, loading, error] = useList(
       ref_database(database, "room/" + roomID + "/leaderboard")
@@ -175,10 +187,11 @@ export default function Gameplay({
         )}
         {!loading && snapshots && (
           <Fragment>
-            <Text h2 size={30} align="center" style={{ margin: "auto" }}>
+            <Spacer y={4} />
+            <Text h2 size={30} align="center">
               Top 3
             </Text>
-            <Spacer y={4} />
+            <EmptyMessage display={snapshots.length == 0} />
             {UpdateLeaderboard(snapshots)}
           </Fragment>
         )}
@@ -188,11 +201,14 @@ export default function Gameplay({
 
   var pieceIndex = 0;
 
-  useEffect(() => {
-    addEventListener("beforeunload", function (event) {
-      event.returnValue = "You have unsaved changes.";
-    });
-  });
+  // useEffect(() => {
+  //   addEventListener("beforeunload", function (event) {
+  //     //   event.returnValue =
+  //     //     "Trust me you do not want to do this, press end button instead...bro";
+  //     event.returnValue = "This will restart the puzzle...";
+  //   });
+  // });
+
   function endGame() {
     router.push("/leaderboard?roomID=" + roomID);
   }
@@ -205,7 +221,7 @@ export default function Gameplay({
         puzzleName={puzzleName}
         puzzleType={puzzleType}
         action={endGame}
-        actionText={"Leaderboard"}
+        actionText={"End Game"}
       />
 
       <Grid.Container gap={2} justify="center">
@@ -214,26 +230,18 @@ export default function Gameplay({
             css={{
               width: "auto",
               background: "$green",
-              margin: "1em",
+              padding: "1em",
             }}
           >
-            <Card css={{ w: "30em", h: "100%", margin: "1em", width: "auto" }}>
-              <Card.Body
-                css={{
-                  p: 0,
-                  backgroundColor: "$lightGreen",
-                  border: "$darkGreen",
-                }}
-              >
-                <Image
-                  src={puzzlePieces[pieceIndex]}
-                  id="puzzlePieceImg"
-                  alt={"Puzzle piece image"}
-                  width="auto"
-                  height="auto"
-                  object-fit="cover"
-                ></Image>
-              </Card.Body>
+            <Card css={{ w: "30em", h: "100%", width: "auto" }}>
+              <Image
+                src={puzzlePieces[pieceIndex]}
+                id="puzzlePieceImg"
+                alt={"Puzzle piece image"}
+                width="auto"
+                height="auto"
+                object-fit="cover"
+              />
             </Card>
           </Card>
         </Grid>
@@ -292,8 +300,10 @@ export default function Gameplay({
                         {/* {({ remainingTime }) => remainingTime} */}
                       </CountdownCircleTimer>
                     </div>
+                    <Text h3 size={25} align="center" id="availPoints">
+                      Available Points:
+                    </Text>
                     <Text h3 size={25} align="center" id="availPoints"></Text>
-
                     <Leaderboard />
                   </Card.Body>
                 </Card>

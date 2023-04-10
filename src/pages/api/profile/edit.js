@@ -1,6 +1,7 @@
-import { ref, update, get } from "firebase/database";
+import { ref, update } from "firebase/database";
 
 const { database } = require("@/modules/firebase-config.js");
+
 const { auth, hashPassword } = require("@/modules/authentication.js");
 
 const validator = require("validator");

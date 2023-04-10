@@ -1,17 +1,20 @@
 import {
   Card,
-  Col,
   Container,
   NextUIProvider,
   Row,
   Spacer,
   Text,
 } from "@nextui-org/react";
-import { get, getDatabase, ref, update } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { getDatabase, get, ref, update, getDatabase } from "firebase/database";
 import { useRouter } from "next/router";
 import { theme } from "@/themes/theme.js";
 
-const { database } = require("@/modules/firebase-config.js");
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
+
 const { NavigationGamePlay } = require("@/components/Navigation.js");
 
 const { LeaderboardMapper, endRoom } = require("@/modules/leaderboard");
@@ -59,7 +62,7 @@ export default function Leaderboard({ title, entries, type }) {
                 color="#8A2BE2"
                 align="center"
               >
-                Leaderboard for {title}
+                {title} Leaderboard
               </Text>
               <Spacer y={2} />
               <LeaderboardMapper entries={entries} />

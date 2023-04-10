@@ -1,6 +1,4 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get, update } from "firebase/database";
-import { use } from "react";
+import { ref, update } from "firebase/database";
 const { database } = require("@/modules/firebase-config.js");
 
 var Filter = require("bad-words"),

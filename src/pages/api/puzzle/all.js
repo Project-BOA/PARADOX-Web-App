@@ -1,9 +1,9 @@
-import { getDatabase, ref, get } from "firebase/database";
+import { ref, get } from "firebase/database";
 
 const { database } = require("@/modules/firebase-config.js");
 
 export default async function handler(req, res) {
-  const page = req.body.page || 1;
+  //   const page = req.body.page || 1;
 
   await get(ref(database, "puzzle/"))
     .then((snapshot) => {

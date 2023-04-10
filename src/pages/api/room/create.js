@@ -1,4 +1,4 @@
-import { getDatabase, ref, set, get } from "firebase/database";
+import { ref, set, get } from "firebase/database";
 
 const { database } = require("@/modules/firebase-config.js");
 
