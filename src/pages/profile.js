@@ -22,7 +22,13 @@ import { Lock, Message, Document } from "react-iconly";
 const { Navigation } = require("@/components/Navigation.js");
 const { Footer } = require("@/components/Footer.js");
 
-export default function Profile({ user }) {
+import { initializeApp } from "firebase/app";
+import { ref, get, getDatabase } from "firebase/database";
+
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
+export default function Profile({ user, completedPuzzles }) {
   const router = useRouter();
 
   const [visible, setVisible] = React.useState(false);
@@ -34,6 +40,7 @@ export default function Profile({ user }) {
   };
 
   function SolvedPuzzleList({ solved }) {
+    var comPuz = [];
     console.log(Object.entries(solved));
     if (typeof window !== "undefined") {
       const List = require("list.js");
@@ -44,11 +51,14 @@ export default function Profile({ user }) {
       };
 
       var values = Object.entries(solved).map((entry) => {
-        return {
-          puzzleTitle: entry[0],
-          date: new Date(entry[1].completedOn).toLocaleDateString(),
-          points: entry[1].points,
-        };
+        if (!comPuz.includes(entry[0])) {
+          comPuz.push(entry[0]);
+          return {
+            puzzleTitle: entry[0],
+            date: new Date(entry[1].completedOn).toLocaleDateString(),
+            points: entry[1].points,
+          };
+        }
       });
 
       var SolvedPuzzleList = new List("solvedPuzzles", options, values);
@@ -361,6 +371,7 @@ export default function Profile({ user }) {
                         </button>
 
                         <ul class="list"></ul>
+                        <SolvedPuzzleList solved={completedPuzzles} />
                       </div>
                       <Grid.Container gap={2} justify="center"></Grid.Container>
                     </Card.Body>
@@ -373,7 +384,6 @@ export default function Profile({ user }) {
 
           <Footer />
         </div>
-        <SolvedPuzzleList solved={user.completedPuzzles} />
       </NextUIProvider>
     </>
   );
@@ -389,10 +399,21 @@ export const getServerSideProps = withIronSessionSsr(
         },
       };
     }
+    var completedPuzzles;
+    await get(ref(database, "users/" + req.session.user.username + "/solved"))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          completedPuzzles = snapshot.toJSON();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
     return {
       props: {
         user: req.session.user,
+        completedPuzzles: completedPuzzles,
       },
     };
   }, // -------------------- All boilerplate code for sessions ------------------------------------
