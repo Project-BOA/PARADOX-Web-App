@@ -33,83 +33,125 @@ export default function Profile({ user }) {
     console.log("closed");
   };
 
+  function SolvedPuzzleList({ solved }) {
+    console.log(Object.entries(solved));
+    if (typeof window !== "undefined") {
+      const List = require("list.js");
+
+      var options = {
+        valueNames: ["puzzleTitle", "date", "points"],
+        item: '<li><h3 class="puzzleTitle"></h3><p>Date:</p><p class="date"></p><p>Points:</p><p class="points"></p></li>',
+      };
+
+      var values = Object.entries(solved).map((entry) => {
+        return {
+          puzzleTitle: entry[0],
+          date: new Date(entry[1].completedOn).toLocaleDateString(),
+          points: entry[1].points,
+        };
+      });
+
+      var SolvedPuzzleList = new List("solvedPuzzles", options, values);
+    }
+
+    return <></>;
+  }
+
   function ChangePasswordModal() {
     return (
       <Modal
         closeButton
-        aria-labelledby="modal-title"
+        aria-labelledby="modal-change-password"
         open={visible}
         onClose={closeHandler}
+        css={{
+          color: "$green",
+          background: "$green",
+          padding: "1em",
+        }}
       >
-        <form
-          onSubmit={(event) => {
-            handleSubmitPass(event);
+        <Card
+          css={{
+            color: "$green",
+            background: "$green",
           }}
         >
-          <Modal.Header>
-            <Text h4>Change Password</Text>
-          </Modal.Header>
-
-          <Modal.Body>
-            <Spacer y={0.1} />
-            <Row>
-              <Lock
-                set="bold"
-                aria-label="lock icon"
-                primaryColor="blueviolet"
-                size="xlarge"
-              />
-              <Input
-                fullWidth
-                id="password"
-                clearable
-                type={"password"}
-                labelPlaceholder="Password"
-              />
-            </Row>
-            <Spacer y={0.1} />
-
-            <Row>
-              <Lock
-                set="bold"
-                aria-label="lock icon"
-                primaryColor="blueviolet"
-                size="xlarge"
-              />
-              <Input
-                fullWidth
-                id="newPassword"
-                clearable
-                type={"password"}
-                labelPlaceholder="New Password"
-              />
-            </Row>
-          </Modal.Body>
-
-          <Modal.Footer justify="center">
-            <Button
-              auto
-              flat
-              css={{
-                color: "$buttonSecondary",
-                backgroundColor: "$buttonPrimary",
+          <Card
+            css={{
+              background: "$primary",
+            }}
+          >
+            <form
+              onSubmit={(event) => {
+                handleSubmitPass(event);
               }}
-              onPress={closeHandler}
             >
-              Cancel
-            </Button>
-            <Button
-              auto
-              css={{
-                color: "$buttonSecondary",
-                backgroundColor: "$buttonPrimary",
-              }}
-              onPress={closeHandler}
-            >
-              Change
-            </Button>
-          </Modal.Footer>
-        </form>
+              <Modal.Header>
+                <Text h4>Change Password</Text>
+              </Modal.Header>
+
+              <Modal.Body>
+                <Spacer y={0.1} />
+                <Row>
+                  <Lock
+                    set="bold"
+                    aria-label="lock icon"
+                    primaryColor="blueviolet"
+                    size="xlarge"
+                  />
+                  <Input
+                    fullWidth
+                    id="password"
+                    clearable
+                    type={"password"}
+                    labelPlaceholder="Password"
+                  />
+                </Row>
+                <Spacer y={0.1} />
+
+                <Row>
+                  <Lock
+                    set="bold"
+                    aria-label="lock icon"
+                    primaryColor="blueviolet"
+                    size="xlarge"
+                  />
+                  <Input
+                    fullWidth
+                    id="newPassword"
+                    clearable
+                    type={"password"}
+                    labelPlaceholder="New Password"
+                  />
+                </Row>
+              </Modal.Body>
+
+              <Modal.Footer justify="center">
+                <Button
+                  auto
+                  flat
+                  css={{
+                    color: "$buttonSecondary",
+                    backgroundColor: "$buttonPrimary",
+                  }}
+                  onPress={closeHandler}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  auto
+                  css={{
+                    color: "$buttonSecondary",
+                    backgroundColor: "$buttonPrimary",
+                  }}
+                  onPress={closeHandler}
+                >
+                  Change
+                </Button>
+              </Modal.Footer>
+            </form>
+          </Card>
+        </Card>
       </Modal>
     );
   }
@@ -196,126 +238,142 @@ export default function Profile({ user }) {
 
   return (
     <>
-      <NextUIProvider id="page-container" theme={theme}>
-        <Container id="content-wrap">
-          <Navigation page="profile" username={user.username} />
+      <NextUIProvider theme={theme}>
+        <div id="page-container">
+          <div id="content-wrap">
+            <Container>
+              <Navigation page="profile" username={user.username} />
 
-          <Spacer y={1} />
-          <Row gap={1}>
-            <Card
-              css={{
-                marginRight: "auto",
-                marginLeft: "auto",
-                background: "$green",
-                width: "40vw",
-                padding: "1em",
-              }}
-            >
-              <Card
-                css={{
-                  background: "$primary",
-                }}
-              >
-                <Card.Body>
-                  <Text h4 align="center">
-                    Profile Info
-                  </Text>
-                  <Grid.Container gap={2} justify="center">
-                    <form
-                      id="profile-info-form"
-                      onSubmit={(event) => {
-                        handleSubmit(event);
-                      }}
-                    >
-                      <Row>
-                        <Message
-                          set="bold"
-                          aria-label="email icon"
-                          primaryColor="blueviolet"
-                          size="xlarge"
-                        />
-                        <Spacer />
-                        <Input
-                          fullWidth
-                          id="email"
-                          clearable
-                          initialValue={user.email}
-                        />
-                      </Row>
-                      <Spacer y={1} />
-                      <Row>
-                        <Document
-                          set="bold"
-                          aria-label="biography icon"
-                          primaryColor="blueviolet"
-                          size="xlarge"
-                        />
-
-                        <Spacer />
-                        <Input
-                          fullWidth
-                          id="biography"
-                          clearable
-                          initialValue={user.biography}
-                        />
-                      </Row>
-
-                      <Grid.Container gap={1} justify="center">
-                        <Grid>
-                          <Button
-                            auto
-                            type="submit"
-                            color="secondary"
-                            css={{ marginLeft: "auto", marginRight: "auto" }}
-                          >
-                            Update
-                          </Button>
-                        </Grid>
-                      </Grid.Container>
-                    </form>
-                  </Grid.Container>
-
-                  <Link
-                    auto
-                    type="edit"
-                    color="secondary"
-                    onPress={handler}
-                    css={{ marginLeft: "auto", marginRight: "auto" }}
+              <Spacer y={1} />
+              <Row gap={1}>
+                <Card
+                  css={{
+                    marginRight: "auto",
+                    marginLeft: "auto",
+                    background: "$green",
+                    width: "40vw",
+                    padding: "1em",
+                  }}
+                >
+                  <Card
+                    css={{
+                      background: "$primary",
+                    }}
                   >
-                    Change Password
-                  </Link>
-                </Card.Body>
-              </Card>
-            </Card>
+                    <Card.Body>
+                      <Text h4 align="center">
+                        Profile Info
+                      </Text>
+                      <Grid.Container gap={2} justify="center">
+                        <form
+                          id="profile-info-form"
+                          onSubmit={(event) => {
+                            handleSubmit(event);
+                          }}
+                        >
+                          <Row>
+                            <Message
+                              set="bold"
+                              aria-label="email icon"
+                              primaryColor="blueviolet"
+                              size="xlarge"
+                            />
+                            <Spacer />
+                            <Input
+                              fullWidth
+                              id="email"
+                              clearable
+                              initialValue={user.email}
+                            />
+                          </Row>
+                          <Spacer y={1} />
+                          <Row>
+                            <Document
+                              set="bold"
+                              aria-label="biography icon"
+                              primaryColor="blueviolet"
+                              size="xlarge"
+                            />
 
-            <Card
-              css={{
-                marginRight: "auto",
-                marginLeft: "auto",
-                background: "$green",
-                width: "50vw",
-                padding: "1em",
-              }}
-            >
-              <Card
-                css={{
-                  background: "$primary",
-                }}
-              >
-                <Card.Body>
-                  <Text h4 align="center">
-                    Solved Puzzles
-                  </Text>
-                  Solved Puzzles:
-                  {JSON.stringify(user.completedPuzzles)}
-                  <Grid.Container gap={2} justify="center"></Grid.Container>
-                </Card.Body>
-              </Card>
-            </Card>
-          </Row>
-          <ChangePasswordModal />
-        </Container>
-        <Footer />
+                            <Spacer />
+                            <Input
+                              fullWidth
+                              id="biography"
+                              clearable
+                              initialValue={user.biography}
+                            />
+                          </Row>
+
+                          <Grid.Container gap={1} justify="center">
+                            <Grid>
+                              <Button
+                                auto
+                                type="submit"
+                                css={{
+                                  color: "$buttonSecondary",
+                                  background: "$buttonPrimary",
+                                  marginLeft: "auto",
+                                  marginRight: "auto",
+                                }}
+                              >
+                                Update
+                              </Button>
+                            </Grid>
+                          </Grid.Container>
+                        </form>
+                      </Grid.Container>
+
+                      <Link
+                        auto
+                        type="edit"
+                        onPress={handler}
+                        css={{ marginLeft: "auto", marginRight: "auto" }}
+                      >
+                        Change Password
+                      </Link>
+                    </Card.Body>
+                  </Card>
+                </Card>
+
+                <Card
+                  css={{
+                    marginRight: "auto",
+                    marginLeft: "auto",
+                    background: "$green",
+                    width: "50vw",
+                    padding: "1em",
+                  }}
+                >
+                  <Card
+                    css={{
+                      background: "$primary",
+                    }}
+                  >
+                    <Card.Body>
+                      <Text h4 align="center">
+                        Solved Puzzles
+                      </Text>
+                      Solved Puzzles:
+                      <div id="solvedPuzzles">
+                        <input class="search" placeholder="Search" />
+                        <button class="sort" data-sort="puzzleTitle">
+                          Sort by name
+                        </button>
+
+                        <ul class="list"></ul>
+                      </div>
+                      <Grid.Container gap={2} justify="center"></Grid.Container>
+                    </Card.Body>
+                  </Card>
+                </Card>
+              </Row>
+              <ChangePasswordModal />
+            </Container>
+          </div>
+
+          <Footer />
+        </div>
+        <SolvedPuzzleList solved={user.completedPuzzles} />
       </NextUIProvider>
     </>
   );

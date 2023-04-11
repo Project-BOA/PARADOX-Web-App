@@ -14,6 +14,7 @@ import {
   Spacer,
   Button,
   Textarea,
+  Input,
   Modal,
   Grid,
 } from "@nextui-org/react";
@@ -63,6 +64,65 @@ export default function Puzzle({ user, puzzle }) {
     }
   };
 
+  function createCommentModal() {
+    return (
+      <Modal
+        closeButton
+        flat
+        aria-label="modal-comments-creation"
+        open={visible}
+        onClose={closeHandler}
+        css={{
+          color: "$green",
+          background: "$green",
+          padding: "1em",
+        }}
+      >
+        <Card
+          css={{
+            color: "$green",
+            background: "$green",
+          }}
+        >
+          <Card
+            css={{
+              background: "$primary",
+            }}
+          >
+            <form onSubmit={handleSubmit}>
+              <Modal.Header>
+                <Text h4>Add Comment</Text>
+              </Modal.Header>
+
+              <Spacer y={1} />
+
+              <Modal.Body>
+                <Text size={18} align="center" color="green" css={{ m: 0 }}>
+                  {user.username} - {}
+                </Text>
+
+                <Textarea
+                  aria-label="Your comment"
+                  placeholder="Enter your comments here."
+                  id="comment"
+                />
+              </Modal.Body>
+
+              <Modal.Footer justify="center">
+                <Button auto flat color="secondary" onPress={closeHandler}>
+                  Cancel
+                </Button>
+                <Button auto color="secondary" type="submit">
+                  Comment
+                </Button>
+              </Modal.Footer>
+            </form>
+          </Card>
+        </Card>
+      </Modal>
+    );
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -87,6 +147,18 @@ export default function Puzzle({ user, puzzle }) {
       closeHandler();
     } else {
       alert("Status: " + result.status);
+    }
+  }
+
+  function EmptyMessage({ display }) {
+    if (display == true) {
+      return (
+        <>
+          <Text h2 size={40}>
+            Use the app to join the room with the Room ID...
+          </Text>
+        </>
+      );
     }
   }
 
@@ -118,11 +190,17 @@ export default function Puzzle({ user, puzzle }) {
             return (
               <>
                 <div className="box">
-                  <Text size={20} align="left" color="white" css={{ m: 0 }}>
-                    {username} - {date}
+                  <Text size={20} align="left" css={{ m: 0 }}>
+                    {username} &#x2022; {date}
                   </Text>
-
-                  <Text>{comment}</Text>
+                  <Spacer x={1} />
+                  <Input
+                    width="25em"
+                    id="comment"
+                    clearable
+                    value={comment}
+                  ></Input>
+                  <Spacer y={1} />
                 </div>
               </>
             );
@@ -133,128 +211,143 @@ export default function Puzzle({ user, puzzle }) {
 
   return (
     <>
-      <NextUIProvider id="page-container" theme={theme}>
-        <Container id="content-wrap">
-          <Navigation page="comment" username={user.username} />
+      <NextUIProvider theme={theme}>
+        <div id="page-container">
+          <div id="content-wrap">
+            <Container>
+              <Navigation page="comment" username={user.username} />
 
-          <Spacer y={1} />
+              <Spacer y={1} />
 
-          <Row gap={1}>
-            <Card
-              css={{
-                width: "auto",
-                background: "$green",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              <Card
-                css={{
-                  width: "40vw",
-                  background: "$primary",
-                  margin: "1em",
-                }}
-              >
-                <Text h4 align="center">
-                  {puzzle.title} : {puzzle.puzzleType}
-                </Text>
-                <Col>
-                  <Text h4 align="center">
-                    Description
-                  </Text>
-                  <div className="box">
-                    <TimeDescription />
-                  </div>
-                </Col>
-              </Card>
-            </Card>
-
-            <Card
-              css={{
-                width: "auto",
-                background: "$green",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              <Card
-                css={{
-                  width: "40vw",
-                  background: "$primary",
-                  margin: "1em",
-                }}
-              >
-                <Text h4 align="center">
-                  Comments
-                </Text>
-
-                <Comments />
-
-                <Button
-                  type="edit"
-                  color="secondary"
-                  onPress={handler}
-                  css={{ marginLeft: "auto", marginRight: "auto" }}
-                >
-                  Create
-                </Button>
-
-                <Modal
-                  closeButton
-                  flat
-                  aria-label="modal-comments-creation"
-                  open={visible}
-                  onClose={closeHandler}
+              <Row gap={1}>
+                <Card
                   css={{
-                    color: "$green",
+                    width: "auto",
                     background: "$green",
-                    padding: "1em",
+                    marginLeft: "auto",
+                    marginRight: "auto",
                   }}
                 >
-                  <form onSubmit={handleSubmit}>
-                    <Modal.Header>
-                      <Text h4>Add Comment</Text>
-                    </Modal.Header>
-
-                    <Spacer y={1} />
-
-                    <Modal.Body>
-                      <Text
-                        size={18}
-                        align="center"
-                        color="green"
-                        css={{ m: 0 }}
-                      >
-                        {user.username} - {}
+                  <Card
+                    css={{
+                      width: "40vw",
+                      background: "$primary",
+                      margin: "1em",
+                    }}
+                  >
+                    <Text h4 align="center">
+                      {puzzle.title} : {puzzle.puzzleType}
+                    </Text>
+                    <Col>
+                      <Text h4 align="center">
+                        Description
                       </Text>
+                      <div className="box">
+                        <TimeDescription />
+                      </div>
+                    </Col>
+                  </Card>
+                </Card>
 
-                      <Textarea
-                        aria-label="Your comment"
-                        placeholder="Enter your comments here."
-                        id="comment"
-                      />
-                    </Modal.Body>
-
-                    <Modal.Footer justify="center">
-                      <Button
-                        auto
-                        flat
-                        color="secondary"
-                        onPress={closeHandler}
+                <Card
+                  css={{
+                    width: "auto",
+                    background: "$green",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  <Card
+                    css={{
+                      width: "40vw",
+                      background: "$primary",
+                      margin: "1em",
+                    }}
+                  >
+                    {" "}
+                    <Text h4 align="center">
+                      Comments
+                    </Text>
+                    <Comments />
+                    <Button
+                      type="edit"
+                      color="secondary"
+                      onPress={handler}
+                      css={{ marginLeft: "auto", marginRight: "auto" }}
+                    >
+                      Create
+                    </Button>
+                    <Modal
+                      closeButton
+                      flat
+                      aria-label="modal-comments-creation"
+                      open={visible}
+                      onClose={closeHandler}
+                      css={{
+                        color: "$green",
+                        background: "$green",
+                        padding: "1em",
+                      }}
+                    >
+                      <Card
+                        css={{
+                          color: "$green",
+                          background: "$green",
+                        }}
                       >
-                        Cancel
-                      </Button>
-                      <Button auto color="secondary" type="submit">
-                        Comment
-                      </Button>
-                    </Modal.Footer>
-                  </form>
-                </Modal>
-              </Card>
-            </Card>
-          </Row>
-        </Container>
-        <Footer />
+                        <Card
+                          css={{
+                            background: "$primary",
+                          }}
+                        >
+                          <form onSubmit={handleSubmit}>
+                            <Modal.Header>
+                              <Text h4>Add Comment</Text>
+                            </Modal.Header>
+
+                            <Spacer y={1} />
+
+                            <Modal.Body>
+                              <Text
+                                size={18}
+                                align="center"
+                                color="green"
+                                css={{ m: 0 }}
+                              >
+                                {user.username} - {}
+                              </Text>
+
+                              <Textarea
+                                aria-label="Your comment"
+                                placeholder="Enter your comments here."
+                                id="comment"
+                              />
+                            </Modal.Body>
+
+                            <Modal.Footer justify="center">
+                              <Button
+                                auto
+                                flat
+                                color="secondary"
+                                onPress={closeHandler}
+                              >
+                                Cancel
+                              </Button>
+                              <Button auto color="secondary" type="submit">
+                                Comment
+                              </Button>
+                            </Modal.Footer>
+                          </form>
+                        </Card>
+                      </Card>
+                    </Modal>
+                  </Card>
+                </Card>
+              </Row>
+            </Container>
+          </div>
+          <Footer />
+        </div>
       </NextUIProvider>
     </>
   );
@@ -282,7 +375,7 @@ export const getServerSideProps = withIronSessionSsr(
       }
     });
 
-    var comments;
+    var comments = "No Comments";
     await get(ref(database, "comments/" + id)).then((snapshot) => {
       if (snapshot.exists()) {
         comments = snapshot.toJSON();

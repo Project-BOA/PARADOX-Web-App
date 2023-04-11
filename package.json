@@ -17,6 +17,7 @@
     "eslint-config-next": "13.1.6",
     "firebase": "^9.17.1",
     "iron-session": "^6.3.1",
+    "list.js": "^2.3.1",
     "next": "13.1.6",
     "nextjs-progressbar": "^0.0.16",
     "randomstring": "^1.2.3",

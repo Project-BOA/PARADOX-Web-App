@@ -7,7 +7,7 @@ function Footer() {
         <Image
           width={75}
           height={75}
-          src="/image/penrose-triangle-coloured-circled.png"
+          src="/image/penrose-triangle-coloured-circled-512.png"
           alt=" Logo"
           style={{ objectFit: "cover" }}
         />

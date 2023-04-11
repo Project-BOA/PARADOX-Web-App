@@ -209,8 +209,13 @@ export default function Home({ user }) {
     <>
       <NextUIProvider theme={theme}>
         <Navigation page="puzzles" username={user.username} />
-        <Puzzles />
-        <Footer />
+        <div id="page-container">
+          <div id="content-wrap">
+            <Puzzles />
+          </div>
+
+          <Footer />
+        </div>
       </NextUIProvider>
     </>
   );
