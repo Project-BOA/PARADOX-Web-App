@@ -26,8 +26,6 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useList, useObject } from "react-firebase-hooks/database";
 
 import { theme } from "@/themes/theme.js";
-import { initializeApp, initializeApp } from "firebase/app";
-import { useEffect } from "react";
 const { NavigationGamePlay } = require("@/components/Navigation.js");
 
 const { config } = require("@/modules/firebase-config.js");

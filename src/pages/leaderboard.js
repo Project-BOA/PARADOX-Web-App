@@ -7,7 +7,7 @@ import {
   Text,
 } from "@nextui-org/react";
 import { initializeApp } from "firebase/app";
-import { getDatabase, get, ref, update, getDatabase } from "firebase/database";
+import { getDatabase, get, ref, update } from "firebase/database";
 import { useRouter } from "next/router";
 import { theme } from "@/themes/theme.js";
 

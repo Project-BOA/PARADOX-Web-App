@@ -5,7 +5,6 @@ import {
   Container,
   Text,
   Spacer,
-  Col,
   Grid,
   Card,
 } from "@nextui-org/react";
@@ -28,8 +27,7 @@ export default function Contacts({ user }) {
         <Container>
           <Card css={{ $$cardColor: "#90EE90" }}>
             <Text h2 size={40} align="center" color="#8A2BE2" css={{ m: 0 }}>
-              {" "}
-              Contact us{" "}
+              Contact us
             </Text>
 
             <Text
@@ -49,7 +47,7 @@ export default function Contacts({ user }) {
                 Email
               </Text>
               <Text size={20} align="center" color="white" css={{ m: 0 }}>
-                alanjohn@gmail.com
+                hello@paradox.boa.com
               </Text>
             </Card>
           </Grid>
