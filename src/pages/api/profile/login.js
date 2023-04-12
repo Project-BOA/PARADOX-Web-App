@@ -1,7 +1,5 @@
-import { ref, update } from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
-const { database } = require("@/modules/firebase-config.js");
 const { auth } = require("@/modules/authentication.js");
 
 export default withIronSessionApiRoute(
@@ -21,21 +19,6 @@ export default withIronSessionApiRoute(
     }
 
     // ================ after authentication ================
-
-    var loggedOnSite = req.body.website;
-
-    if (!loggedOnSite) {
-      update(ref(database, "users/" + username), {
-        loggedIn: true,
-      });
-    }
-
-    if (user.loggedIn && !loggedOnSite) {
-      res.status(400).json({
-        status: "User logged in on another device",
-      });
-      return;
-    }
 
     // save user to session for website usage
     req.session.user = {

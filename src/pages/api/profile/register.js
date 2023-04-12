@@ -64,12 +64,10 @@ export default async function handler(req, res) {
     return;
   }
 
-  // loggedIn is set to false since the user just registered
   await set(ref(database, "users/" + username), {
     password: hashPassword(password),
     biography: biography,
     email: email,
-    loggedIn: false,
   }).catch((error) => {
     console.error(error);
     res.status(500).json({
