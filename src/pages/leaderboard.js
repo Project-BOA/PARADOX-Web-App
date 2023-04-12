@@ -17,13 +17,12 @@ const database = getDatabase(app);
 
 const { NavigationGamePlay } = require("@/components/Navigation.js");
 
-const { LeaderboardMapper, endRoom } = require("@/modules/leaderboard");
+const { LeaderboardEntries, endRoom } = require("@/modules/leaderboard");
 
 export default function Leaderboard({ title, entries, type }) {
   const router = useRouter();
   const { roomID } = router.query;
 
-  console.log(endRoom);
   return (
     <NextUIProvider theme={theme}>
       <NavigationGamePlay
@@ -65,7 +64,7 @@ export default function Leaderboard({ title, entries, type }) {
                 {title} Leaderboard
               </Text>
               <Spacer y={2} />
-              <LeaderboardMapper entries={entries} />
+              <LeaderboardEntries entries={entries} />
             </Card>
           </Card>
         </Row>
@@ -135,10 +134,6 @@ export async function getServerSideProps(context) {
       }
     );
   }
-
-  entries.sort(function (a, b) {
-    return b[1] - a[1];
-  });
 
   return { props: { title, entries, type } };
 }

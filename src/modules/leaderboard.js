@@ -1,13 +1,5 @@
 import { Spacer, Text } from "@nextui-org/react";
-import { useList } from "react-firebase-hooks/database";
 import { Fragment } from "react";
-import { initializeApp } from "firebase/app";
-import { ref, getDatabase } from "firebase/database";
-import { useRouter } from "next/router";
-
-const { config } = require("@/modules/firebase-config.js");
-const app = initializeApp(config);
-const database = getDatabase(app);
 
 function getOrdinal(n) {
   let ord = "th";
@@ -45,61 +37,45 @@ async function endRoom(router, roomID) {
   }
 }
 
-function LeaderboardEntries({ roomID }) {
-  const [snapshots, loading, error] = useList(
-    ref(database, "room/" + roomID + "/leaderboard")
-  );
-
-  return (
-    <>
-      {error && (
-        <Text h2 size={30} weight="bold" align="center">
-          Error: {error}
+function LeaderboardEntries({ entries }) {
+  return leaderboardMapper(entries).map(({ name, score, position }) => {
+    return (
+      <Fragment key={name}>
+        <Text h3 size={30} align="center">
+          {position}. {name} - {score} points
         </Text>
-      )}
-      {loading && (
-        <Text h2 size={30} align="center">
-          Loading Leaderboard...
-        </Text>
-      )}
-      {!loading && snapshots && (
-        <Fragment>
-          <Text h2 size={30} align="center">
-            Leaderboard
-          </Text>
-          <Spacer y={2.5} />
-          {snapshots.map((snap) => {
-            return [snap.key, snap.val().score ?? snap.val()];
-          })}
-        </Fragment>
-      )}
-    </>
-  );
+        <Spacer y={2.5} />
+      </Fragment>
+    );
+  });
 }
 
-function LeaderboardMapper({ entries }) {
+function leaderboardMapper(entries) {
+  // sort descending by score
+  entries = entries.sort((a, b) => {
+    return (b[1].score ?? b[1]) - (a[1].score ?? a[1]);
+  });
+
   var players = [];
   var position = 1;
+  var name;
 
   return entries.map((entry) => {
-    var name = entry[0];
-    var score = entry[1];
+    name = entry[0];
     if (!players.includes(name)) {
       players.push(name);
-      return (
-        <Fragment key={name}>
-          <Text h3 size={30} align="center">
-            {getOrdinal(position++)}. {name} - {score} points
-          </Text>
-          <Spacer y={2.5} />
-        </Fragment>
-      );
+      return {
+        name,
+        score: entry[1],
+        position: getOrdinal(position++),
+      };
     }
   });
 }
 
 module.exports = {
-  LeaderboardMapper,
   LeaderboardEntries,
   endRoom,
+  leaderboardMapper,
+  getOrdinal,
 };

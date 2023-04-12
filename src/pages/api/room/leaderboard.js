@@ -25,28 +25,10 @@ export default async function handler(req, res) {
     roomID = validation[0]; // first matched substring
   }
 
-  var room;
-  await get(ref(database, "room/" + roomID))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        room = snapshot.toJSON();
-      } else {
-        res.status(400).json({
-          status: "Room does not Exist",
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({
-        status: "ERROR",
-      });
-      console.error(error);
-    });
-
   var leaderboard;
   await get(ref(database, "room/" + roomID + "/leaderboard"))
     .then((snapshot) => {
-      leaderboard = leaderboardMapper(snapshot.toJSON());
+      leaderboard = leaderboardMapper(Object.entries(snapshot.toJSON()));
     })
     .catch((error) => {
       console.error(error);

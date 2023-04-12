@@ -4,8 +4,6 @@ const { database } = require("@/modules/firebase-config.js");
 
 export default async function create(req, res) {
   // TODO:
-  // validate input
-  // verify roomID exists
   // check if user already in room
   // authenticate username
 
@@ -30,22 +28,25 @@ export default async function create(req, res) {
     roomID = validation[0]; // first matched substring
   }
 
-  console.log("User: '" + username + "' joined room with ID: '" + roomID + "'");
-
   var room;
   await get(ref(database, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {
         room = snapshot.toJSON();
       } else {
-        console.log("Room does not exist");
+        res.status(404).json({
+            status: "Room does not exist",
+          });
+            return
       }
     })
     .catch((error) => {
       res.status(500).json({
         status: "ERROR",
       });
-      console.error(error);
+        console.error(error);
+        return
+        
     });
   var puzzleType;
   await get(ref(database, "puzzle/" + room.puzzleID + "/puzzleType"))
@@ -56,13 +57,16 @@ export default async function create(req, res) {
         res.status(500).json({
           status: "No puzzle type available",
         });
+          return
       }
     })
     .catch((error) => {
       res.status(500).json({
         status: "ERROR",
       });
-      console.error(error);
+        console.error(error);
+        return
+        
     });
 
   if (puzzleType == "multi") {
