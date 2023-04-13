@@ -58,9 +58,10 @@ function Navigation({ page, username }) {
             <Modal.Footer justify="center">
               <Button
                 auto
+                bordered
                 css={{
-                  color: "$buttonSecondary",
-                  backgroundColor: "$buttonPrimary",
+                  color: "$buttonPrimary",
+                  borderColor: "$buttonPrimary",
                 }}
                 onPress={closeHandler}
               >

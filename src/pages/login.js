@@ -100,7 +100,14 @@ export default function Login() {
               <Grid.Container justify="center">
                 <Grid>
                   <Col>
-                    <Button color="secondary" size="lg" type="submit">
+                    <Button
+                      css={{
+                        color: "$buttonSecondary",
+                        backgroundColor: "$buttonPrimary",
+                      }}
+                      size="lg"
+                      type="submit"
+                    >
                       Sign In
                     </Button>
                     <Spacer />

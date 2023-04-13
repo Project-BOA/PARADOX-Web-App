@@ -66,7 +66,7 @@ function leaderboardMapper(entries) {
       players.push(name);
       return {
         name,
-        score: entry[1],
+        score: entry[1].score ?? entry[1],
         position: getOrdinal(position++),
       };
     }

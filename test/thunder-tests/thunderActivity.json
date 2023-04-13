@@ -4,16 +4,16 @@
     "colId": "history",
     "containerId": "",
     "name": "https://paradox-git-dev-team-boa.vercel.app/api/profile/login",
-    "url": "https://paradox-git-dev-team-boa.vercel.app/api/profile/login",
+    "url": "https://paradox-git-dev-team-boa.vercel.app/api/room/leaderboard",
     "method": "GET",
     "sortNum": 0,
     "created": "2023-04-12T02:55:58.352Z",
-    "modified": "2023-04-12T02:55:58.352Z",
+    "modified": "2023-04-13T20:08:12.964Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"username\": \"alan\",\n  \"password\": \"pass\"\n\n}",
+      "raw": "{\n  \"username\": \"alan\",\n  \"password\": \"pass\",\n  \"roomID\": \"TESTI\"\n}",
       "form": []
     },
     "tests": []
