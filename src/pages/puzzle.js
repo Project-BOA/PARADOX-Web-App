@@ -47,7 +47,7 @@ export default function Puzzle({ user, puzzle }) {
           <Text size={20} align="left" color="white" css={{ m: 0 }}>
             Amount of time you have to answer each puzzle piece is{" "}
             {puzzle.pieceTime.interval} seconds, and you will lose{" "}
-            {puzzle.pieceTime.decrement} points every
+            {puzzle.pieceTime.decrement} points every{" "}
             {puzzle.pieceTime.interval} seconds
           </Text>
         </>

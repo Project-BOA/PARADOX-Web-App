@@ -76,7 +76,7 @@ export default function Instruction({ user }) {
                 >
                   How to Play
                 </Text>
-                <Text h3 size={40} align="center" color="white" css={{ m: 0 }}>
+                <Text size={32} align="center" css={{ m: 0 }}>
                   There are 3 Types of puzzles...
                 </Text>
               </Card.Body>
@@ -93,28 +93,6 @@ export default function Instruction({ user }) {
             }}
           >
             <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
-              <Card.Header
-                css={{
-                  marginLeft: "auto",
-                  backgroundColor: "$lightGreen",
-                  marginRight: "auto",
-                }}
-              >
-                <Col>
-                  <Text
-                    size={28}
-                    weight="bold"
-                    transform="uppercase"
-                    color="black"
-                  ></Text>
-                  <Text
-                    size={18}
-                    weight="bold"
-                    transform="uppercase"
-                    color="black"
-                  ></Text>
-                </Col>
-              </Card.Header>
               <Card.Body
                 css={{
                   p: 0,
@@ -123,6 +101,7 @@ export default function Instruction({ user }) {
                 }}
               >
                 <Text
+                  h2
                   size={40}
                   align="center"
                   color="$blueViolet"
@@ -130,9 +109,18 @@ export default function Instruction({ user }) {
                 >
                   Single Puzzles
                 </Text>
-                <Text size={20} align="center" color="$powder" css={{ m: 0 }}>
+                <Text size={20} align="center" css={{ m: 0 }}>
                   {singleDescritption}
                 </Text>
+                <Image
+                  css={{
+                    margin: "auto",
+                  }}
+                  src="/image/default_puzzle_image.png"
+                  width="auto"
+                  height="auto"
+                  alt="puzzle image"
+                />
               </Card.Body>
             </Card>
           </Card>
@@ -145,28 +133,6 @@ export default function Instruction({ user }) {
             }}
           >
             <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
-              <Card.Header
-                css={{
-                  marginLeft: "auto",
-                  backgroundColor: "$lightGreen",
-                  marginRight: "auto",
-                }}
-              >
-                <Col>
-                  <Text
-                    size={28}
-                    weight="bold"
-                    transform="uppercase"
-                    color="black"
-                  ></Text>
-                  <Text
-                    size={18}
-                    weight="bold"
-                    transform="uppercase"
-                    color="black"
-                  ></Text>
-                </Col>
-              </Card.Header>
               <Card.Body
                 css={{
                   p: 0,
@@ -175,6 +141,7 @@ export default function Instruction({ user }) {
                 }}
               >
                 <Text
+                  h2
                   size={40}
                   align="center"
                   color="$blueViolet"
@@ -182,9 +149,18 @@ export default function Instruction({ user }) {
                 >
                   Multi Puzzles
                 </Text>
-                <Text size={20} align="center" color="$powder" css={{ m: 0 }}>
+                <Text size={20} align="center" css={{ m: 0 }}>
                   {multiDescription}
                 </Text>
+                <Image
+                  css={{
+                    margin: "auto",
+                  }}
+                  src="/image/default_puzzle_image.png"
+                  width="auto"
+                  height="auto"
+                  alt="puzzle image"
+                />
               </Card.Body>
             </Card>
           </Card>
@@ -197,28 +173,6 @@ export default function Instruction({ user }) {
             }}
           >
             <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
-              <Card.Header
-                css={{
-                  marginLeft: "auto",
-                  backgroundColor: "$lightGreen",
-                  marginRight: "auto",
-                }}
-              >
-                <Col>
-                  <Text
-                    size={28}
-                    weight="bold"
-                    transform="uppercase"
-                    color="black"
-                  ></Text>
-                  <Text
-                    size={18}
-                    weight="bold"
-                    transform="uppercase"
-                    color="black"
-                  ></Text>
-                </Col>
-              </Card.Header>
               <Card.Body
                 css={{
                   p: 0,
@@ -227,6 +181,7 @@ export default function Instruction({ user }) {
                 }}
               >
                 <Text
+                  h2
                   size={40}
                   align="center"
                   color="$blueViolet"
@@ -234,9 +189,18 @@ export default function Instruction({ user }) {
                 >
                   Timed Puzzles
                 </Text>
-                <Text size={20} align="center" color="$powder" css={{ m: 0 }}>
+                <Text size={20} align="center" css={{ m: 0 }}>
                   {timeDescritption}
                 </Text>
+                <Image
+                  css={{
+                    margin: "auto",
+                  }}
+                  src="/image/default_puzzle_image.png"
+                  width="auto"
+                  height="auto"
+                  alt="puzzle image"
+                />
               </Card.Body>
             </Card>
           </Card>
@@ -259,6 +223,7 @@ export default function Instruction({ user }) {
                 }}
               >
                 <Text
+                  h2
                   size={40}
                   align="center"
                   color="$blueViolet"
@@ -268,7 +233,7 @@ export default function Instruction({ user }) {
                 </Text>
                 <div class="box">
                   <Col>
-                    <Text size={20} align="right" color="white" css={{ m: 0 }}>
+                    <Text size={20} align="right" css={{ m: 0 }}>
                       Users can join a room by inputting the room ID that
                       appears in the corner, once a user joins their username
                       will be displayed in the room. Click on the username of a
@@ -301,7 +266,7 @@ export default function Instruction({ user }) {
 
                 <div class="box">
                   <Col>
-                    <Text size={20} align="right" color="white" css={{ m: 0 }}>
+                    <Text size={20} align="right" css={{ m: 0 }}>
                       Once a room starts a time will countdown till the next
                       puzzle piece. The timer will vary from puzzle to puzzle.
                       The puzzle piece will display front and center. Under the
@@ -336,7 +301,7 @@ export default function Instruction({ user }) {
                 <Spacer y={1} />
                 <div class="box">
                   <Col>
-                    <Text size={20} align="right" color="white" css={{ m: 0 }}>
+                    <Text size={20} align="right" css={{ m: 0 }}>
                       Make sure to download the app to experience the the fun
                       puzzles and begin your puzzle journey
                     </Text>

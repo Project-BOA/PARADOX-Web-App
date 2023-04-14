@@ -45,8 +45,6 @@ export default async function create(req, res) {
     });
   }
 
-  console.log("Room Created with ID: '" + roomID + "'");
-
   set(ref(database, "room/" + roomID), {});
 
   var puzzleType;

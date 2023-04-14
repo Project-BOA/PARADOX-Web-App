@@ -55,7 +55,7 @@ export default function Leaderboard({ title, entries, type }) {
               <Spacer y={1} />{" "}
               <Text
                 h1
-                size={60}
+                size={32}
                 css={{ m: 0 }}
                 weight="bold"
                 color="#8A2BE2"

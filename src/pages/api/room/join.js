@@ -35,19 +35,19 @@ export default async function create(req, res) {
         room = snapshot.toJSON();
       } else {
         res.status(404).json({
-            status: "Room does not exist",
-          });
-            return
+          status: "Room does not exist",
+        });
+        return;
       }
     })
     .catch((error) => {
       res.status(500).json({
         status: "ERROR",
       });
-        console.error(error);
-        return
-        
+      console.error(error);
+      return;
     });
+
   var puzzleType;
   await get(ref(database, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
@@ -57,16 +57,15 @@ export default async function create(req, res) {
         res.status(500).json({
           status: "No puzzle type available",
         });
-          return
+        return;
       }
     })
     .catch((error) => {
       res.status(500).json({
         status: "ERROR",
       });
-        console.error(error);
-        return
-        
+      console.error(error);
+      return;
     });
 
   if (puzzleType == "multi") {

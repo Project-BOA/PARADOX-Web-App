@@ -3,9 +3,10 @@ import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {
   NextUIProvider,
-  Container,
   Card,
+  Container,
   Row,
+  Col,
   Text,
   Spacer,
   Button,
@@ -24,6 +25,7 @@ const { Footer } = require("@/components/Footer.js");
 
 import { initializeApp } from "firebase/app";
 import { ref, get, getDatabase } from "firebase/database";
+import ReactDomServer from "react-dom/server";
 
 const { config } = require("@/modules/firebase-config.js");
 const app = initializeApp(config);
@@ -39,16 +41,28 @@ export default function Profile({ user, completedPuzzles }) {
     console.log("closed");
   };
 
+  const SolvedEntry = () => {
+    return (
+      <Row align="justify">
+        <Col>
+          <Text size={20} p className="puzzleTitle"></Text>
+        </Col>
+        <Col align="center">
+          <Text size={20} p className="date"></Text>
+        </Col>
+        <Col align="center">
+          <Text size={20} p className="points"></Text>
+        </Col>
+      </Row>
+    );
+  };
+
+  var solvedPuzzleList;
   function SolvedPuzzleList({ solved }) {
     var comPuz = [];
-    console.log(Object.entries(solved));
+
     if (typeof window !== "undefined") {
       const List = require("list.js");
-
-      var options = {
-        valueNames: ["puzzleTitle", "date", "points"],
-        item: '<li><h3 class="puzzleTitle"></h3><p>Date:</p><p class="date"></p><p>Points:</p><p class="points"></p></li>',
-      };
 
       var values = Object.entries(solved).map((entry) => {
         if (!comPuz.includes(entry[0])) {
@@ -61,7 +75,12 @@ export default function Profile({ user, completedPuzzles }) {
         }
       });
 
-      var SolvedPuzzleList = new List("solvedPuzzles", options, values);
+      var options = {
+        valueNames: ["puzzleTitle", "date", "points"],
+        item: ReactDomServer.renderToString(SolvedEntry(values)),
+      };
+
+      SolvedPuzzleList = new List("solvedPuzzles", options, values);
     }
 
     return <></>;
@@ -249,13 +268,12 @@ export default function Profile({ user, completedPuzzles }) {
   return (
     <>
       <NextUIProvider theme={theme}>
+        <Navigation page="profile" username={user.username} />
         <div id="page-container">
           <div id="content-wrap">
-            <Container>
-              <Navigation page="profile" username={user.username} />
-
-              <Spacer y={1} />
-              <Row gap={1}>
+            <Spacer y={1} />
+            <Row>
+              <Col>
                 <Card
                   css={{
                     marginRight: "auto",
@@ -271,9 +289,11 @@ export default function Profile({ user, completedPuzzles }) {
                     }}
                   >
                     <Card.Body>
-                      <Text h4 align="center">
+                      <Text h4 size={30} align="center">
                         Profile Info
                       </Text>
+                      <Spacer y={1} />
+
                       <Grid.Container gap={2} justify="center">
                         <form
                           id="profile-info-form"
@@ -344,13 +364,15 @@ export default function Profile({ user, completedPuzzles }) {
                     </Card.Body>
                   </Card>
                 </Card>
+              </Col>
 
+              <Col>
                 <Card
                   css={{
                     marginRight: "auto",
                     marginLeft: "auto",
                     background: "$green",
-                    width: "50vw",
+                    width: "45vw",
                     padding: "1em",
                   }}
                 >
@@ -360,16 +382,47 @@ export default function Profile({ user, completedPuzzles }) {
                     }}
                   >
                     <Card.Body>
-                      <Text h4 align="center">
+                      <Text h4 size={30} align="center">
                         Solved Puzzles
                       </Text>
-                      Solved Puzzles:
-                      <div id="solvedPuzzles">
-                        <input class="search" placeholder="Search" />
-                        <button class="sort" data-sort="puzzleTitle">
-                          Sort by name
-                        </button>
+                      <Spacer y={1} />
 
+                      <div id="solvedPuzzles">
+                        <Row align="justify">
+                          <Col>
+                            <button class="sort" data-sort="puzzleTitle">
+                              <Text
+                                weight="bold"
+                                size={25}
+                                css={{ m: 0, color: "$link" }}
+                              >
+                                Title
+                              </Text>
+                            </button>
+                          </Col>
+                          <Col align="center">
+                            <button class="sort" data-sort="date">
+                              <Text
+                                weight="bold"
+                                size={25}
+                                css={{ m: 0, color: "$link" }}
+                              >
+                                Completed on
+                              </Text>
+                            </button>
+                          </Col>
+                          <Col align="center">
+                            <button class="sort" data-sort="points">
+                              <Text
+                                weight="bold"
+                                size={25}
+                                css={{ m: 0, color: "$link" }}
+                              >
+                                Points
+                              </Text>
+                            </button>
+                          </Col>
+                        </Row>
                         <ul class="list"></ul>
                         <SolvedPuzzleList solved={completedPuzzles} />
                       </div>
@@ -377,9 +430,9 @@ export default function Profile({ user, completedPuzzles }) {
                     </Card.Body>
                   </Card>
                 </Card>
-              </Row>
-              <ChangePasswordModal />
-            </Container>
+              </Col>
+            </Row>
+            <ChangePasswordModal />
           </div>
 
           <Footer />

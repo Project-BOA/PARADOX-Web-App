@@ -19,6 +19,7 @@ body {
     rgb(var(--background-end-rgb))
   )
   rgb(var(--background-start-rgb));
+  overflow-y: hidden; /*temporarily fix overflow bug*/
 }
 
 a {
@@ -91,14 +92,18 @@ a {
 }
 
 #content-wrap {
-  padding-bottom: 11rem;    /* Footer height */
+    margin: 0;
+    padding: 0;
+  padding-bottom: 14rem;
 }
 
 #footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 11rem;            /* Footer height */
+  height: 12rem;
+  background-color: #90ee90;
+  padding: 1rem;
 }
 
 /* List js css */
@@ -114,9 +119,7 @@ a {
   padding:10px;
   box-shadow: inset 0 1px 0 #fff;
 }
-.avatar {
-  max-width: 150px;
-}
+
 img {
   max-width: 100%;
 }
@@ -131,28 +134,25 @@ p {
 }
 
 input {
-  border:solid 1px #ccc;
-  border-radius: 5px;
+  border:none;
+  border-radius: 10px;
   padding:7px 14px;
   margin-bottom:10px
 }
-input:focus {
-  outline:none;
-  border-color:#aaa;
-}
+
+
 .sort {
-  padding:8px 30px;
-  border-radius: 6px;
   border:none;
   display:inline-block;
-  color:#fff;
   text-decoration: none;
-  background-color: #28a8e0;
-  height:30px;
+  background: none;
 }
+
 .sort:hover {
-  text-decoration: none;
-  background-color:#1b8aba;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #BB2297;
+
 }
 .sort:focus {
   outline:none;
@@ -173,7 +173,7 @@ input:focus {
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid #fff;
+  border-top: 5px solid #BB2297;
   content:"";
   position: relative;
   top:13px;
@@ -184,7 +184,7 @@ input:focus {
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 5px solid #fff;
+  border-bottom: 5px solid #BB2297;
   content:"";
   position: relative;
   top:-10px;

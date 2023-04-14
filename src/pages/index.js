@@ -110,96 +110,92 @@ export default function Home({ user }) {
           </Text>
         )}
         {!loading && snapshots && (
-          <Row gap={1}>
-            <Grid.Container gap={2} justify="center">
-              {snapshots.map((snap) => {
-                var puzzleID = snap.key;
-                var puzzle = snap.val();
-                return (
-                  <>
-                    <Card
-                      isHoverable
-                      isPressable
-                      onPress={() => {
-                        getRoom(puzzleID);
-                      }}
-                      css={{
-                        width: "auto",
-                        background: "$green",
-                        margin: "1em",
-                      }}
-                    >
-                      <Card
-                        key={puzzleID}
-                        css={{ w: "30em", h: "50vh", margin: "1em" }}
+          <Grid.Container gap={2} justify="center">
+            {snapshots.map((snap) => {
+              var puzzleID = snap.key;
+              var puzzle = snap.val();
+              return (
+                <>
+                  <Card
+                    isHoverable
+                    isPressable
+                    onPress={() => {
+                      getRoom(puzzleID);
+                    }}
+                    css={{
+                      width: "auto",
+                      background: "$green",
+                      padding: "1em",
+                      margin: "1em",
+                    }}
+                  >
+                    <Card key={puzzleID} css={{ w: "30em", h: "50vh" }}>
+                      <Card.Header
+                        css={{ marginLeft: "auto", marginRight: "auto" }}
                       >
-                        <Card.Header
-                          css={{ marginLeft: "auto", marginRight: "auto" }}
-                        >
-                          <Col>
-                            <Text
-                              size={28}
-                              weight="bold"
-                              transform="uppercase"
-                              color="black"
+                        <Col>
+                          <Text
+                            size={28}
+                            weight="bold"
+                            transform="uppercase"
+                            color="black"
+                          >
+                            {puzzle.title}
+                          </Text>
+                          <Text
+                            size={18}
+                            weight="bold"
+                            transform="uppercase"
+                            color="black"
+                          >
+                            {puzzle.description}
+                          </Text>
+                        </Col>
+                      </Card.Header>
+                      <Card.Body css={{ p: 0, border: "#17706E" }}>
+                        <Card.Image
+                          src="/image/default_puzzle_image.png"
+                          objectFit="cover"
+                          width="100%"
+                          height="100%"
+                          alt="puzzle image"
+                        />
+                      </Card.Body>
+                      <Card.Footer
+                        isBlurred
+                        css={{
+                          position: "absolute",
+                          bgBlur: "#0f111466",
+                          borderTop: "$borderWeights$light solid $gray800",
+                          bottom: 0,
+                          zIndex: 1,
+                        }}
+                      >
+                        <Row justify="center">
+                          <Tooltip
+                            trigger="click"
+                            color={"primary"}
+                            content={<GetComment puzzleID={puzzleID} />}
+                          >
+                            <Button
+                              size="lg"
+                              auto
+                              css={{
+                                color: "$buttonSecondary",
+                                backgroundColor: "$buttonPrimary",
+                              }}
                             >
-                              {puzzle.title}
-                            </Text>
-                            <Text
-                              size={18}
-                              weight="bold"
-                              transform="uppercase"
-                              color="black"
-                            >
-                              {puzzle.description}
-                            </Text>
-                          </Col>
-                        </Card.Header>
-                        <Card.Body css={{ p: 0, border: "#17706E" }}>
-                          <Card.Image
-                            src="/image/default_puzzle_image.png"
-                            objectFit="cover"
-                            width="100%"
-                            height="100%"
-                            alt="puzzle image"
-                          />
-                        </Card.Body>
-                        <Card.Footer
-                          isBlurred
-                          css={{
-                            position: "absolute",
-                            bgBlur: "#0f111466",
-                            borderTop: "$borderWeights$light solid $gray800",
-                            bottom: 0,
-                            zIndex: 1,
-                          }}
-                        >
-                          <Row justify="center">
-                            <Tooltip
-                              trigger="click"
-                              color={"primary"}
-                              content={<GetComment puzzleID={puzzleID} />}
-                            >
-                              <Button
-                                size="lg"
-                                auto
-                                css={{
-                                  color: "$buttonSecondary",
-                                  backgroundColor: "$buttonPrimary",
-                                }}
-                              >
-                                Details
-                              </Button>
-                            </Tooltip>
-                          </Row>
-                        </Card.Footer>
-                      </Card>
+                              Details
+                            </Button>
+                          </Tooltip>
+                        </Row>
+                      </Card.Footer>
                     </Card>
-                  </>
-                );
-              })}
-            </Grid.Container>
-          </Row>
+                  </Card>
+                </>
+              );
+            })}
+          </Grid.Container>
         )}
       </>
     );
@@ -213,9 +209,8 @@ export default function Home({ user }) {
           <div id="content-wrap">
             <Puzzles />
           </div>
-
-          <Footer />
         </div>
+        <Footer />
       </NextUIProvider>
     </>
   );
