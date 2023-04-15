@@ -41,17 +41,38 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (biography.length >= 50) {
+  username = username.trim();
+  password = password.trim();
+  email = email.trim();
+  biography = biography.trim();
+
+  if (username.length < 3 || username.length > 15) {
+    res.status(400).json({
+      status: "Username has to have a length between 3 and 16 characters",
+    });
+    return;
+  }
+
+  if (password.length < 3) {
+    res.status(400).json({
+      status: "Minimum password length is 3 characters",
+    });
+    return;
+  }
+
+  if (email.length < 3 || username.length > 255) {
+    res.status(400).json({
+      status: "Username has to have a length between 3 and 256 characters",
+    });
+    return;
+  }
+
+  if (biography.length > 50) {
     res.status(400).json({
       status: "Max Biography length is 50 characters",
     });
     return;
   }
-
-  username = username.trim();
-  password = password.trim();
-  email = email.trim();
-  biography = biography.trim();
 
   if (
     filter.isProfane(username) ||

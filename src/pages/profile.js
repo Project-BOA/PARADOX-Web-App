@@ -34,12 +34,8 @@ export default function Profile({ user, completedPuzzles }) {
   const router = useRouter();
 
   const [visible, setVisible] = React.useState(false);
-  const handler = () => setVisible(true);
-
-  const closeHandler = () => {
-    setVisible(false);
-    console.log("closed");
-  };
+  const openModal = () => setVisible(true);
+  const closeModal = () => setVisible(false);
 
   const SolvedEntry = () => {
     return (
@@ -80,7 +76,7 @@ export default function Profile({ user, completedPuzzles }) {
         item: ReactDomServer.renderToString(SolvedEntry(values)),
       };
 
-      SolvedPuzzleList = new List("solvedPuzzles", options, values);
+      solvedPuzzleList = new List("solvedPuzzles", options, values);
     }
 
     return <></>;
@@ -92,7 +88,7 @@ export default function Profile({ user, completedPuzzles }) {
         closeButton
         aria-labelledby="modal-change-password"
         open={visible}
-        onClose={closeHandler}
+        onClose={closeModal}
         css={{
           color: "$green",
           background: "$green",
@@ -112,15 +108,14 @@ export default function Profile({ user, completedPuzzles }) {
           >
             <form
               onSubmit={(event) => {
-                handleSubmitPass(event);
+                postEdit(event);
               }}
             >
               <Modal.Header>
-                <Text h4>Change Password</Text>
+                <Text h4>Enter Password</Text>
               </Modal.Header>
 
               <Modal.Body>
-                <Spacer y={0.1} />
                 <Row>
                   <Lock
                     set="bold"
@@ -128,29 +123,14 @@ export default function Profile({ user, completedPuzzles }) {
                     primaryColor="blueviolet"
                     size="xlarge"
                   />
+                  <Spacer />
                   <Input
                     fullWidth
                     id="password"
                     clearable
                     type={"password"}
                     labelPlaceholder="Password"
-                  />
-                </Row>
-                <Spacer y={0.1} />
-
-                <Row>
-                  <Lock
-                    set="bold"
-                    aria-label="lock icon"
-                    primaryColor="blueviolet"
-                    size="xlarge"
-                  />
-                  <Input
-                    fullWidth
-                    id="newPassword"
-                    clearable
-                    type={"password"}
-                    labelPlaceholder="New Password"
+                    minLength={3}
                   />
                 </Row>
               </Modal.Body>
@@ -158,24 +138,24 @@ export default function Profile({ user, completedPuzzles }) {
               <Modal.Footer justify="center">
                 <Button
                   auto
-                  flat
+                  bordered
                   css={{
-                    color: "$buttonSecondary",
-                    backgroundColor: "$buttonPrimary",
+                    color: "$buttonPrimary",
+                    borderColor: "$buttonPrimary",
                   }}
-                  onPress={closeHandler}
+                  onPress={closeModal}
                 >
                   Cancel
                 </Button>
                 <Button
                   auto
+                  type="submit"
                   css={{
                     color: "$buttonSecondary",
                     backgroundColor: "$buttonPrimary",
                   }}
-                  onPress={closeHandler}
                 >
-                  Change
+                  Update
                 </Button>
               </Modal.Footer>
             </form>
@@ -185,28 +165,32 @@ export default function Profile({ user, completedPuzzles }) {
     );
   }
 
-  async function handleSubmitPass(event) {
+  async function postEdit(event) {
     event.preventDefault();
+
     // Send the data to the server in JSON format.
-    const data = JSON.stringify({
+    const data = {
       username: user.username,
       password: event.target.password.value,
-      newPassword: event.target.newPassword.value,
-    });
+      biography: document.getElementById("biography").value,
+      email: document.getElementById("email").value,
+      newPassword: document.getElementById("newPassword").value,
+    };
 
     // API endpoint where we send form data.
     const endpoint = "/api/profile/edit";
 
-    // Form the request for sending data to the server.
     const options = {
-      // The method is POST because we are sending data.
       method: "POST",
-      // Tell the server we're sending JSON.
       headers: {
         "Content-Type": "application/json",
       },
-      // Body of the request is the JSON data we created above.
-      body: data,
+      body: JSON.stringify(data, (key, value) => {
+        if (/^\s*$/.test(value)) {
+          return undefined;
+        }
+        return value;
+      }),
     };
 
     // Send the form data to our forms API on Vercel and get a response.
@@ -218,48 +202,11 @@ export default function Profile({ user, completedPuzzles }) {
 
     // redirect or display based on the result
     if (result.status == "OK") {
-      router.push("/logout");
-    } else {
-      alert(result.status);
-    }
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-
-    // Send the data to the server in JSON format.
-    const data = JSON.stringify({
-      username: user.username,
-      password: user.password,
-      biography: event.target.biography.value,
-      email: event.target.email.value,
-    });
-
-    // API endpoint where we send form data.
-    const endpoint = "/api/profile/edit";
-
-    // Form the request for sending data to the server.
-    const options = {
-      // The method is POST because we are sending data.
-      method: "POST",
-      // Tell the server we're sending JSON.
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // Body of the request is the JSON data we created above.
-      body: data,
-    };
-
-    // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch(endpoint, options);
-
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
-    const result = await response.json();
-
-    // reload or display based on the result
-    if (result.status == "OK") {
-      router.reload();
+      setVisible(false);
+      if (data.newPassword || !/^\s*$/.test(data.newPassword)) {
+        router.push("/logout");
+        document.getElementById("newPassword").value = "";
+      }
     } else {
       alert(result.status);
     }
@@ -298,7 +245,8 @@ export default function Profile({ user, completedPuzzles }) {
                         <form
                           id="profile-info-form"
                           onSubmit={(event) => {
-                            handleSubmit(event);
+                            event.preventDefault();
+                            openModal(event);
                           }}
                         >
                           <Row>
@@ -314,6 +262,8 @@ export default function Profile({ user, completedPuzzles }) {
                               id="email"
                               clearable
                               initialValue={user.email}
+                              minLength={3}
+                              maxLength={255}
                             />
                           </Row>
                           <Spacer y={1} />
@@ -331,6 +281,27 @@ export default function Profile({ user, completedPuzzles }) {
                               id="biography"
                               clearable
                               initialValue={user.biography}
+                              maxLength={50}
+                            />
+                          </Row>
+                          <Spacer y={1} />
+
+                          <Row>
+                            <Lock
+                              set="bold"
+                              aria-label="lock icon"
+                              primaryColor="blueviolet"
+                              size="xlarge"
+                            />
+                            <Spacer />
+
+                            <Input
+                              fullWidth
+                              id="newPassword"
+                              clearable
+                              type={"password"}
+                              labelPlaceholder="New Password here..."
+                              minLength={3}
                             />
                           </Row>
 
@@ -352,15 +323,6 @@ export default function Profile({ user, completedPuzzles }) {
                           </Grid.Container>
                         </form>
                       </Grid.Container>
-
-                      <Link
-                        auto
-                        type="edit"
-                        onPress={handler}
-                        css={{ marginLeft: "auto", marginRight: "auto" }}
-                      >
-                        Change Password
-                      </Link>
                     </Card.Body>
                   </Card>
                 </Card>

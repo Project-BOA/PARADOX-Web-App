@@ -23,7 +23,6 @@ export default withIronSessionApiRoute(
     // save user to session for website usage
     req.session.user = {
       username,
-      password,
       biography: user.biography,
       email: user.email,
       completedPuzzles: user.solved,

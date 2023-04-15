@@ -4,7 +4,6 @@ import * as React from "react";
 
 import {
   NextUIProvider,
-  Container,
   Card,
   Row,
   Text,
@@ -96,7 +95,7 @@ export default function Register() {
                   clearable
                   labelPlaceholder="Username"
                   minLength={3}
-                  maxLength={10}
+                  maxLength={15}
                 />
               </Row>
               <Spacer y={2} />
@@ -125,6 +124,8 @@ export default function Register() {
                   id="email"
                   clearable
                   labelPlaceholder="Email"
+                  minLength={3}
+                  maxLength={255}
                 />
               </Row>
 
@@ -140,6 +141,7 @@ export default function Register() {
                   id="bio"
                   clearable
                   labelPlaceholder="Biography"
+                  maxLength={50}
                 />
               </Row>
 
