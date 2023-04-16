@@ -112,7 +112,7 @@ function Navigation({ page, username }) {
         </Navbar.Brand>
         <Navbar.Content variant="underline-rounded">
           <Navbar.Link isActive={page == "profile"} href="/profile">
-            <Text weight="bold" size={24}>
+            <Text color="$link" weight="bold" size={24}>
               Profile
             </Text>
           </Navbar.Link>
@@ -120,20 +120,20 @@ function Navigation({ page, username }) {
           <Spacer />
 
           <Navbar.Link href="/" isActive={page == "puzzles"}>
-            <Text weight="bold" size={24}>
+            <Text color="$link" weight="bold" size={24}>
               Puzzles
             </Text>
           </Navbar.Link>
           <Spacer />
           <Navbar.Link href="/instructions" isActive={page == "instructions"}>
-            <Text weight="bold" size={24}>
+            <Text color="$link" weight="bold" size={24}>
               Instructions
             </Text>
           </Navbar.Link>
         </Navbar.Content>
         <Navbar.Content>
           <Navbar.Link isActive={page == "profile"} href="/profile">
-            <Text align="right" weight="bold" size={20}>
+            <Text color="$link" align="right" weight="bold" size={20}>
               Hi, {username}
             </Text>
           </Navbar.Link>
