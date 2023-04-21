@@ -11,7 +11,6 @@
   "dependencies": {
     "@next/font": "^13.1.6",
     "@nextui-org/react": "^1.0.0-beta.12",
-    "@vtaits/filterlist": "^0.3.0",
     "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
     "eslint": "8.33.0",
