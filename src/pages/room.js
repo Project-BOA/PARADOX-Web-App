@@ -43,7 +43,7 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
     if (display == true) {
       return (
         <>
-          <Text h2 size={40}>
+          <Text h2 size={32}>
             Use the app to join the room with the Room ID...
           </Text>
         </>
@@ -75,10 +75,6 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
         )}
         {!loading && snapshots && (
           <>
-            <Text h2 size={32} color="$secondary" align="center">
-              {puzzleTitle} Room
-            </Text>
-            <Spacer y={2.5} />
             <Grid.Container gap={1} justify="center">
               <EmptyMessage display={snapshots.length == 0} />
               {snapshots.map((username) => {
@@ -127,55 +123,32 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
         secondaryAction={endRoom}
       />
       <Spacer y={1} />
-      <Container gap={0}>
-        <Row gap={1}>
+      <Row gap={1}>
+        <Card
+          css={{
+            width: "60vw",
+            background: "$green",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
           <Card
             css={{
               width: "auto",
-              background: "$green",
-              marginLeft: "auto",
-              marginRight: "auto",
+              background: "$primary",
+              margin: "1em",
             }}
           >
-            <Card
-              css={{
-                width: "40vw",
-                background: "$primary",
-                margin: "1em",
-              }}
-            >
-              <Spacer y={1} />
-              <Text h1 size={40} color="$secondary" align="center">
-                {puzzleTitle}
-              </Text>
-              <Spacer y={1} />
-            </Card>
+            <Spacer y={1} />
+            <Text h2 size={40} color="$secondary" align="center">
+              {puzzleTitle} Room
+            </Text>
+            <Spacer y={2.5} />
+            <Room />
+            <Spacer y={2.5} />
           </Card>
-        </Row>
-        <Spacer y={2} />
-        <Row gap={1}>
-          <Card
-            css={{
-              width: "60vw",
-              background: "$green",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            <Card
-              css={{
-                width: "auto",
-                background: "$primary",
-                margin: "1em",
-              }}
-            >
-              <Spacer y={1} />
-              <Room />
-              <Spacer y={2.5} />
-            </Card>
-          </Card>
-        </Row>
-      </Container>
+        </Card>
+      </Row>
     </NextUIProvider>
   );
 }

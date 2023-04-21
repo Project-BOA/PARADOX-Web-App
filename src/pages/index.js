@@ -69,17 +69,27 @@ export default function Home({ user }) {
             could be possible spoilers for answers
           </Text>
         </Row>
+        <Spacer />
         <Grid.Container justify="space-between" alignContent="center">
           <Grid>
-            <Button size="sm" light>
+            <Button
+              link
+              css={{
+                color: "$buttonPrimary",
+              }}
+              size="sm"
+              light
+            >
               Cancel
             </Button>
           </Grid>
           <Grid>
             <Button
+              css={{
+                color: "$buttonSecondary",
+                backgroundColor: "$buttonPrimary",
+              }}
               size="sm"
-              shadow
-              color="error"
               onClick={() => {
                 router.push({
                   pathname: "/puzzle",
