@@ -50,7 +50,7 @@ const RenderTime = ({ remainingTime }) => {
     isNewTimeFirstTick.current = false;
   }
 
-  // force one last re-render when the time is over to tirgger the last animation
+  // force one last re-render when the time is over to trigger the last animation
   if (remainingTime === 0) {
     setTimeout(() => {
       setOneLastRerender((val) => val + 1);
@@ -199,15 +199,7 @@ export default function Gameplay({
 
   var pieceIndex = 0;
 
-  // useEffect(() => {
-  //   addEventListener("beforeunload", function (event) {
-  //     //   event.returnValue =
-  //     //     "Trust me you do not want to do this, press end button instead...bro";
-  //     event.returnValue = "This will restart the puzzle...";
-  //   });
-  // });
-
-  function endGame() {
+  function toLeaderboard() {
     router.push("/leaderboard?roomID=" + roomID);
   }
 
@@ -218,8 +210,8 @@ export default function Gameplay({
         roomID={roomID}
         puzzleName={puzzleName}
         puzzleType={puzzleType}
-        action={endGame}
-        actionText={"End Game"}
+        logoAction={toLeaderboard}
+        actionText={"Finish"}
       />
 
       <Grid.Container gap={2} justify="center">
@@ -273,7 +265,7 @@ export default function Gameplay({
                         onComplete={() => {
                           pieceIndex++;
                           if (pieceIndex >= puzzlePieces.length) {
-                            router.push("/leaderboard?roomID=" + roomID);
+                            toLeaderboard();
                             return { shouldRepeat: false };
                           }
 
@@ -294,8 +286,6 @@ export default function Gameplay({
                         }}
                       >
                         {RenderTime}
-
-                        {/* {({ remainingTime }) => remainingTime} */}
                       </CountdownCircleTimer>
                     </div>
                     <Text h3 size={25} align="center" id="availPoints">

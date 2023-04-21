@@ -14,9 +14,7 @@ import {
   Spacer,
   Button,
   Textarea,
-  Input,
   Modal,
-  Grid,
 } from "@nextui-org/react";
 import { theme } from "@/themes/theme.js";
 
@@ -30,21 +28,16 @@ const { Footer } = require("@/components/Footer.js");
 export default function Puzzle({ user, puzzle }) {
   const router = useRouter();
   const { puzzleID } = router.query;
-  let now = new Date();
 
   const [visible, setVisible] = React.useState(false);
   const handler = () => setVisible(true);
-
-  const closeHandler = () => {
-    setVisible(false);
-    console.log("closed");
-  };
+  const closeHandler = () => setVisible(false);
 
   const TimeDescription = () => {
     if (puzzle.puzzleType.toLowerCase() == "time") {
       return (
         <>
-          <Text size={20} align="left" color="white" css={{ m: 0 }}>
+          <Text size={20} align="center">
             Amount of time you have to answer each puzzle piece is{" "}
             {puzzle.pieceTime.interval} seconds, and you will lose{" "}
             {puzzle.pieceTime.decrement} points every{" "}
@@ -55,7 +48,7 @@ export default function Puzzle({ user, puzzle }) {
     } else {
       return (
         <>
-          <Text size={20} align="left" color="white" css={{ m: 0 }}>
+          <Text size={20} align="center">
             Amount of time you have to answer each puzzle piece is{" "}
             {puzzle.pieceTime.interval} seconds.
           </Text>
@@ -64,7 +57,29 @@ export default function Puzzle({ user, puzzle }) {
     }
   };
 
-  function createCommentModal() {
+  async function getRoom(puzzleID) {
+    const data = {
+      puzzleID: puzzleID,
+    };
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json ",
+      },
+      body: JSON.stringify(data),
+    };
+
+    const response = await fetch("api/room/create", options);
+    const result = await response.json();
+    if (result.status == "OK") {
+      router.push({ pathname: "/room", query: { roomID: result.roomID } });
+    } else {
+      alert("Status: " + result.status);
+    }
+  }
+
+  function CreateCommentModal() {
     return (
       <Modal
         closeButton
@@ -94,25 +109,40 @@ export default function Puzzle({ user, puzzle }) {
                 <Text h4>Add Comment</Text>
               </Modal.Header>
 
-              <Spacer y={1} />
-
               <Modal.Body>
-                <Text size={18} align="center" color="green" css={{ m: 0 }}>
-                  {user.username} - {}
+                <Text size={20} align="left">
+                  {user.username} &#x2022;{" "}
+                  {new Date().toLocaleDateString("en-IE")}
                 </Text>
-
                 <Textarea
-                  aria-label="Your comment"
-                  placeholder="Enter your comments here."
                   id="comment"
+                  fullWidth
+                  minRows={2}
+                  placeholder="Enter your comments here..."
+                  aria-label="Your comment"
                 />
               </Modal.Body>
 
               <Modal.Footer justify="center">
-                <Button auto flat color="secondary" onPress={closeHandler}>
+                <Button
+                  auto
+                  bordered
+                  css={{
+                    color: "$buttonPrimary",
+                    borderColor: "$buttonPrimary",
+                  }}
+                  onPress={closeHandler}
+                >
                   Cancel
                 </Button>
-                <Button auto color="secondary" type="submit">
+                <Button
+                  auto
+                  css={{
+                    color: "$buttonSecondary",
+                    backgroundColor: "$buttonPrimary",
+                  }}
+                  type="submit"
+                >
                   Comment
                 </Button>
               </Modal.Footer>
@@ -150,18 +180,6 @@ export default function Puzzle({ user, puzzle }) {
     }
   }
 
-  function EmptyMessage({ display }) {
-    if (display == true) {
-      return (
-        <>
-          <Text h2 size={40}>
-            Use the app to join the room with the Room ID...
-          </Text>
-        </>
-      );
-    }
-  }
-
   function Comments() {
     const [snapshots, loading, error] = useList(
       ref(database, "comments/" + puzzleID)
@@ -169,12 +187,12 @@ export default function Puzzle({ user, puzzle }) {
     return (
       <>
         {error && (
-          <Text h2 size={30} weight="bold" align="center">
+          <Text h2 size={25} align="center">
             Error: {error}
           </Text>
         )}
         {loading && (
-          <Text h2 size={30} align="center">
+          <Text h2 size={25} align="center">
             Loading Comments...
           </Text>
         )}
@@ -189,22 +207,29 @@ export default function Puzzle({ user, puzzle }) {
 
             return (
               <>
-                <div className="box">
-                  <Text size={20} align="left" css={{ m: 0 }}>
+                <Col>
+                  <Text size={20} align="left">
                     {username} &#x2022; {date}
                   </Text>
                   <Spacer x={1} />
-                  <Input
-                    width="25em"
+                  <Textarea
                     id="comment"
-                    clearable
+                    fullWidth
+                    minRows={2}
+                    readOnly
                     value={comment}
-                  ></Input>
-                  <Spacer y={1} />
-                </div>
+                    aria-label={username + " commented on " + date}
+                  />
+                </Col>
+                <Spacer y={1} />
               </>
             );
           })}
+        {!loading && snapshots.length == 0 && (
+          <Text align="center" size={25}>
+            There are no comments for this puzzle yet...
+          </Text>
+        )}
       </>
     );
   }
@@ -233,19 +258,48 @@ export default function Puzzle({ user, puzzle }) {
                       width: "40vw",
                       background: "$primary",
                       margin: "1em",
+                      padding: "1em",
                     }}
                   >
-                    <Text h4 align="center">
-                      {puzzle.title} : {puzzle.puzzleType}
-                    </Text>
-                    <Col>
-                      <Text h4 align="center">
-                        Description
-                      </Text>
-                      <div className="box">
+                    <Row>
+                      <Col>
+                        <Text h4 size={40} align="center">
+                          {puzzle.title} :{" "}
+                          {puzzle.puzzleType.charAt(0).toUpperCase() +
+                            puzzle.puzzleType.slice(1).toLowerCase()}
+                        </Text>
                         <TimeDescription />
-                      </div>
-                    </Col>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Text size={35} h4 align="center">
+                          Description
+                        </Text>
+                        <Spacer y={1} />
+                        <Textarea
+                          readOnly
+                          fullWidth
+                          minRows={10}
+                          value={puzzle.description}
+                        />
+                        <Spacer y={1} />
+                        <Button
+                          onPress={() => {
+                            getRoom(puzzleID);
+                          }}
+                          css={{
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            color: "$buttonSecondary",
+                            backgroundColor: "$buttonPrimary",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Play Now
+                        </Button>
+                      </Col>
+                    </Row>
                   </Card>
                 </Card>
 
@@ -264,83 +318,29 @@ export default function Puzzle({ user, puzzle }) {
                       margin: "1em",
                     }}
                   >
-                    {" "}
-                    <Text h4 align="center">
-                      Comments
-                    </Text>
+                    <Row>
+                      <Col>
+                        <Text h4 size={40} align="center">
+                          Comments
+                        </Text>
+                      </Col>
+                    </Row>
                     <Comments />
+                    <Spacer y={1} />
                     <Button
                       type="edit"
-                      color="secondary"
                       onPress={handler}
-                      css={{ marginLeft: "auto", marginRight: "auto" }}
+                      css={{
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        color: "$buttonSecondary",
+                        backgroundColor: "$buttonPrimary",
+                      }}
                     >
                       Create
                     </Button>
-                    <Modal
-                      closeButton
-                      flat
-                      aria-label="modal-comments-creation"
-                      open={visible}
-                      onClose={closeHandler}
-                      css={{
-                        color: "$green",
-                        background: "$green",
-                        padding: "1em",
-                      }}
-                    >
-                      <Card
-                        css={{
-                          color: "$green",
-                          background: "$green",
-                        }}
-                      >
-                        <Card
-                          css={{
-                            background: "$primary",
-                          }}
-                        >
-                          <form onSubmit={handleSubmit}>
-                            <Modal.Header>
-                              <Text h4>Add Comment</Text>
-                            </Modal.Header>
-
-                            <Spacer y={1} />
-
-                            <Modal.Body>
-                              <Text
-                                size={18}
-                                align="center"
-                                color="green"
-                                css={{ m: 0 }}
-                              >
-                                {user.username} - {}
-                              </Text>
-
-                              <Textarea
-                                aria-label="Your comment"
-                                placeholder="Enter your comments here."
-                                id="comment"
-                              />
-                            </Modal.Body>
-
-                            <Modal.Footer justify="center">
-                              <Button
-                                auto
-                                flat
-                                color="secondary"
-                                onPress={closeHandler}
-                              >
-                                Cancel
-                              </Button>
-                              <Button auto color="secondary" type="submit">
-                                Comment
-                              </Button>
-                            </Modal.Footer>
-                          </form>
-                        </Card>
-                      </Card>
-                    </Modal>
+                    <Spacer y={1} />
+                    <CreateCommentModal />
                   </Card>
                 </Card>
               </Row>

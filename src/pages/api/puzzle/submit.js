@@ -15,9 +15,9 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (comment.length > 100) {
+  if (comment.length > 255) {
     res.status(400).json({
-      status: "Max Comment length is less than 100",
+      status: "Max Comment length is 255",
     });
     return;
   }

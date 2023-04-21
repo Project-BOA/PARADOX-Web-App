@@ -73,10 +73,9 @@ export default function Home({ user }) {
         <Grid.Container justify="space-between" alignContent="center">
           <Grid>
             <Button
-              bordered
+              link
               css={{
                 color: "$buttonPrimary",
-                borderColor: "$buttonPrimary",
               }}
               size="sm"
               light

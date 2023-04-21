@@ -53,7 +53,7 @@ function Navigation({ page, username }) {
             }}
           >
             <Modal.Header>
-              <Text size={18}>Are you sure you want to logout?</Text>
+              <Text h4>Are you sure you want to logout?</Text>
             </Modal.Header>
             <Modal.Footer justify="center">
               <Button
