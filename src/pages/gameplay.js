@@ -211,21 +211,25 @@ export default function Gameplay({
         puzzleName={puzzleName}
         puzzleType={puzzleType}
         logoAction={toLeaderboard}
+        action={toLeaderboard}
         actionText={"Finish"}
       />
 
       <Grid.Container gap={2} justify="center">
-        <Grid xs={10}>
+        <Grid xs={9}>
           <Card
             css={{
-              width: "auto",
               background: "$green",
               padding: "1em",
+              w: "auto",
+              h: "70vh",
+              width: "auto",
             }}
           >
-            <Card css={{ w: "30em", h: "100%", width: "auto" }}>
+            <Card css={{ h: "70vh", marginTop: "auto", marginBottom: "auto" }}>
               <Image
                 src={puzzlePieces[pieceIndex]}
+                // css={{ }}
                 id="puzzlePieceImg"
                 alt={"Puzzle piece image"}
                 width="auto"
@@ -237,67 +241,62 @@ export default function Gameplay({
         </Grid>
 
         <Grid>
-          <Grid.Container gap={2} justify="center">
-            <Grid>
-              <Card
+          <Card
+            css={{
+              width: "auto",
+              background: "$green",
+              padding: "1em",
+              h: "70vh",
+            }}
+          >
+            <Card css={{ h: "70vh", width: "auto" }}>
+              <Card.Body
                 css={{
-                  width: "auto",
-                  background: "$green",
-                  margin: "1em",
+                  p: 0,
+                  backgroundColor: "$lightGreen",
+                  border: "#17706E",
                 }}
               >
-                <Card
-                  css={{ w: "30em", h: "70vh", margin: "1em", width: "auto" }}
-                >
-                  <Card.Body
-                    css={{
-                      p: 0,
-                      backgroundColor: "$lightGreen",
-                      border: "#17706E",
+                <div className="timer-wrapper">
+                  <CountdownCircleTimer
+                    isPlaying
+                    duration={time}
+                    colors={["#000C66", "#F7B801", "#A30000"]}
+                    colorsTime={[2, 1, 0]}
+                    onComplete={() => {
+                      pieceIndex++;
+                      if (pieceIndex >= puzzlePieces.length) {
+                        toLeaderboard();
+                        return { shouldRepeat: false };
+                      }
+
+                      if (puzzleType == "time") {
+                        if (getPoints <= 0) getPoints = 0;
+                        getPoints = getPoints - decrement;
+                        update(ref_database(database, "room/" + roomID), {
+                          points: getPoints,
+                        });
+                        document.getElementById("availPoints").innerHTML =
+                          getPoints;
+                      }
+
+                      const img = document.getElementById("puzzlePieceImg");
+                      img.setAttribute("src", puzzlePieces[pieceIndex]);
+
+                      return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
                     }}
                   >
-                    <div className="timer-wrapper">
-                      <CountdownCircleTimer
-                        isPlaying
-                        duration={time}
-                        colors={["#000C66", "#F7B801", "#A30000"]}
-                        colorsTime={[2, 1, 0]}
-                        onComplete={() => {
-                          pieceIndex++;
-                          if (pieceIndex >= puzzlePieces.length) {
-                            toLeaderboard();
-                            return { shouldRepeat: false };
-                          }
-
-                          if (puzzleType == "time") {
-                            if (getPoints <= 0) getPoints = 0;
-                            getPoints = getPoints - decrement;
-                            update(ref_database(database, "room/" + roomID), {
-                              points: getPoints,
-                            });
-                            document.getElementById("availPoints").innerHTML =
-                              getPoints;
-                          }
-
-                          const img = document.getElementById("puzzlePieceImg");
-                          img.setAttribute("src", puzzlePieces[pieceIndex]);
-
-                          return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
-                        }}
-                      >
-                        {RenderTime}
-                      </CountdownCircleTimer>
-                    </div>
-                    <Text h3 size={25} align="center" id="availPoints">
-                      Available Points:
-                    </Text>
-                    <Text h3 size={25} align="center" id="availPoints"></Text>
-                    <Leaderboard />
-                  </Card.Body>
-                </Card>
-              </Card>
-            </Grid>
-          </Grid.Container>
+                    {RenderTime}
+                  </CountdownCircleTimer>
+                </div>
+                <Text h3 size={25} align="center" id="availPoints">
+                  Available Points:
+                </Text>
+                <Text h3 size={25} align="center" id="availPoints"></Text>
+                <Leaderboard />
+              </Card.Body>
+            </Card>
+          </Card>
         </Grid>
       </Grid.Container>
     </NextUIProvider>

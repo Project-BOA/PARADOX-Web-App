@@ -316,16 +316,16 @@
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
     "name": "Submit correct answer ",
-    "url": "http://localhost:3000/api/room/submit",
+    "url": "http://localhost:3000/api/room/join",
     "method": "POST",
     "sortNum": 18750,
     "created": "2023-04-05T16:50:46.783Z",
-    "modified": "2023-04-05T16:50:46.783Z",
+    "modified": "2023-04-22T15:33:13.786Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"7DZWV\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n\n}\n\n",
+      "raw": "{\n  \"roomID\": \"6JYP9\",\n  \"username\": \"example\"\n}\n\n",
       "form": []
     },
     "tests": []
