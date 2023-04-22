@@ -40,3 +40,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ### Sources
 
 [User icon created by Freepik](https://www.flaticon.com/free-icons/user)
+[Number to ordinal](https://www.sitepoint.com/convert-numbers-to-ordinals-javascript/)
