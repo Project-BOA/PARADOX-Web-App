@@ -6,9 +6,6 @@ var randomstring = require("randomstring");
 var Filter = require("bad-words"),
   filter = new Filter();
 export default async function create(req, res) {
-  // TODO:
-  // verify puzzle exists
-  // check roomID does not already exist
   var puzzleID = req.body.puzzleID;
 
   if (puzzleID == null) {

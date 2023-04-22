@@ -5,14 +5,19 @@ var Filter = require("bad-words"),
   filter = new Filter();
 export default async function handler(req, res) {
   // TODO:
-  // validate input
-  // verify roomID exists
   // verify user is in room
   // authenticate username
 
   var username = req.body.username;
   var answer = req.body.answer;
   var roomID = req.body.roomID;
+
+  if (roomID == null || answer == null || roomID == null) {
+    res.status(400).json({
+      status: "Invalid request body",
+    });
+    return;
+  }
 
   if (filter.isProfane(answer)) {
     res.status(400).json({
@@ -58,15 +63,19 @@ export default async function handler(req, res) {
       console.error(error);
     });
 
-  console.log(
-    "User: '" +
-      username +
-      "' submitted answer: '" +
-      answer +
-      "' to room with ID: '" +
-      roomID +
-      "'"
-  );
+  if (room == undefined) {
+    res.status(400).json({
+      status: "Room does not exist",
+    });
+    return;
+  }
+
+  if (!room.leaderboard || !Object.keys(room.leaderboard).includes(username)) {
+    res.status(400).json({
+      status: "User is not in Room",
+    });
+    return;
+  }
 
   var puzzleType;
   await get(ref(database, "puzzle/" + room.puzzleID + "/puzzleType"))

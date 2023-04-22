@@ -65,7 +65,7 @@
     "method": "POST",
     "sortNum": 40000,
     "created": "2023-04-05T16:50:24.028Z",
-    "modified": "2023-04-12T02:43:15.507Z",
+    "modified": "2023-04-22T16:37:57.889Z",
     "headers": [],
     "params": [],
     "body": {
@@ -78,7 +78,7 @@
         "type": "res-code",
         "custom": "",
         "action": "equal",
-        "value": "400"
+        "value": "200"
       }
     ]
   },
@@ -259,54 +259,68 @@
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
     "name": "Create Room with correct puzzle ID",
-    "url": "http://localhost:3000/api/room/create",
+    "url": "create",
     "method": "POST",
     "sortNum": 10000,
     "created": "2023-04-05T16:50:46.780Z",
-    "modified": "2023-04-05T16:50:46.780Z",
+    "modified": "2023-04-22T20:26:19.225Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"puzzleID\": \"T45\"\n}\n\n",
+      "raw": "{\n  \"puzzleID\": \"T45\"\n}",
       "form": []
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "set-env-var",
+        "custom": "json.roomID",
+        "action": "setto",
+        "value": "{{roomID}}"
+      }
+    ]
   },
   {
     "_id": "da6ac683-6f06-440f-9768-695c497c700a",
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
-    "name": "Create Room with correct puzzle ID Copy",
-    "url": "http://localhost:3000/api/room/join",
+    "name": "Create Room with incorrect puzzle ID",
+    "url": "create",
     "method": "POST",
     "sortNum": 15000,
     "created": "2023-04-05T16:50:46.781Z",
-    "modified": "2023-04-08T16:07:58.621Z",
+    "modified": "2023-04-22T20:01:44.504Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"N5WBT\",\n  \"username\":\"ola\"\n}\n\n",
+      "raw": "{\n  \"puzzleID\": \"incor\"\n}\n",
       "form": []
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
   },
   {
     "_id": "cb7c0564-3d72-4cc6-8b2f-ce4c871286fd",
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
-    "name": "Create Room with incorrect puzzle ID Copy Copy",
-    "url": "http://localhost:3000/api/room/join",
+    "name": "Join Room with puzzle ID",
+    "url": "join",
     "method": "POST",
     "sortNum": 17500,
     "created": "2023-04-05T16:50:46.782Z",
-    "modified": "2023-04-05T16:50:46.782Z",
+    "modified": "2023-04-22T20:29:06.905Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"T45wqw3fdrqw\",\n  \"username\": \"ola\",\n\n}\n\n",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"ola\"\n}",
       "form": []
     },
     "tests": []
@@ -316,16 +330,16 @@
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
     "name": "Submit correct answer ",
-    "url": "http://localhost:3000/api/room/submit",
+    "url": "submit",
     "method": "POST",
     "sortNum": 18750,
     "created": "2023-04-05T16:50:46.783Z",
-    "modified": "2023-04-05T16:50:46.783Z",
+    "modified": "2023-04-22T20:25:39.455Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"7DZWV\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n\n}\n\n",
+      "raw": "{\n  \"roomID\": \"TESTI\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
       "form": []
     },
     "tests": []
@@ -335,16 +349,16 @@
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
     "name": "Submit incorrect answer",
-    "url": "http://localhost:3000/api/room/submit",
+    "url": "submit",
     "method": "POST",
-    "sortNum": 19375,
+    "sortNum": 19531.3,
     "created": "2023-04-05T16:50:46.784Z",
-    "modified": "2023-04-05T16:50:46.784Z",
+    "modified": "2023-04-22T20:30:06.552Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"7DZWV\",\n  \"username\": \"ola\",\n  \"answer\":\"santa11\"\n\n}\n\n",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"ola\",\n  \"answer\":\"santa11\"\n}",
       "form": []
     },
     "tests": []
@@ -354,35 +368,42 @@
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
     "name": "Submit correct answer to incorrect room",
-    "url": "http://localhost:3000/api/room/submit",
+    "url": "submit",
     "method": "POST",
-    "sortNum": 19687.5,
+    "sortNum": 19140.7,
     "created": "2023-04-05T16:50:46.785Z",
-    "modified": "2023-04-05T16:50:46.785Z",
+    "modified": "2023-04-22T20:02:10.704Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"7DZWV\",\n  \"username\": \"ola\",\n  \"answer\":\"santa11\"\n\n}\n\n",
+      "raw": "{\n  \"roomID\": \"incor\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
       "form": []
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
   },
   {
     "_id": "c0947c01-953e-4ed8-8703-209b4063b64c",
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
     "name": "Request correct leaderboard",
-    "url": "http://localhost:3000/api/room/leaderboard",
+    "url": "leaderboard",
     "method": "POST",
     "sortNum": 19843.8,
     "created": "2023-04-05T16:50:46.786Z",
-    "modified": "2023-04-12T03:30:54.477Z",
+    "modified": "2023-04-22T19:58:46.143Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"TESTI\"\n\n}\n\n",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\"\n}",
       "form": []
     },
     "tests": []
@@ -396,31 +417,38 @@
     "method": "POST",
     "sortNum": 19921.9,
     "created": "2023-04-05T16:50:46.787Z",
-    "modified": "2023-04-05T16:50:46.787Z",
+    "modified": "2023-04-22T20:02:21.396Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"7OZWV\"\n\n}\n\n",
+      "raw": "{\n  \"roomID\": \"incor\"\n}",
       "form": []
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
   },
   {
     "_id": "7f3090c8-c20f-4ea0-b291-9fb185968ed4",
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
     "name": "Remove Room with correct RoomID",
-    "url": "http://localhost:3000/api/room/remove",
+    "url": "remove",
     "method": "POST",
     "sortNum": 20000,
     "created": "2023-04-05T16:50:46.788Z",
-    "modified": "2023-04-05T16:50:46.788Z",
+    "modified": "2023-04-22T20:00:00.741Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"7DZWV\"\n}\n\n",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\"\n}",
       "form": []
     },
     "tests": []
@@ -429,20 +457,27 @@
     "_id": "6a757c81-3bb6-4b78-b29b-adf1fcf047e5",
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
-    "name": "Remove Room with incorrect RoomID Copy",
-    "url": "http://localhost:3000/api/room/remove",
+    "name": "Remove Room with incorrect RoomID",
+    "url": "remove",
     "method": "POST",
     "sortNum": 30000,
     "created": "2023-04-05T16:50:46.789Z",
-    "modified": "2023-04-05T16:50:46.789Z",
+    "modified": "2023-04-22T20:02:36.326Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"XUYP7\"\n}\n\n",
+      "raw": "{\n  \"roomID\": \"incor\"\n}",
       "form": []
     },
-    "tests": []
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
   },
   {
     "_id": "af529269-1a8d-43bf-a3fb-dfdc4b84bf4f",
@@ -467,7 +502,123 @@
     "method": "GET",
     "sortNum": 40000,
     "created": "2023-04-05T16:56:52.249Z",
-    "modified": "2023-04-05T16:56:52.249Z",
-    "headers": []
+    "modified": "2023-04-22T16:32:09.854Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"puzzleID\": \"A97\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "0b95a7a6-a591-4bb0-a741-66864b76fd22",
+    "colId": "bee4ca6a-63cd-4bbe-a5f2-81bcdeecb358",
+    "containerId": "",
+    "name": "Submit a comment",
+    "url": "comment",
+    "method": "GET",
+    "sortNum": 50000,
+    "created": "2023-04-22T17:43:09.653Z",
+    "modified": "2023-04-22T19:45:11.099Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\r\n  \"comment\":\"Test comment\",\r\n  \"username\":\"alan\",\r\n  \"puzzleID\":\"A97\"\r\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "f9735462-d07f-465c-9551-57439863712c",
+    "colId": "bee4ca6a-63cd-4bbe-a5f2-81bcdeecb358",
+    "containerId": "",
+    "name": "Edit a comment",
+    "url": "comment",
+    "method": "GET",
+    "sortNum": 60000,
+    "created": "2023-04-22T19:47:58.793Z",
+    "modified": "2023-04-22T19:48:24.777Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"comment\":\"Edited test comment\",\n  \"username\":\"alan\",\n  \"puzzleID\":\"A97\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "e882bac4-1153-4aad-be0b-a3f043e64960",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Join Room with incorrect puzzle ID",
+    "url": "http://localhost:3000/api/room/join",
+    "method": "POST",
+    "sortNum": 18125,
+    "created": "2023-04-22T19:56:52.678Z",
+    "modified": "2023-04-22T20:02:00.858Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"incor\",\n  \"username\": \"ola\"\n}\n",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
+  },
+  {
+    "_id": "d7321e31-bde2-4034-9419-627f4c10c3ef",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Submit correct answer  Copy",
+    "url": "submit",
+    "method": "POST",
+    "sortNum": 18945.3,
+    "created": "2023-04-22T20:09:21.150Z",
+    "modified": "2023-04-22T20:09:21.150Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3f9b39a5-d05a-461f-8f01-235cf37b80d7",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Submit correct answer with wrong username",
+    "url": "submit",
+    "method": "POST",
+    "sortNum": 18945.3,
+    "created": "2023-04-22T20:09:49.753Z",
+    "modified": "2023-04-22T20:27:57.692Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"alan\",\n  \"answer\":\"santa\"\n}\n",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
   }
 ]

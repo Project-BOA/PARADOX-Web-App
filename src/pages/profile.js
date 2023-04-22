@@ -55,20 +55,15 @@ export default function Profile({ user, completedPuzzles }) {
 
   var solvedPuzzleList;
   function SolvedPuzzleList({ solved }) {
-    var comPuz = [];
-
     if (typeof window !== "undefined") {
       const List = require("list.js");
 
       var values = Object.entries(solved).map((entry) => {
-        if (!comPuz.includes(entry[0])) {
-          comPuz.push(entry[0]);
-          return {
-            puzzleTitle: entry[0],
-            date: new Date(entry[1].completedOn).toLocaleDateString(),
-            points: entry[1].points,
-          };
-        }
+        return {
+          puzzleTitle: entry[0],
+          date: new Date(entry[1].completedOn).toLocaleDateString(),
+          points: entry[1].points,
+        };
       });
 
       var options = {
@@ -350,6 +345,14 @@ export default function Profile({ user, completedPuzzles }) {
                       <Spacer y={1} />
 
                       <div id="solvedPuzzles">
+                        <Row>
+                          <Input
+                            fullWidth
+                            className="search"
+                            placeholder="Search"
+                          />
+                        </Row>
+                        <Spacer y={1} />
                         <Row align="justify">
                           <Col>
                             <button class="sort" data-sort="puzzleTitle">

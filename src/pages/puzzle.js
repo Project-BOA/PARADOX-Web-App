@@ -106,7 +106,7 @@ export default function Puzzle({ user, puzzle }) {
           >
             <form onSubmit={handleSubmit}>
               <Modal.Header>
-                <Text h4>Add Comment</Text>
+                <Text h4>Your Comment</Text>
               </Modal.Header>
 
               <Modal.Body>
@@ -118,7 +118,7 @@ export default function Puzzle({ user, puzzle }) {
                   id="comment"
                   fullWidth
                   minRows={2}
-                  placeholder="Enter your comments here..."
+                  placeholder="Enter your comment here..."
                   aria-label="Your comment"
                 />
               </Modal.Body>
@@ -170,7 +170,7 @@ export default function Puzzle({ user, puzzle }) {
       body: JSON.stringify(data),
     };
 
-    const response = await fetch("api/puzzle/submit", options);
+    const response = await fetch("api/puzzle/comment", options);
     const result = await response.json();
 
     if (result.status == "OK") {
@@ -191,11 +191,13 @@ export default function Puzzle({ user, puzzle }) {
             Error: {error}
           </Text>
         )}
+
         {loading && (
           <Text h2 size={25} align="center">
             Loading Comments...
           </Text>
         )}
+
         {!loading &&
           snapshots &&
           snapshots.map((snap) => {
@@ -225,10 +227,31 @@ export default function Puzzle({ user, puzzle }) {
               </>
             );
           })}
+
         {!loading && snapshots.length == 0 && (
           <Text align="center" size={25}>
             There are no comments for this puzzle yet...
           </Text>
+        )}
+
+        <Spacer y={1} />
+
+        {!loading && (
+          <Button
+            type="edit"
+            onPress={handler}
+            css={{
+              marginLeft: "auto",
+              marginRight: "auto",
+              color: "$buttonSecondary",
+              backgroundColor: "$buttonPrimary",
+            }}
+          >
+            {snapshots.findIndex((snapshot) => snapshot.key == user.username) !=
+              -1 && "Replace"}
+            {snapshots.findIndex((snapshot) => snapshot.key == user.username) ==
+              -1 && "Create"}
+          </Button>
         )}
       </>
     );
@@ -327,19 +350,6 @@ export default function Puzzle({ user, puzzle }) {
                     </Row>
                     <Comments />
                     <Spacer y={1} />
-                    <Button
-                      type="edit"
-                      onPress={handler}
-                      css={{
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        color: "$buttonSecondary",
-                        backgroundColor: "$buttonPrimary",
-                      }}
-                    >
-                      Create
-                    </Button>
-                    <Spacer y={1} />
                     <CreateCommentModal />
                   </Card>
                 </Card>
@@ -371,24 +381,13 @@ export const getServerSideProps = withIronSessionSsr(
       if (snapshot.exists()) {
         puzzle = snapshot.toJSON();
       } else {
-        console.log("No Piece available");
-      }
-    });
-
-    var comments = "No Comments";
-    await get(ref(database, "comments/" + id)).then((snapshot) => {
-      if (snapshot.exists()) {
-        comments = snapshot.toJSON();
-      } else {
-        // create comment table
-        update(ref(database, "comments/" + id), {});
+        console.log("No puzzle available");
       }
     });
 
     return {
       props: {
         user: req.session.user,
-        comments: comments,
         id: id,
         puzzle: puzzle,
       },

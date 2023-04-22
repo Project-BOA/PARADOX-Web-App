@@ -3,6 +3,7 @@ const { database } = require("@/modules/firebase-config.js");
 
 var Filter = require("bad-words"),
   filter = new Filter();
+
 export default async function handler(req, res) {
   const comment = req.body.comment;
   const username = req.body.username;
@@ -33,11 +34,10 @@ export default async function handler(req, res) {
     });
     console.error(error);
   });
-  console.log("comment is: " + puzzleID);
 
   res.status(200).json({
     status: "OK",
     comment: comment,
-    username: username,
+    commentedOn: date,
   });
 }

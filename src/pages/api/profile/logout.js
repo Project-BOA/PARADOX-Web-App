@@ -20,15 +20,6 @@ export default async function handler(req, res) {
 
   // ================ after authentication ================
 
-  //   // update loggedIn to false
-  //   await update(ref(database, "users/" + username), {
-  //     loggedIn: false,
-  //   }).catch(() => {
-  //     res.status(500).json({
-  //       status: "ERROR",
-  //     });
-  //   });
-
   res.status(200).json({
     status: username + " logged out",
   });
