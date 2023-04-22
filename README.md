@@ -37,7 +37,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-### Sources
+### Sources :
 
 -[User icon created by Freepik](https://www.flaticon.com/free-icons/user)
 -[Number to ordinal](https://www.sitepoint.com/convert-numbers-to-ordinals-javascript/)
