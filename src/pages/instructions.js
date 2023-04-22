@@ -112,15 +112,6 @@ export default function Instruction({ user }) {
                 <Text size={20} align="center" css={{ m: 0 }}>
                   {singleDescritption}
                 </Text>
-                <Image
-                  css={{
-                    margin: "auto",
-                  }}
-                  src="/image/default_puzzle_image.png"
-                  width="auto"
-                  height="auto"
-                  alt="puzzle image"
-                />
               </Card.Body>
             </Card>
           </Card>
@@ -152,15 +143,6 @@ export default function Instruction({ user }) {
                 <Text size={20} align="center" css={{ m: 0 }}>
                   {multiDescription}
                 </Text>
-                <Image
-                  css={{
-                    margin: "auto",
-                  }}
-                  src="/image/default_puzzle_image.png"
-                  width="auto"
-                  height="auto"
-                  alt="puzzle image"
-                />
               </Card.Body>
             </Card>
           </Card>
@@ -175,7 +157,6 @@ export default function Instruction({ user }) {
             <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
               <Card.Body
                 css={{
-                  p: 0,
                   backgroundColor: "$lightGreen",
                   border: "#17706E",
                 }}
@@ -192,15 +173,6 @@ export default function Instruction({ user }) {
                 <Text size={20} align="center" css={{ m: 0 }}>
                   {timeDescritption}
                 </Text>
-                <Image
-                  css={{
-                    margin: "auto",
-                  }}
-                  src="/image/default_puzzle_image.png"
-                  width="auto"
-                  height="auto"
-                  alt="puzzle image"
-                />
               </Card.Body>
             </Card>
           </Card>
@@ -254,7 +226,7 @@ export default function Instruction({ user }) {
                         css={{
                           margin: "auto",
                         }}
-                        src="/image/default_puzzle_image.png"
+                        src="/image/room.png"
                         width="auto"
                         height="auto"
                         alt="puzzle image"
@@ -289,7 +261,7 @@ export default function Instruction({ user }) {
                         css={{
                           margin: "auto",
                         }}
-                        src="/image/default_puzzle_image.png"
+                        src="/image/gameplay.png"
                         width="auto"
                         height="auto"
                         alt="puzzle image"
@@ -319,7 +291,7 @@ export default function Instruction({ user }) {
                         css={{
                           margin: "auto",
                         }}
-                        src="/image/default_puzzle_image.png"
+                        src="/image/app.png"
                         width="auto"
                         height="auto"
                         alt="puzzle image"
