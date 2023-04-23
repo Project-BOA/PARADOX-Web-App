@@ -95,7 +95,7 @@ export default async function handler(req, res) {
       console.error(error);
     });
 
-  // check answer
+  // get answer or answers depending on type
   if (puzzleType == "MULTI") {
     var puzzleAnswers;
     await get(ref(database, "puzzle/" + room.puzzleID + "/answers"))
@@ -115,7 +115,6 @@ export default async function handler(req, res) {
         console.error(error);
       });
   } else {
-    // check answer
     var puzzleAnswer;
     await get(ref(database, "puzzle/" + room.puzzleID + "/answer"))
       .then((snapshot) => {
@@ -135,11 +134,14 @@ export default async function handler(req, res) {
       });
   }
 
+  // updating score
+  var score;
   if (puzzleType == "TIME") {
     if (answer == puzzleAnswer.toLowerCase()) {
+      score = room.leaderboard[username] + room.points;
       set(
         ref(database, "room/" + roomID + "/leaderboard/" + username),
-        room.leaderboard[username] + room.points
+        score
       ).catch((error) => {
         res.status(500).json({
           status: "ERROR",
@@ -149,9 +151,10 @@ export default async function handler(req, res) {
     }
   } else if (puzzleType == "SINGLE") {
     if (answer == puzzleAnswer.toLowerCase()) {
+      score = room.leaderboard[username] + 100;
       set(
         ref(database, "room/" + roomID + "/leaderboard/" + username),
-        room.leaderboard[username] + 100
+        score
       ).catch((error) => {
         res.status(500).json({
           status: "ERROR",
@@ -167,10 +170,11 @@ export default async function handler(req, res) {
     if (!room.leaderboard[username].solved.hasOwnProperty(answer)) {
       if (answer == puzzleAnswers.overall.toLowerCase()) {
         room.leaderboard[username].solved[answer] = answer;
+        score = room.leaderboard[username].score + 100;
         set(
           ref(database, "room/" + roomID + "/leaderboard/" + username + "/"),
           {
-            score: room.leaderboard[username].score + 100,
+            score,
             solved: room.leaderboard[username].solved,
           }
         ).catch((error) => {
@@ -182,13 +186,12 @@ export default async function handler(req, res) {
         if (puzzleAnswers.partial.hasOwnProperty(answer)) {
           room.leaderboard[username].solved[answer] =
             puzzleAnswers.partial[answer];
-
+          score =
+            room.leaderboard[username].score + puzzleAnswers.partial[answer];
           set(
             ref(database, "room/" + roomID + "/leaderboard/" + username + "/"),
             {
-              score:
-                room.leaderboard[username].score +
-                puzzleAnswers.partial[answer],
+              score,
               solved: room.leaderboard[username].solved,
             }
           ).catch((error) => {
@@ -198,16 +201,15 @@ export default async function handler(req, res) {
             console.error(error);
           });
         } else {
-          var score = room.leaderboard[username].score;
+          score = room.leaderboard[username].score;
           score -= 50;
           if (score <= 0) {
             score = 0;
           }
-          room.leaderboard[username].score = score;
           update(
             ref(database, "room/" + roomID + "/leaderboard/" + username + "/"),
             {
-              score: (room.leaderboard[username].score = score),
+              score,
             }
           ).catch((error) => {
             res.status(500).json({
@@ -221,8 +223,8 @@ export default async function handler(req, res) {
   }
 
   res.status(200).json({
-    status: "OK - " + puzzleType,
-    score: room.leaderboard[username],
+    status: "OK",
+    score,
     puzzleID: room.puzzleID,
   });
 }
