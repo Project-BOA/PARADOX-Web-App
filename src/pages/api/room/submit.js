@@ -136,9 +136,11 @@ export default async function handler(req, res) {
 
   // updating score
   var score;
+  var correct = false;
   if (puzzleType == "TIME") {
     if (answer == puzzleAnswer.toLowerCase()) {
       score = room.leaderboard[username] + room.points;
+      correct = true;
       set(
         ref(database, "room/" + roomID + "/leaderboard/" + username),
         score
@@ -152,6 +154,7 @@ export default async function handler(req, res) {
   } else if (puzzleType == "SINGLE") {
     if (answer == puzzleAnswer.toLowerCase()) {
       score = room.leaderboard[username] + 100;
+      correct = true;
       set(
         ref(database, "room/" + roomID + "/leaderboard/" + username),
         score
@@ -171,6 +174,7 @@ export default async function handler(req, res) {
       if (answer == puzzleAnswers.overall.toLowerCase()) {
         room.leaderboard[username].solved[answer] = answer;
         score = room.leaderboard[username].score + 100;
+        correct = true;
         set(
           ref(database, "room/" + roomID + "/leaderboard/" + username + "/"),
           {
@@ -188,6 +192,7 @@ export default async function handler(req, res) {
             puzzleAnswers.partial[answer];
           score =
             room.leaderboard[username].score + puzzleAnswers.partial[answer];
+          correct = true;
           set(
             ref(database, "room/" + roomID + "/leaderboard/" + username + "/"),
             {
@@ -222,9 +227,17 @@ export default async function handler(req, res) {
     }
   }
 
-  res.status(200).json({
-    status: "OK",
-    score,
-    puzzleID: room.puzzleID,
-  });
+  if (correct == true) {
+    res.status(200).json({
+      status: "OK",
+      score,
+      puzzleID: room.puzzleID,
+    });
+  } else {
+    res.status(200).json({
+      status: "Incorrect answer",
+      score,
+      puzzleID: room.puzzleID,
+    });
+  }
 }

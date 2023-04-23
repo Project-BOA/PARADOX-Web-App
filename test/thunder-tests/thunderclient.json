@@ -326,25 +326,6 @@
     "tests": []
   },
   {
-    "_id": "3c944329-2e64-4645-afcc-6e039784095f",
-    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
-    "containerId": "",
-    "name": "Submit correct answer ",
-    "url": "submit",
-    "method": "POST",
-    "sortNum": 18750,
-    "created": "2023-04-05T16:50:46.783Z",
-    "modified": "2023-04-22T20:25:39.455Z",
-    "headers": [],
-    "params": [],
-    "body": {
-      "type": "json",
-      "raw": "{\n  \"roomID\": \"TESTI\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
-      "form": []
-    },
-    "tests": []
-  },
-  {
     "_id": "9259da95-4ba7-475a-b22a-c51a45ba143d",
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
@@ -580,17 +561,17 @@
     "_id": "d7321e31-bde2-4034-9419-627f4c10c3ef",
     "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
     "containerId": "",
-    "name": "Submit correct answer  Copy",
-    "url": "submit",
+    "name": "Submit correct answer ",
+    "url": "http://localhost:3000/api/room/submit",
     "method": "POST",
     "sortNum": 18945.3,
     "created": "2023-04-22T20:09:21.150Z",
-    "modified": "2023-04-22T20:09:21.150Z",
+    "modified": "2023-04-23T03:28:13.762Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
+      "raw": "{\n  \"roomID\": \"TESTI\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
       "form": []
     },
     "tests": []
