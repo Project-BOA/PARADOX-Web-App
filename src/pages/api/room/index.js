@@ -1,10 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get } from "firebase/database";
+import { ref, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 export default async function handler(req, res) {
   var roomID = req.body.roomID;
@@ -27,7 +23,7 @@ export default async function handler(req, res) {
     roomID = validation[0]; // first matched substring
   }
 
-  await get(ref(db, "room/" + roomID))
+  await get(ref(database, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {
         res.status(200).json(snapshot.toJSON());

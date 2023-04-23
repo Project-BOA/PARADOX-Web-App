@@ -1,0 +1,624 @@
+[
+  {
+    "_id": "a14bd58a-dc76-4557-ab69-508e5ee3b029",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "First Register",
+    "url": "register",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2023-04-05T16:50:24.024Z",
+    "modified": "2023-04-05T16:55:00.808Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\",\n  \"email\":\"ola@gmail.com\",\n  \"biography\":\"hi\"\n  \n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "0738be27-0359-4bd9-ac2b-c40eb78758c2",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "Second Register",
+    "url": "register",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2023-04-05T16:50:24.026Z",
+    "modified": "2023-04-12T02:42:54.109Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\",\n  \"biography\":\"hiee\",\n  \"email\":\"ola@gmail.com\"\n\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "ad94d4fb-cfd2-456c-be69-26822b020ebd",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "First Login",
+    "url": "login",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2023-04-05T16:50:24.027Z",
+    "modified": "2023-04-12T02:43:05.378Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\"\n\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "5616049e-575b-4a61-8a45-9f09c9ade708",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "Second Login",
+    "url": "login",
+    "method": "POST",
+    "sortNum": 40000,
+    "created": "2023-04-05T16:50:24.028Z",
+    "modified": "2023-04-22T16:37:57.889Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\"\n\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "200"
+      }
+    ]
+  },
+  {
+    "_id": "cf456c52-6b41-4e17-a3d1-52f29568a074",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "Edit",
+    "url": "edit",
+    "method": "POST",
+    "sortNum": 45000,
+    "created": "2023-04-05T16:50:24.029Z",
+    "modified": "2023-04-12T02:43:23.968Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\",\n  \"newPassword\": \"pass\",\n  \"biography\":\"hiee\"\n\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "f1796504-835d-4483-b77f-b1f670607768",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "New Password Edit",
+    "url": "edit",
+    "method": "POST",
+    "sortNum": 47500,
+    "created": "2023-04-05T16:50:24.030Z",
+    "modified": "2023-04-12T02:43:36.577Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\",\n  \"newPassword\": \"newpass\",\n  \"biography\":\"hiee\"\n\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "306873c5-fe60-4903-a3a9-7981517aa471",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "Wrong Password Edit",
+    "url": "edit",
+    "method": "POST",
+    "sortNum": 48750,
+    "created": "2023-04-05T16:50:24.031Z",
+    "modified": "2023-04-12T02:43:49.293Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\",\n  \"newPassword\": \"newpass\",\n  \"biography\":\"hiee\"\n\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      },
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "contains",
+        "value": "\"Incorrect Username or Password\""
+      }
+    ]
+  },
+  {
+    "_id": "136b6f6e-09c3-4967-a330-9a8b966e2bc1",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "Correct Password Change Edit",
+    "url": "edit",
+    "method": "POST",
+    "sortNum": 49375,
+    "created": "2023-04-05T16:50:24.032Z",
+    "modified": "2023-04-12T02:43:58.037Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"newpass\",\n  \"newPassword\": \"pass\",\n  \"biography\":\"hiee\"\n\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "07d0e7b6-ff25-44bc-8b08-791dc9fb782e",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "Logout",
+    "url": "logout",
+    "method": "POST",
+    "sortNum": 50000,
+    "created": "2023-04-05T16:50:24.033Z",
+    "modified": "2023-04-12T02:44:05.918Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\"\n\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      },
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "contains",
+        "value": "\"Incorrect Username or Password\""
+      }
+    ]
+  },
+  {
+    "_id": "e8cf9428-fe7b-4645-8f4b-d57b4449b23b",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "Delete",
+    "url": "delete",
+    "method": "POST",
+    "sortNum": 60000,
+    "created": "2023-04-05T16:50:24.034Z",
+    "modified": "2023-04-12T02:44:31.922Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\"\n\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "47033969-ca08-417c-a114-1e91c63869c1",
+    "colId": "8e31ccc3-7938-411a-afcb-ebdd484dd5ec",
+    "containerId": "",
+    "name": "Second Delete",
+    "url": "delete",
+    "method": "POST",
+    "sortNum": 70000,
+    "created": "2023-04-05T16:50:24.035Z",
+    "modified": "2023-04-12T02:46:17.718Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\"\n\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      },
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "contains",
+        "value": "Incorrect Username or Password"
+      }
+    ]
+  },
+  {
+    "_id": "b97dae76-bc90-4c96-9eb1-3cfd1fa4b789",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Create Room with correct puzzle ID",
+    "url": "create",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2023-04-05T16:50:46.780Z",
+    "modified": "2023-04-22T20:26:19.225Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"puzzleID\": \"T45\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "set-env-var",
+        "custom": "json.roomID",
+        "action": "setto",
+        "value": "{{roomID}}"
+      }
+    ]
+  },
+  {
+    "_id": "da6ac683-6f06-440f-9768-695c497c700a",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Create Room with incorrect puzzle ID",
+    "url": "create",
+    "method": "POST",
+    "sortNum": 15000,
+    "created": "2023-04-05T16:50:46.781Z",
+    "modified": "2023-04-22T20:01:44.504Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"puzzleID\": \"incor\"\n}\n",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
+  },
+  {
+    "_id": "cb7c0564-3d72-4cc6-8b2f-ce4c871286fd",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Join Room with puzzle ID",
+    "url": "join",
+    "method": "POST",
+    "sortNum": 17500,
+    "created": "2023-04-05T16:50:46.782Z",
+    "modified": "2023-04-22T20:29:06.905Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"ola\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3c944329-2e64-4645-afcc-6e039784095f",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Submit correct answer ",
+    "url": "submit",
+    "method": "POST",
+    "sortNum": 18750,
+    "created": "2023-04-05T16:50:46.783Z",
+    "modified": "2023-04-22T20:25:39.455Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"TESTI\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "9259da95-4ba7-475a-b22a-c51a45ba143d",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Submit incorrect answer",
+    "url": "submit",
+    "method": "POST",
+    "sortNum": 19531.3,
+    "created": "2023-04-05T16:50:46.784Z",
+    "modified": "2023-04-22T20:30:06.552Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"ola\",\n  \"answer\":\"santa11\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "cb633f52-5f14-45d3-8902-c90776ed916b",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Submit correct answer to incorrect room",
+    "url": "submit",
+    "method": "POST",
+    "sortNum": 19140.7,
+    "created": "2023-04-05T16:50:46.785Z",
+    "modified": "2023-04-22T20:02:10.704Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"incor\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
+  },
+  {
+    "_id": "c0947c01-953e-4ed8-8703-209b4063b64c",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Request correct leaderboard",
+    "url": "leaderboard",
+    "method": "POST",
+    "sortNum": 19843.8,
+    "created": "2023-04-05T16:50:46.786Z",
+    "modified": "2023-04-22T19:58:46.143Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "aacb8e1e-23fc-49b8-a5eb-2656d84d52b0",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Request incorrect leaderboard",
+    "url": "http://localhost:3000/api/room/leaderboard",
+    "method": "POST",
+    "sortNum": 19921.9,
+    "created": "2023-04-05T16:50:46.787Z",
+    "modified": "2023-04-22T20:02:21.396Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"incor\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
+  },
+  {
+    "_id": "7f3090c8-c20f-4ea0-b291-9fb185968ed4",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Remove Room with correct RoomID",
+    "url": "remove",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2023-04-05T16:50:46.788Z",
+    "modified": "2023-04-22T20:00:00.741Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "6a757c81-3bb6-4b78-b29b-adf1fcf047e5",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Remove Room with incorrect RoomID",
+    "url": "remove",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2023-04-05T16:50:46.789Z",
+    "modified": "2023-04-22T20:02:36.326Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"incor\"\n}",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
+  },
+  {
+    "_id": "af529269-1a8d-43bf-a3fb-dfdc4b84bf4f",
+    "colId": "bee4ca6a-63cd-4bbe-a5f2-81bcdeecb358",
+    "containerId": "",
+    "name": "Get All Puzzles",
+    "url": "all",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2023-04-05T16:55:35.565Z",
+    "modified": "2023-04-05T16:55:48.056Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "8dd04c76-5eb6-4d85-b473-f86b5b576ac4",
+    "colId": "bee4ca6a-63cd-4bbe-a5f2-81bcdeecb358",
+    "containerId": "",
+    "name": "Get One Puzzle",
+    "url": "",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2023-04-05T16:56:52.249Z",
+    "modified": "2023-04-22T16:32:09.854Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"puzzleID\": \"A97\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "0b95a7a6-a591-4bb0-a741-66864b76fd22",
+    "colId": "bee4ca6a-63cd-4bbe-a5f2-81bcdeecb358",
+    "containerId": "",
+    "name": "Submit a comment",
+    "url": "comment",
+    "method": "GET",
+    "sortNum": 50000,
+    "created": "2023-04-22T17:43:09.653Z",
+    "modified": "2023-04-22T19:45:11.099Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\r\n  \"comment\":\"Test comment\",\r\n  \"username\":\"alan\",\r\n  \"puzzleID\":\"A97\"\r\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "f9735462-d07f-465c-9551-57439863712c",
+    "colId": "bee4ca6a-63cd-4bbe-a5f2-81bcdeecb358",
+    "containerId": "",
+    "name": "Edit a comment",
+    "url": "comment",
+    "method": "GET",
+    "sortNum": 60000,
+    "created": "2023-04-22T19:47:58.793Z",
+    "modified": "2023-04-22T19:48:24.777Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"comment\":\"Edited test comment\",\n  \"username\":\"alan\",\n  \"puzzleID\":\"A97\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "e882bac4-1153-4aad-be0b-a3f043e64960",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Join Room with incorrect puzzle ID",
+    "url": "http://localhost:3000/api/room/join",
+    "method": "POST",
+    "sortNum": 18125,
+    "created": "2023-04-22T19:56:52.678Z",
+    "modified": "2023-04-22T20:02:00.858Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"incor\",\n  \"username\": \"ola\"\n}\n",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
+  },
+  {
+    "_id": "d7321e31-bde2-4034-9419-627f4c10c3ef",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Submit correct answer  Copy",
+    "url": "submit",
+    "method": "POST",
+    "sortNum": 18945.3,
+    "created": "2023-04-22T20:09:21.150Z",
+    "modified": "2023-04-22T20:09:21.150Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"ola\",\n  \"answer\":\"santa\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3f9b39a5-d05a-461f-8f01-235cf37b80d7",
+    "colId": "295cf55c-e99a-42c9-b96a-e3f2b91a9df5",
+    "containerId": "",
+    "name": "Submit correct answer with wrong username",
+    "url": "submit",
+    "method": "POST",
+    "sortNum": 18945.3,
+    "created": "2023-04-22T20:09:49.753Z",
+    "modified": "2023-04-22T20:27:57.692Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"roomID\": \"{{roomID}}\",\n  \"username\": \"alan\",\n  \"answer\":\"santa\"\n}\n",
+      "form": []
+    },
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "400"
+      }
+    ]
+  }
+]

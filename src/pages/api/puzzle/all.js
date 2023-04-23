@@ -1,15 +1,11 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get } from "firebase/database";
+import { ref, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 export default async function handler(req, res) {
-  const page = req.body.page || 1;
+  //   const page = req.body.page || 1;
 
-  await get(ref(db, "puzzle/"))
+  await get(ref(database, "puzzle/"))
     .then((snapshot) => {
       res.status(200).json({
         status: "OK",

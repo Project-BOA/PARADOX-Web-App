@@ -1,50 +1,31 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get } from "firebase/database";
 import { withIronSessionApiRoute } from "iron-session/next";
 
-var config = require("@/modules/config.js");
-const bcrypt = require("bcrypt");
+const { auth } = require("@/modules/authentication.js");
 
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
 export default withIronSessionApiRoute(
   async function handler(req, res) {
+    // authentication
     var username = req.body.username;
     var password = req.body.password;
 
-    if (username == null || password == null) {
-      res.status(400).json({
-        status: "Invalid input",
-      });
-      return;
-    }
-    // sanitation
-    username = username.trim();
-    password = password.trim();
+    // check authentication
+    var user = await auth(username, password);
 
-    var user;
-    await get(ref(db, "users/" + username))
-      .then((snapshot) => {
-        user = snapshot.toJSON();
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).json({
-          status: "ERROR",
-        });
-      });
-
-    if (user == null || !bcrypt.compareSync(password, user.password)) {
+    if (user == false) {
       res.status(400).json({
-        status: "Username or Password Incorrect",
+        status: "Incorrect Username or Password",
       });
       return;
     }
 
-    // save user to session
+    // ================ after authentication ================
+
+    // save user to session for website usage
     req.session.user = {
       username,
       biography: user.biography,
+      email: user.email,
+      completedPuzzles: user.solved,
     };
 
     await req.session.save();
@@ -52,6 +33,8 @@ export default withIronSessionApiRoute(
     res.status(200).json({
       status: "OK",
       biography: user.biography,
+      email: user.email,
+      completedPuzzles: user.solved,
     });
   },
   {

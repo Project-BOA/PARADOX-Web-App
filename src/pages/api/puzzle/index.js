@@ -1,10 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get } from "firebase/database";
+import { ref, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 export default async function personHandler(req, res) {
   var puzzleID = req.body.puzzleID;
@@ -27,7 +23,7 @@ export default async function personHandler(req, res) {
     puzzleID = validation[0]; // first matched substring
   }
 
-  await get(ref(db, "puzzle/" + puzzleID))
+  await get(ref(database, "puzzle/" + puzzleID))
     .then((snapshot) => {
       if (!snapshot.exists()) {
         res.status(400).json({

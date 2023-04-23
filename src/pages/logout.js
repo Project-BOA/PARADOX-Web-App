@@ -14,7 +14,6 @@ export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     req.session.destroy();
     await req.session.save();
-    console.log(req.session.user);
     return {
       redirect: {
         permanent: false,

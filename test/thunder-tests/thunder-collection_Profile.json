@@ -1,0 +1,219 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Profile",
+    "dateExported": "2023-04-03T17:28:30.494Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "ae66d934-5e76-422e-bd05-7c5c4370960e",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "First Register",
+            "url": "http://localhost:3000/api/profile/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-04-03T16:58:27.850Z",
+            "modified": "2023-04-03T17:05:00.649Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\",\n  \"email\":\"ola@gmail.com\",\n  \"biography\":\"hi\"\n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "4e0599a2-ce3e-4883-9d9a-33b071d380f8",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "Second Register",
+            "url": "http://localhost:3000/api/profile/register",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-04-03T17:05:59.713Z",
+            "modified": "2023-04-03T17:07:58.629Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\",\n  \"biography\":\"hiee\",\n  \"email\":\"ola@gmail.com\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "873bdfcd-c6a1-453d-840b-2de71cb6bd73",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "First Login",
+            "url": "http://localhost:3000/api/profile/login",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-04-03T17:14:03.083Z",
+            "modified": "2023-04-03T17:16:55.685Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "269c5ebc-bbc4-4e57-bd5d-08c28773c8f9",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "Second Login",
+            "url": "http://localhost:3000/api/profile/login",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-04-03T17:14:56.671Z",
+            "modified": "2023-04-03T17:16:17.122Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\": \"pass\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "fc1e33eb-31a8-45c0-99ba-c80509a70962",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "Edit",
+            "url": "http://localhost:3000/api/profile/edit",
+            "method": "POST",
+            "sortNum": 45000,
+            "created": "2023-04-03T17:21:58.771Z",
+            "modified": "2023-04-03T17:25:49.361Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\",\n  \"newPassword\": \"pass\",\n  \"biography\":\"hiee\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "bd631a54-10bb-44ea-8565-b9ebe2e79658",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "New Password Edit",
+            "url": "http://localhost:3000/api/profile/edit",
+            "method": "POST",
+            "sortNum": 47500,
+            "created": "2023-04-03T17:26:22.242Z",
+            "modified": "2023-04-03T17:26:50.638Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\",\n  \"newPassword\": \"newpass\",\n  \"biography\":\"hiee\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "cc0b1741-9345-45da-a56c-dbbe0e67f097",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "Wrong Password Edit",
+            "url": "http://localhost:3000/api/profile/edit",
+            "method": "POST",
+            "sortNum": 48750,
+            "created": "2023-04-03T17:26:54.093Z",
+            "modified": "2023-04-03T17:26:54.093Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\",\n  \"newPassword\": \"newpass\",\n  \"biography\":\"hiee\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "e13f9eee-b2e5-4943-abad-c6c324835547",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "Correct Password Chnage Edit",
+            "url": "http://localhost:3000/api/profile/edit",
+            "method": "POST",
+            "sortNum": 49375,
+            "created": "2023-04-03T17:27:42.093Z",
+            "modified": "2023-04-03T17:28:03.265Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"newpass\",\n  \"newPassword\": \"pass\",\n  \"biography\":\"hiee\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "d07a83a8-8866-4699-a8aa-33f013518d45",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "Logout",
+            "url": "http://localhost:3000/api/profile/logout",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2023-04-03T17:17:37.630Z",
+            "modified": "2023-04-03T17:20:11.024Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2166ae43-999a-43ee-b8e8-2dd5819ce649",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "Delete",
+            "url": "http://localhost:3000/api/profile/delete",
+            "method": "POST",
+            "sortNum": 60000,
+            "created": "2023-04-03T17:20:14.442Z",
+            "modified": "2023-04-03T17:20:50.220Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "ecbfedda-dc11-4846-ac35-d5a199b658bf",
+            "colId": "24cb2ef4-87ca-4b33-a9ac-5f01f11492bd",
+            "containerId": "",
+            "name": "Second Delete",
+            "url": "http://localhost:3000/api/profile/delete",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2023-04-03T17:21:25.194Z",
+            "modified": "2023-04-03T17:21:25.194Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"ola1\",\n  \"password\":\"pass\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ],
+    "settings": {}
+}

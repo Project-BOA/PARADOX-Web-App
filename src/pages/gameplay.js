@@ -1,26 +1,80 @@
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { initializeApp } from "firebase/app";
-import { getStorage, getDownloadURL, listAll, ref } from "firebase/storage";
 import {
-  getDatabase,
+  Card,
+  Grid,
+  Image,
+  NextUIProvider,
+  Spacer,
+  Text,
+  Tooltip,
+} from "@nextui-org/react";
+import { initializeApp } from "firebase/app";
+import {
   get,
   ref as ref_database,
   update,
+  getDatabase,
 } from "firebase/database";
-import { NextUIProvider } from "@nextui-org/react";
-import { Grid, Image, Text, Spacer, Tooltip } from "@nextui-org/react";
-import React from "react";
-import { useList } from "react-firebase-hooks/database";
+import {
+  getDownloadURL,
+  getStorage,
+  listAll,
+  ref as ref_storage,
+} from "firebase/storage";
 import { useRouter } from "next/router";
+import { Fragment, useRef, useState } from "react";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { useList, useObject } from "react-firebase-hooks/database";
 
-var config = require("@/modules/config.js");
+import { theme } from "@/themes/theme.js";
+const { NavigationGamePlay } = require("@/components/Navigation.js");
 
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
 const storage = getStorage(app);
+
 var time = 5;
 var getPoints,
   decrement = 0;
+const RenderTime = ({ remainingTime }) => {
+  const currentTime = useRef(remainingTime);
+  const prevTime = useRef(null);
+  const isNewTimeFirstTick = useRef(false);
+  const [, setOneLastRerender] = useState(0);
+
+  if (currentTime.current !== remainingTime) {
+    isNewTimeFirstTick.current = true;
+    prevTime.current = currentTime.current;
+    currentTime.current = remainingTime;
+  } else {
+    isNewTimeFirstTick.current = false;
+  }
+
+  // force one last re-render when the time is over to trigger the last animation
+  if (remainingTime === 0) {
+    setTimeout(() => {
+      setOneLastRerender((val) => val + 1);
+    }, 20);
+  }
+
+  const isTimeUp = isNewTimeFirstTick.current;
+
+  return (
+    <div className="time-wrapper">
+      <div key={remainingTime} className={`time ${isTimeUp ? "up" : ""}`}>
+        {remainingTime}
+      </div>
+      {prevTime.current !== null && (
+        <div
+          key={prevTime.current}
+          className={`time ${!isTimeUp ? "down" : ""}`}
+        >
+          {prevTime.current}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function Gameplay({
   time,
@@ -34,19 +88,18 @@ export default function Gameplay({
   var roomID = router.query.roomID;
   var leaderboard = [];
 
-  async function GetUserBio(name) {
-    var bio = "No biography";
-    await get(ref_database(db, "users/" + name + "/biography")).then(
-      (snapshot) => {
-        if (snapshot.exists()) {
-          bio = snapshot.val();
-          console.log(bio);
-        } else {
-          console.log("No Bio");
-        }
-      }
+  function BioToolTip({ name }) {
+    const [snapshot, loading, error] = useObject(
+      ref_database(database, "users/" + name + "/biography")
     );
-    return bio;
+
+    return (
+      <>
+        {error && <Text align="center">Error: {error}</Text>}
+        {loading && <Text align="center">Loading Bio...</Text>}
+        {!loading && snapshot && <Text align="center">{snapshot.val()}</Text>}
+      </>
+    );
   }
 
   function UpdateLeaderboard(snapshots) {
@@ -73,8 +126,6 @@ export default function Gameplay({
       leaderboard.push(newEntry);
     }
 
-    //console.log(leaderboard);
-
     return leaderboard
       .sort((a, b) => {
         if (a.score < b.score) return 1;
@@ -88,24 +139,33 @@ export default function Gameplay({
           players.push(name);
           if (index < 3) {
             return (
-              <React.Fragment key={name}>
-                <Tooltip content={"Bio: " + GetUserBio(name)}>
+              <Fragment key={name}>
+                <Tooltip content={<BioToolTip name={name} />}>
                   <Text h3 size={25} style={{ margin: "auto" }}>
                     {position++}. {name} - {score} points
                   </Text>
                 </Tooltip>
                 <Spacer y={2.5} />
-              </React.Fragment>
+              </Fragment>
             );
           }
         }
       });
   }
-
+  function EmptyMessage({ display }) {
+    if (display == true) {
+      return (
+        <Text h2 align="center" size={23}>
+          No players
+        </Text>
+      );
+    }
+  }
   function Leaderboard() {
     const [snapshots, loading, error] = useList(
-      ref_database(db, "room/" + roomID + "/leaderboard")
+      ref_database(database, "room/" + roomID + "/leaderboard")
     );
+
     return (
       <>
         {error && (
@@ -125,79 +185,119 @@ export default function Gameplay({
           </Text>
         )}
         {!loading && snapshots && (
-          <React.Fragment>
-            <Text h2 size={30} align="center" style={{ margin: "auto" }}>
-              Leaderboard:
-            </Text>
+          <Fragment>
             <Spacer y={4} />
+            <Text h2 size={30} align="center">
+              Top 3
+            </Text>
+            <EmptyMessage display={snapshots.length == 0} />
             {UpdateLeaderboard(snapshots)}
-          </React.Fragment>
+          </Fragment>
         )}
       </>
     );
   }
 
   var pieceIndex = 0;
+
+  function toLeaderboard() {
+    router.push("/leaderboard?roomID=" + roomID);
+  }
+
   return (
-    <NextUIProvider>
+    <NextUIProvider theme={theme}>
+      <NavigationGamePlay
+        page="gameplay"
+        roomID={roomID}
+        puzzleName={puzzleName}
+        puzzleType={puzzleType}
+        logoAction={toLeaderboard}
+        action={toLeaderboard}
+        actionText={"Finish"}
+      />
+
       <Grid.Container gap={2} justify="center">
-        <Grid xs={4}>
-          {" "}
-          <Text h1 size={30} css={{ m: 0 }} weight="bold" align="left">
-            RoomID: {roomID}
-          </Text>
-        </Grid>
-        <Grid xs={4}>
-          <Text h1 size={50} css={{ m: 0 }} weight="bold" align="center">
-            {puzzleName}
-          </Text>
-        </Grid>
-        <Grid xs={1}>
-          <CountdownCircleTimer
-            isPlaying
-            duration={time}
-            colors={["#000C66", "#F7B801", "#A30000"]}
-            colorsTime={[2, 1, 0]}
-            onComplete={() => {
-              pieceIndex++;
-              if (pieceIndex >= puzzlePieces.length) {
-                router.push("/leaderboard?roomID=" + roomID);
-                return { shouldRepeat: false };
-              }
-
-              if (puzzleType == "time") {
-                if (getPoints <= 0) getPoints = 0;
-                getPoints = getPoints - decrement;
-                update(ref_database(db, "room/" + roomID), {
-                  points: getPoints,
-                });
-              }
-
-              const img = document.getElementById("puzzlePieceImg");
-              img.setAttribute("src", puzzlePieces[pieceIndex]);
-
-              return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
+        <Grid xs={9}>
+          <Card
+            css={{
+              background: "$green",
+              padding: "1em",
+              w: "auto",
+              h: "70vh",
+              width: "auto",
             }}
           >
-            {({ remainingTime }) => remainingTime}
-          </CountdownCircleTimer>
+            <Card css={{ h: "70vh", marginTop: "auto", marginBottom: "auto" }}>
+              <Image
+                src={puzzlePieces[pieceIndex]}
+                // css={{ }}
+                id="puzzlePieceImg"
+                alt={"Puzzle piece image"}
+                width="auto"
+                height="auto"
+                object-fit="cover"
+              />
+            </Card>
+          </Card>
         </Grid>
-      </Grid.Container>
 
-      <Grid.Container gap={0} justify="center">
-        <Grid xs>
-          {" "}
-          <Image
-            src={puzzlePieces[pieceIndex]}
-            id="puzzlePieceImg"
-            alt={"Puzzle piece image"}
-            width="100%"
-            height="auto"
-            object-fit="cover"
-          ></Image>
-        </Grid>
-        <Grid xs={4}>
-          <Leaderboard />
+        <Grid>
+          <Card
+            css={{
+              width: "auto",
+              background: "$green",
+              padding: "1em",
+              h: "70vh",
+            }}
+          >
+            <Card css={{ h: "70vh", width: "auto" }}>
+              <Card.Body
+                css={{
+                  p: 0,
+                  backgroundColor: "$lightGreen",
+                  border: "#17706E",
+                }}
+              >
+                <div className="timer-wrapper">
+                  <CountdownCircleTimer
+                    isPlaying
+                    duration={time}
+                    colors={["#000C66", "#F7B801", "#A30000"]}
+                    colorsTime={[2, 1, 0]}
+                    onComplete={() => {
+                      pieceIndex++;
+                      if (pieceIndex >= puzzlePieces.length) {
+                        toLeaderboard();
+                        return { shouldRepeat: false };
+                      }
+
+                      if (puzzleType == "time") {
+                        if (getPoints <= 0) getPoints = 0;
+                        getPoints = getPoints - decrement;
+                        update(ref_database(database, "room/" + roomID), {
+                          points: getPoints,
+                        });
+                        document.getElementById("availPoints").innerHTML =
+                          getPoints;
+                      }
+
+                      const img = document.getElementById("puzzlePieceImg");
+                      img.setAttribute("src", puzzlePieces[pieceIndex]);
+
+                      return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
+                    }}
+                  >
+                    {RenderTime}
+                  </CountdownCircleTimer>
+                </div>
+                <Text h3 size={25} align="center" id="availPoints">
+                  Available Points:
+                </Text>
+                <Text h3 size={25} align="center" id="availPoints"></Text>
+                <Leaderboard />
+              </Card.Body>
+            </Card>
+          </Card>
         </Grid>
       </Grid.Container>
     </NextUIProvider>
@@ -217,14 +317,14 @@ export async function getServerSideProps(context) {
   }
 
   await get(
-    ref_database(db, "room/" + context.query.roomID + "/puzzleID")
+    ref_database(database, "room/" + context.query.roomID + "/puzzleID")
   ).then((snapshot) => {
     puzzleID = snapshot.val();
   });
 
   var puzzleName;
 
-  await get(ref_database(db, "puzzle/" + puzzleID + "/title")).then(
+  await get(ref_database(database, "puzzle/" + puzzleID + "/title")).then(
     (snapshot) => {
       if (snapshot.exists()) {
         puzzleName = snapshot.val();
@@ -234,7 +334,7 @@ export async function getServerSideProps(context) {
     }
   );
   var puzzleType;
-  await get(ref_database(db, "puzzle/" + puzzleID + "/puzzleType")).then(
+  await get(ref_database(database, "puzzle/" + puzzleID + "/puzzleType")).then(
     (snapshot) => {
       if (snapshot.exists()) {
         puzzleType = snapshot.val();
@@ -243,7 +343,7 @@ export async function getServerSideProps(context) {
       }
     }
   );
-  await get(ref_database(db, "puzzle/" + puzzleID + "/pieceTime")).then(
+  await get(ref_database(database, "puzzle/" + puzzleID + "/pieceTime")).then(
     (snapshot) => {
       if (snapshot.exists()) {
         var pieceTime = snapshot.toJSON();
@@ -255,19 +355,19 @@ export async function getServerSideProps(context) {
     }
   );
 
-  await get(ref_database(db, "room/" + context.query.roomID + "/points")).then(
-    (snapshot) => {
-      getPoints = snapshot.val();
-    }
-  );
+  await get(
+    ref_database(database, "room/" + context.query.roomID + "/points")
+  ).then((snapshot) => {
+    getPoints = snapshot.val();
+  });
 
-  const listRef = ref(storage, puzzleID);
+  const listRef = ref_storage(storage, puzzleID);
   var puzzlePieces = [];
 
   await listAll(listRef).then(async (res) => {
     await Promise.all(
       res.items.map(async (itemRef) => {
-        await getDownloadURL(ref(storage, itemRef)).then((url) => {
+        await getDownloadURL(ref_storage(storage, itemRef)).then((url) => {
           puzzlePieces.push(url);
         });
       })
@@ -282,7 +382,6 @@ export async function getServerSideProps(context) {
       getPoints,
       puzzleType,
       decrement,
-      puzzleID,
       puzzlePieces,
       puzzleName,
     }, // will be passed to the page component as props

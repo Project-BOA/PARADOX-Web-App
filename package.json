@@ -9,20 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/font": "13.1.6",
+    "@next/font": "^13.1.6",
     "@nextui-org/react": "^1.0.0-beta.12",
     "bad-words": "^3.0.4",
-    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "firebase": "^9.17.1",
     "iron-session": "^6.3.1",
+    "list.js": "^2.3.1",
     "next": "13.1.6",
+    "nextjs-progressbar": "^0.0.16",
     "randomstring": "^1.2.3",
     "react": "18.2.0",
     "react-countdown-circle-timer": "^3.1.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
+    "react-iconly": "^2.2.6",
     "validator": "^13.9.0",
     "xss": "^1.0.14"
   }

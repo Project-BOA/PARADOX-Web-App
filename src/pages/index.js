@@ -1,32 +1,27 @@
-import Image from "next/image";
-import { Inter } from "@next/font/google";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref } from "firebase/database";
+import { ref, getDatabase } from "firebase/database";
 import { useList } from "react-firebase-hooks/database";
-import styles from "@/styles/Home.module.css";
 import { withIronSessionSsr } from "iron-session/next";
 import { useRouter } from "next/router";
 import {
   NextUIProvider,
-  Container,
   Card,
   Row,
   Text,
   Col,
-  Spacer,
   Button,
-  Link,
   Grid,
-  User,
-  Navbar,
+  Tooltip,
+  Spacer,
 } from "@nextui-org/react";
+import { theme } from "@/themes/theme.js";
 
-const inter = Inter({ subsets: ["latin"] });
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { Navigation } = require("@/components/Navigation.js");
+const { Footer } = require("@/components/Footer.js");
 
 export default function Home({ user }) {
   const router = useRouter();
@@ -39,12 +34,10 @@ export default function Home({ user }) {
     const options = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json ",
       },
       body: JSON.stringify(data),
     };
-
-    console.log(options);
 
     const response = await fetch("api/room/create", options);
     const result = await response.json();
@@ -55,8 +48,65 @@ export default function Home({ user }) {
     }
   }
 
+  const GetComment = ({ puzzleID }) => {
+    return (
+      <Grid.Container
+        css={{
+          color: "$primary",
+          borderRadius: "18px",
+          padding: "1rem",
+          maxWidth: "330px",
+        }}
+      >
+        <Row justify="center" align="center">
+          <Text weight="bold" size={"$lg"}>
+            Confirm
+          </Text>
+        </Row>
+        <Row>
+          <Text>
+            Are you sure you want to check the comments of this puzzle?, there
+            could be possible spoilers for answers
+          </Text>
+        </Row>
+        <Spacer />
+        <Grid.Container justify="space-between" alignContent="center">
+          <Grid>
+            <Button
+              link
+              css={{
+                color: "$buttonPrimary",
+              }}
+              size="sm"
+              light
+            >
+              Cancel
+            </Button>
+          </Grid>
+          <Grid>
+            <Button
+              css={{
+                color: "$buttonSecondary",
+                backgroundColor: "$buttonPrimary",
+              }}
+              size="sm"
+              onClick={() => {
+                router.push({
+                  pathname: "/puzzle",
+                  query: { puzzleID: puzzleID },
+                });
+              }}
+            >
+              Check
+            </Button>
+          </Grid>
+        </Grid.Container>
+      </Grid.Container>
+    );
+  };
+
   function Puzzles() {
-    const [snapshots, loading, error] = useList(ref(db, "puzzle/"));
+    const [snapshots, loading, error] = useList(ref(database, "puzzle/"));
     return (
       <>
         {error && (
@@ -70,97 +120,92 @@ export default function Home({ user }) {
           </Text>
         )}
         {!loading && snapshots && (
-          <Container>
-            <Row gap={1}>
-              <Card css={{ $$cardColor: "$colors$primary" }}>
-                <Card.Body>
-                  <Grid.Container gap={2} justify="center">
-                    {snapshots.map((snap, index) => {
-                      var puzzleID = snap.key;
-                      var puzzle = snap.val();
-                      return (
-                        <>
-                          <Card
-                            key={puzzleID}
-                            css={{ w: "30em", h: "50vh", margin: "1em" }}
+          <Grid.Container gap={2} justify="center">
+            {snapshots.map((snap) => {
+              var puzzleID = snap.key;
+              var puzzle = snap.val();
+              return (
+                <>
+                  <Card
+                    isHoverable
+                    isPressable
+                    onPress={() => {
+                      getRoom(puzzleID);
+                    }}
+                    css={{
+                      width: "auto",
+                      background: "$green",
+                      padding: "1em",
+                      margin: "1em",
+                    }}
+                  >
+                    <Card key={puzzleID} css={{ w: "30em", h: "50vh" }}>
+                      <Card.Header
+                        css={{ marginLeft: "auto", marginRight: "auto" }}
+                      >
+                        <Col>
+                          <Text
+                            size={28}
+                            weight="bold"
+                            transform="uppercase"
+                            color="black"
                           >
-                            <Card.Header
-                              css={{ marginLeft: "auto", marginRight: "auto" }}
-                            >
-                              <Col>
-                                <Text
-                                  size={28}
-                                  weight="bold"
-                                  transform="uppercase"
-                                  color="black"
-                                >
-                                  {puzzle.title}
-                                </Text>
-                                <Text
-                                  size={18}
-                                  weight="bold"
-                                  transform="uppercase"
-                                  color="black"
-                                >
-                                  {puzzle.description}
-                                </Text>
-                              </Col>
-                            </Card.Header>
-                            <Card.Body css={{ p: 0 }}>
-                              <Card.Image
-                                src="/image/default_puzzle_image.png"
-                                objectFit="cover"
-                                width="100%"
-                                height="100%"
-                                alt="puzzle image"
-                              />
-                            </Card.Body>
-                            <Card.Footer
-                              isBlurred
+                            {puzzle.title}
+                          </Text>
+                          <Text
+                            size={18}
+                            weight="bold"
+                            transform="uppercase"
+                            color="black"
+                          >
+                            {puzzle.description}
+                          </Text>
+                        </Col>
+                      </Card.Header>
+                      <Card.Body css={{ p: 0, border: "#17706E" }}>
+                        <Card.Image
+                          src="/image/default_puzzle_image.png"
+                          objectFit="cover"
+                          width="100%"
+                          height="100%"
+                          alt="puzzle image"
+                        />
+                      </Card.Body>
+                      <Card.Footer
+                        isBlurred
+                        css={{
+                          position: "absolute",
+                          bgBlur: "#0f111466",
+                          borderTop: "$borderWeights$light solid $gray800",
+                          bottom: 0,
+                          zIndex: 1,
+                        }}
+                      >
+                        <Row justify="center">
+                          <Tooltip
+                            trigger="click"
+                            color={"primary"}
+                            content={<GetComment puzzleID={puzzleID} />}
+                          >
+                            <Button
+                              size="lg"
+                              auto
                               css={{
-                                position: "absolute",
-                                bgBlur: "#0f111466",
-                                borderTop:
-                                  "$borderWeights$light solid $gray800",
-                                bottom: 0,
-                                zIndex: 1,
+                                color: "$buttonSecondary",
+                                backgroundColor: "$buttonPrimary",
                               }}
                             >
-                              <Row>
-                                <Row justify="center">
-                                  <Button
-                                    flat
-                                    auto
-                                    rounded
-                                    css={{
-                                      color: "#94f9f0",
-                                      bg: "#94f9f026",
-                                    }}
-                                    onClick={(event) => {
-                                      getRoom(puzzleID);
-                                    }}
-                                  >
-                                    <Text
-                                      css={{ color: "inherit" }}
-                                      size={12}
-                                      weight="bold"
-                                      transform="uppercase"
-                                    >
-                                      Start
-                                    </Text>
-                                  </Button>
-                                </Row>
-                              </Row>
-                            </Card.Footer>
-                          </Card>
-                        </>
-                      );
-                    })}
-                  </Grid.Container>
-                </Card.Body>
-              </Card>
-            </Row>
-          </Container>
+                              Details
+                            </Button>
+                          </Tooltip>
+                        </Row>
+                      </Card.Footer>
+                    </Card>
+                  </Card>
+                </>
+              );
+            })}
+          </Grid.Container>
         )}
       </>
     );
@@ -168,48 +213,14 @@ export default function Home({ user }) {
 
   return (
     <>
-      <NextUIProvider>
-        <Navbar isBordered variant="floating">
-          <Navbar.Brand>
-            <Link href="/">
-              <Image
-                width={188}
-                height={75}
-                src="/image/penrose-triangle-PARADOX-text.png"
-                alt=" Logo"
-                style={{ objectFit: "cover" }}
-              />
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Content hideIn="xs" variant="highlight-rounded">
-            <Navbar.Link href="/profile">Profile</Navbar.Link>
-            <Navbar.Link href="/">Puzzle</Navbar.Link>
-            <Navbar.Link href="/leaderboard">LeaderBoard</Navbar.Link>
-          </Navbar.Content>
-          <Navbar.Content>
-            <Navbar.Item>
-              <Text h6 align="right" size={25} color="black" css={{ m: 0 }}>
-                <User src="/image/user_icon.png" name={user.username} />
-              </Text>
-            </Navbar.Item>
-            <Navbar.Item>
-              <Button auto flat as={Link} href="logout">
-                Logout
-              </Button>
-            </Navbar.Item>
-          </Navbar.Content>
-        </Navbar>
-        <Spacer y={1} />
-
-        <Container>
-          <Text h2 size={40} align="center" color="green" css={{ m: 0 }}>
-            Welcome {user.username}! Check out these puzzles
-          </Text>
-        </Container>
-
-        <Spacer y={1} />
-
-        <Puzzles />
+      <NextUIProvider theme={theme}>
+        <Navigation page="puzzles" username={user.username} />
+        <div id="page-container">
+          <div id="content-wrap">
+            <Puzzles />
+          </div>
+        </div>
+        <Footer />
       </NextUIProvider>
     </>
   );
@@ -231,7 +242,7 @@ export const getServerSideProps = withIronSessionSsr(
         user: req.session.user,
       },
     };
-  }, // -------------------- All boilerplate code for sessions ------------------------------------
+  },
   {
     cookieName: process.env.COOKIE_NAME,
     password: process.env.SESSION_PASSWORD,

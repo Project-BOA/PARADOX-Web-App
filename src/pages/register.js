@@ -4,7 +4,6 @@ import * as React from "react";
 
 import {
   NextUIProvider,
-  Container,
   Card,
   Row,
   Text,
@@ -17,7 +16,11 @@ import {
   Image,
 } from "@nextui-org/react";
 
-export default function Home() {
+import { theme } from "@/themes/theme.js";
+
+import { User, Lock, Message, Document } from "react-iconly";
+
+export default function Register() {
   const router = useRouter();
 
   // Handle the submit for the form
@@ -29,6 +32,7 @@ export default function Home() {
       username: event.target.username.value,
       password: event.target.password.value,
       biography: event.target.bio.value,
+      email: event.target.email.value,
     });
 
     // API endpoint where we send form data.
@@ -62,79 +66,114 @@ export default function Home() {
   }
 
   return (
-    <NextUIProvider>
-      <Container>
-        <Row gap={1}>
-          <Card css={{ $$cardColor: "$colors$primary" }}>
-            <Card.Body>
-              <Text h6 align="center" size={25} color="white" css={{ m: 0 }}>
-                PARADOX
-              </Text>
-            </Card.Body>
-          </Card>
-        </Row>
-        <Spacer y={1} />
-        <Row gap={1}>
-          <Col>
-            <Card css={{ $$cardColor: "$colors$primary" }}>
-              <Card.Body>
-                <Text h6 align="center" size={18} color="white" css={{ m: 0 }}>
-                  Register
-                </Text>
-                <Spacer y={1} />
-                <form onSubmit={handleSubmit}>
-                  <Input
-                    fullWidth
-                    id="username"
-                    clearable
-                    labelPlaceholder="Username"
-                  />
-                  <Spacer y={1.5} />
-                  <Input
-                    fullWidth
-                    id="password"
-                    clearable
-                    type={"password"}
-                    labelPlaceholder="Password"
-                  />
-                  <Spacer y={1.5} />
-                  <Input
-                    fullWidth
-                    id="bio"
-                    clearable
-                    labelPlaceholder="Biography"
-                  />
-                  <Spacer y={1.5} />
-                  <Grid.Container gap={1} justify="center">
-                    <Grid>
-                      <Button
-                        auto
-                        type="submit"
-                        color="secondary"
-                        css={{ marginLeft: "auto", marginRight: "auto" }}
-                      >
-                        Submit
-                      </Button>
-                    </Grid>
-                    <Grid>
-                      <Button
-                        auto
-                        color="secondary"
-                        bordered
-                        as={Link}
-                        href="login"
-                        css={{ marginLeft: "auto", marginRight: "auto" }}
+    <NextUIProvider theme={theme}>
+      <Spacer y={1} />
+      <Row gap={1}>
+        <Image
+          height={192}
+          src="/image/penrose-triangle-PARADOX.png"
+          alt=" Logo"
+          style={{ objectFit: "cover" }}
+        />
+      </Row>
+      <Spacer y={2.5} />
+      <Row gap={1}>
+        <Card css={{ $$cardColor: "lightGreen", mw: "600px", margin: "auto" }}>
+          <Card.Body>
+            <Text h6 align="center" size={36} css={{ m: 0 }}>
+              Register
+            </Text>
+            <Spacer y={2.5} />
+            <form onSubmit={handleSubmit}>
+              <Row>
+                <User set="bold" primaryColor="blueviolet" size="xlarge" />
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="username"
+                  clearable
+                  labelPlaceholder="Username"
+                  minLength={3}
+                  maxLength={15}
+                />
+              </Row>
+              <Spacer y={2} />
+              <Row>
+                <Lock set="bold" primaryColor="blueviolet" size="xlarge" />
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="password"
+                  clearable
+                  type={"password"}
+                  labelPlaceholder="Password"
+                  minLength={3}
+                />
+              </Row>
+
+              <Spacer y={2} />
+
+              <Row>
+                <Message set="bold" primaryColor="blueviolet" size="xlarge" />
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="email"
+                  clearable
+                  labelPlaceholder="Email"
+                  minLength={3}
+                  maxLength={255}
+                />
+              </Row>
+
+              <Spacer y={2} />
+
+              <Row>
+                <Document set="bold" primaryColor="blueviolet" size="xlarge" />
+
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="bio"
+                  clearable
+                  labelPlaceholder="Biography"
+                  maxLength={50}
+                />
+              </Row>
+
+              <Spacer y={2.5} />
+
+              <Grid.Container justify="center">
+                <Grid>
+                  <Col>
+                    <Button color="secondary" size="lg" type="submit">
+                      Register
+                    </Button>
+                    <Spacer />
+                    <Text align="center" size={20}>
+                      or{" "}
+                      <Link
+                        css={{
+                          marginLeft: "auto",
+                          marginRight: "auto",
+                          fontWeight: "bold",
+                        }}
+                        href="/login"
                       >
                         Back
-                      </Button>
-                    </Grid>
-                  </Grid.Container>
-                </form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                      </Link>
+                    </Text>
+                  </Col>
+                </Grid>
+              </Grid.Container>
+            </form>
+          </Card.Body>
+        </Card>
+      </Row>
     </NextUIProvider>
   );
 }

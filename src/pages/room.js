@@ -1,213 +1,162 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import {
-  createTheme,
-  Container,
-  Card,
-  Row,
-  Text,
-  Col,
-  Grid,
-} from "@nextui-org/react";
-import { Spacer, Link } from "@nextui-org/react";
+import { Container, Card, Row, Text, Col, Grid } from "@nextui-org/react";
+import { Spacer } from "@nextui-org/react";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue, remove, get } from "firebase/database";
-import React, { useState } from "react";
+import { ref, remove, get, getDatabase } from "firebase/database";
+import React from "react";
 import { useListKeys } from "react-firebase-hooks/database";
 import { useRouter } from "next/router";
+import { theme } from "@/themes/theme.js";
 
-var config = require("@/modules/config.js");
+const { config } = require("@/modules/firebase-config.js");
+const app = initializeApp(config);
+const database = getDatabase(app);
 
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
-const theme = createTheme({
-  type: "dark", // it could be "light" or "dark"
-  theme: {
-    colors: {
-      // brand colors
-      primaryLight: "$green200",
-      primaryLightHover: "$green300",
-      primaryLightActive: "$green400",
-      primaryLightContrast: "$green600",
-      primary: "#4ADE7B",
-      primaryBorder: "$green500",
-      primaryBorderHover: "$green600",
-      primarySolidHover: "$green700",
-      primarySolidContrast: "$white",
-      primaryShadow: "$green500",
+const { NavigationGamePlay } = require("@/components/Navigation.js");
 
-      gradient:
-        "linear-gradient(112deg, $blue100 -25%, $pink500 -10%, $purple500 80%)",
-      link: "#5E1DAD",
-
-      // you can also create your own color
-      myColor: "#ff4ecd",
-
-      // ...  more colors
-    },
-    space: {},
-    fonts: {},
-  },
-});
-
-export default function Room(data) {
+export default function Room({ roomID, puzzleTitle, puzzleType }) {
   const router = useRouter();
-  const { roomID } = router.query;
+
+  async function endRoom() {
+    const data = {
+      roomID: roomID,
+    };
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+
+    const response = await fetch("api/room/remove", options);
+    const result = await response.json();
+    if (result.status != "OK") {
+      alert(result.status);
+    }
+    router.push("/");
+  }
+
+  function EmptyMessage({ display }) {
+    if (display == true) {
+      return (
+        <>
+          <Text h2 size={32}>
+            Use the app to join the room with the Room ID...
+          </Text>
+        </>
+      );
+    }
+  }
 
   function Room() {
     var players = [];
     const [snapshots, loading, error] = useListKeys(
-      ref(db, "room/" + roomID + "/leaderboard")
+      ref(database, "room/" + roomID + "/leaderboard")
     );
-    const removePlayer = (event, roomID, player) => {
-      remove(ref(db, "room/" + roomID + "/leaderboard/" + player));
-      console.log("Room removed at ID: '" + roomID + " player at " + player);
+    const removePlayer = async (roomID, player) => {
+      console.log(roomID);
+      await remove(ref(database, "room/" + roomID + "/leaderboard/" + player));
       players.pop();
-      if (players.length == 0) {
-        router.push("/");
-      }
     };
     return (
       <>
         {error && (
-          <Text h2 size={30} weight="bold" align="center">
+          <Text h2 size={32} color="$secondary" align="center">
             Error: {error}
           </Text>
         )}
         {loading && (
-          <Text h2 size={30} align="center">
+          <Text h2 size={32} color="$secondary" align="center">
             Loading Room...
           </Text>
         )}
         {!loading && snapshots && (
-          <React.Fragment>
-            <Text h2 size={30} align="center">
-              Players
-            </Text>
-            <Spacer y={2.5} />
-            {snapshots.map((v) => {
-              if (!players.includes(v)) {
-                players.push(v);
-                return (
-                  <React.Fragment key={v}>
-                    <Button
-                      align="center"
-                      color="error"
-                      style={{ margin: "auto", fontSize: "20px" }}
-                      onPress={(event) => removePlayer(event, roomID, v)}
-                    >
-                      {v}
-                    </Button>
-                    <Spacer y={2.5} />
-                  </React.Fragment>
-                );
-              }
-            })}
-          </React.Fragment>
+          <>
+            <Grid.Container gap={1} justify="center">
+              <EmptyMessage display={snapshots.length == 0} />
+              {snapshots.map((username) => {
+                if (!players.includes(username)) {
+                  players.push(username);
+                  return (
+                    <Grid key={username}>
+                      <Button
+                        align="center"
+                        css={{
+                          color: "$buttonPrimary",
+                          marginInline: "auto",
+                          fontSize: "28px",
+                          "&:hover": {
+                            textDecoration: "line-through",
+                          },
+                        }}
+                        onPress={() => removePlayer(roomID, username)}
+                      >
+                        {username}
+                      </Button>
+                      <Spacer y={2.5} />
+                    </Grid>
+                  );
+                }
+              })}
+            </Grid.Container>
+          </>
         )}
       </>
     );
   }
 
   return (
-    <NextUIProvider theme={theme}>
-      <Container gap={0}>
-        <Row gap={0}>
-          <Col>
-            <Card variant="bordered" css={{ $$cardColor: "#3A1078" }}>
-              <Card.Body>
-                <Row>
-                  <Col>
-                    <Container>
-                      <Card.Body>
-                        <Text
-                          h1
-                          size={30}
-                          css={{ m: 0 }}
-                          weight="bold"
-                          align="left"
-                        >
-                          {data.title}
-                        </Text>
-                      </Card.Body>
-                    </Container>
-                  </Col>
-                  <Col>
-                    <Container>
-                      <Text
-                        h1
-                        size={30}
-                        css={{ m: 0 }}
-                        weight="bold"
-                        align="center"
-                        color="white"
-                      >
-                        {"Room ID: " + roomID}
-                      </Text>
-                    </Container>
-                  </Col>
-                  <Col>
-                    <Container>
-                      <Card.Body>
-                        <Text
-                          h1
-                          size={30}
-                          css={{ m: 0 }}
-                          weight="bold"
-                          align="right"
-                        >
-                          {"Type: " + data.puzzleType}
-                        </Text>
-                      </Card.Body>
-                    </Container>
-                  </Col>
-                </Row>
-                <Container>
-                  <Button
-                    onPress={(event) => {
-                      router.push("/gameplay?roomID=" + roomID);
-                    }}
-                    size="lg"
-                    css={{
-                      color: "black",
-                      fontSize: "35px",
-                      backgroundColor: "#2F58CD",
-                      marginInline: "auto",
-                    }}
-                  >
-                    Start
-                  </Button>
-                </Container>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-
-        <Spacer y={1} />
-        <Row gap={1}>
-          <Col>
-            <Card css={{ $$cardColor: "#3A1078" }}></Card>
-          </Col>
-          <Col>
-            <Card css={{ $$cardColor: "#2F58CD" }}>
-              <Card.Body>
-                <Room />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col>
-            <Card css={{ $$cardColor: "#00764F" }}></Card>
-          </Col>
-        </Row>
-      </Container>
+    <NextUIProvider id="page-container" theme={theme}>
+      <NavigationGamePlay
+        page="room"
+        roomID={roomID}
+        puzzleType={puzzleType}
+        logoAction={endRoom}
+        actionText="Start"
+        action={() => {
+          router.push("/gameplay?roomID=" + roomID);
+        }}
+        secondaryActionText="Exit"
+        secondaryAction={endRoom}
+      />
+      <Spacer y={1} />
+      <Row gap={1}>
+        <Card
+          css={{
+            width: "60vw",
+            background: "$green",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
+          <Card
+            css={{
+              width: "auto",
+              background: "$primary",
+              margin: "1em",
+            }}
+          >
+            <Spacer y={1} />
+            <Text h2 size={40} color="$secondary" align="center">
+              {puzzleTitle} Room
+            </Text>
+            <Spacer y={2.5} />
+            <Room />
+            <Spacer y={2.5} />
+          </Card>
+        </Card>
+      </Row>
     </NextUIProvider>
   );
 }
 
 export async function getServerSideProps(context) {
-  var puzzleID;
+  var roomID = context.query.roomID;
 
-  if (context.query.roomID == undefined) {
+  if (roomID == undefined) {
     return {
       redirect: {
         permanent: false,
@@ -216,36 +165,36 @@ export async function getServerSideProps(context) {
     };
   }
 
-  await get(ref(db, "room/" + context.query.roomID + "/puzzleID")).then(
+  roomID = roomID.toUpperCase();
+
+  var puzzleID;
+  await get(ref(database, "room/" + roomID + "/puzzleID")).then((snapshot) => {
+    puzzleID = snapshot.val();
+  });
+
+  var puzzleType = "None";
+  await get(ref(database, "puzzle/" + puzzleID + "/puzzleType")).then(
     (snapshot) => {
-      puzzleID = snapshot.val();
+      if (snapshot.exists()) {
+        puzzleType = snapshot.val();
+      } else {
+      }
     }
   );
 
-  var puzzleType = "None";
-  await get(ref(db, "puzzle/" + puzzleID + "/puzzleType")).then((snapshot) => {
+  var puzzleTitle;
+
+  await get(ref(database, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
     if (snapshot.exists()) {
-      puzzleType = snapshot.val();
+      puzzleTitle = snapshot.val();
     } else {
-      console.log("No puzzle type available");
+      puzzleTitle = "No Title";
     }
   });
-
-  var title;
-
-  await get(ref(db, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
-    if (snapshot.exists()) {
-      title = snapshot.val();
-    } else {
-      title = "No Ttile";
-      console.log("No puzzle piece available");
-    }
-  });
-  console.log(title);
 
   puzzleType = puzzleType.toUpperCase();
 
   return {
-    props: { puzzleType, title }, // will be passed to the page component as props
+    props: { roomID, puzzleType, puzzleTitle }, // will be passed to the page component as props
   };
 }

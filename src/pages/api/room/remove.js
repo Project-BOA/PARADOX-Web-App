@@ -1,15 +1,8 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, remove, get } from "firebase/database";
+import { ref, remove, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 export default async function create(req, res) {
-  // TODO
-  // Validate input to only allow roomID values
-  // add authentication to who is allowed to destroy room
   var roomID = req.body.roomID;
 
   if (roomID == null) {
@@ -30,10 +23,10 @@ export default async function create(req, res) {
     roomID = validation[0]; // first matched substring
   }
 
-  await get(ref(db, "room/" + roomID))
+  await get(ref(database, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        remove(ref(db, "room/" + roomID));
+        remove(ref(database, "room/" + roomID));
 
         console.log("Room removed at ID: '" + roomID + "'");
 

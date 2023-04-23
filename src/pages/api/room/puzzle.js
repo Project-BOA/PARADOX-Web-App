@@ -1,10 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get } from "firebase/database";
+import { ref, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 export default async function handler(req, res) {
   var roomID = req.body.roomID;
@@ -28,7 +24,7 @@ export default async function handler(req, res) {
   }
 
   var puzzleID;
-  await get(ref(db, "room/" + roomID + "/puzzleID"))
+  await get(ref(database, "room/" + roomID + "/puzzleID"))
     .then((snapshot) => {
       puzzleID = snapshot.val();
     })
@@ -40,7 +36,7 @@ export default async function handler(req, res) {
     });
 
   var puzzle;
-  await get(ref(db, "puzzle/" + puzzleID))
+  await get(ref(database, "puzzle/" + puzzleID))
     .then((snapshot) => {
       puzzle = snapshot.toJSON();
     })

@@ -1,18 +1,11 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { ref, set, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 var randomstring = require("randomstring");
 var Filter = require("bad-words"),
   filter = new Filter();
 export default async function create(req, res) {
-  // TODO:
-  // verify puzzle exists
-  // check roomID does not already exist
   var puzzleID = req.body.puzzleID;
 
   if (puzzleID == null) {
@@ -49,12 +42,10 @@ export default async function create(req, res) {
     });
   }
 
-  console.log("Room Created with ID: '" + roomID + "'");
-
-  set(ref(db, "room/" + roomID), {});
+  set(ref(database, "room/" + roomID), {});
 
   var puzzleType;
-  await get(ref(db, "puzzle/" + puzzleID + "/puzzleType"))
+  await get(ref(database, "puzzle/" + puzzleID + "/puzzleType"))
     .then((snapshot) => {
       if (snapshot.exists()) {
         puzzleType = snapshot.val();
@@ -73,7 +64,7 @@ export default async function create(req, res) {
 
   if (puzzleType == "time") {
     var points;
-    await get(ref(db, "puzzle/" + puzzleID + "/points"))
+    await get(ref(database, "puzzle/" + puzzleID + "/points"))
       .then((snapshot) => {
         if (snapshot.exists()) {
           points = snapshot.val();
@@ -90,12 +81,12 @@ export default async function create(req, res) {
         console.error(error);
       });
 
-    set(ref(db, "room/" + roomID), {
+    set(ref(database, "room/" + roomID), {
       points: parseInt(points),
       puzzleID: puzzleID,
     });
   } else {
-    set(ref(db, "room/" + roomID), {
+    set(ref(database, "room/" + roomID), {
       puzzleID: puzzleID,
     });
   }

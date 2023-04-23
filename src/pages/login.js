@@ -1,6 +1,3 @@
-import Head from "next/head";
-import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
 import { useRouter } from "next/router";
 import {
   NextUIProvider,
@@ -12,11 +9,14 @@ import {
   Spacer,
   Button,
   Input,
+  Image,
   Link,
   Grid,
 } from "@nextui-org/react";
 
-const inter = Inter({ subsets: ["latin"] });
+import { theme } from "@/themes/theme.js";
+
+import { User, Lock } from "react-iconly";
 
 export default function Login() {
   const router = useRouter();
@@ -37,12 +37,9 @@ export default function Login() {
       body: JSON.stringify(data),
     };
 
-    console.log(options);
-
     const response = await fetch("api/profile/login", options);
     const result = await response.json();
     if (result.status == "OK") {
-      console.log("Sign in");
       router.push("/");
     } else {
       alert("Status: " + result.status);
@@ -50,73 +47,87 @@ export default function Login() {
   }
 
   return (
-    <NextUIProvider>
+    <NextUIProvider theme={theme}>
       <Spacer y={1} />
       <Row gap={1}>
-        <Container>
-          <Text h6 align="center" size={30} color="black" css={{ m: 0 }}>
-            Welcome to PARADOX
-          </Text>
-        </Container>
+        <Image
+          height={192}
+          src="/image/penrose-triangle-PARADOX.png"
+          alt=" Logo"
+          style={{ objectFit: "cover" }}
+        />
       </Row>
-      <Spacer y={2} />
+      <Spacer y={2.5} />
       <Row gap={1}>
-        <Card css={{ $$cardColor: "$colors$primary" }}>
+        <Card css={{ $$cardColor: "lightGreen", mw: "600px", margin: "auto" }}>
           <Card.Body>
-            <Text h6 align="center" size={24} color="white" css={{ m: 0 }}>
+            <Text h6 align="center" size={36} css={{ m: 0 }}>
               Login
             </Text>
-            <Spacer y={1} />
+            <Spacer y={2.5} />
             <form onSubmit={handleSubmit}>
-              <Input
-                fullWidth
-                id="username"
-                clearable
-                labelPlaceholder="Username"
-              />
-              <Spacer y={1.5} />
-              <Input.Password
-                fullWidth
-                id="password"
-                clearable
-                labelPlaceholder="Password"
-              />
-              <Spacer y={1.5} />
+              <Row>
+                <User set="bold" primaryColor="blueviolet" size="xlarge" />
+                <Spacer />
+                <Input
+                  size="xl"
+                  fullWidth
+                  id="username"
+                  clearable
+                  labelPlaceholder="Username"
+                  minLength={3}
+                  maxLength={15}
+                />
+              </Row>
+
+              <Spacer y={2} />
+
+              <Row>
+                <Lock set="bold" primaryColor="blueviolet" size="xlarge" />
+                <Spacer />
+                <Input.Password
+                  size="xl"
+                  fullWidth
+                  id="password"
+                  clearable
+                  labelPlaceholder="Password"
+                  minLength={3}
+                />
+              </Row>
+
+              <Spacer y={2.5} />
+
               <Grid.Container justify="center">
                 <Grid>
-                  <Row>
+                  <Col>
                     <Button
-                      auto
+                      css={{
+                        color: "$buttonSecondary",
+                        backgroundColor: "$buttonPrimary",
+                      }}
+                      size="lg"
                       type="submit"
-                      color="secondary"
-                      css={{ marginLeft: "auto", marginRight: "auto" }}
                     >
-                      Login
+                      Sign In
                     </Button>
                     <Spacer />
-                    <Button
-                      auto
-                      color="secondary"
-                      onPress={(event) => {
-                        router.push("/register");
-                      }}
-                    >
-                      Register
-                    </Button>
-                  </Row>
+                    <Text align="center" size={20}>
+                      or{" "}
+                      <Link
+                        css={{
+                          marginLeft: "auto",
+                          marginRight: "auto",
+                          fontWeight: "bold",
+                        }}
+                        href="/register"
+                      >
+                        Register
+                      </Link>
+                    </Text>
+                  </Col>
                 </Grid>
-                <Spacer y={0} />
               </Grid.Container>
             </form>
-            <Spacer x={1} />
-            <Link
-              href="#forgot"
-              block
-              color="secondary"
-              css={{ marginLeft: "auto", marginRight: "auto" }}
-            >
-              Forgot password?
-            </Link>
           </Card.Body>
         </Card>
       </Row>

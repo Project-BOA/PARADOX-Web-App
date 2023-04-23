@@ -1,6 +1,10 @@
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebase = {
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
+
+const config = {
   apiKey: "AIzaSyCRlQyWruO-HhPLIXLbUwe8Re3WCuli_VU",
   authDomain: "codedatabase-819d6.firebaseapp.com",
   databaseURL: "https://codedatabase-819d6-default-rtdb.firebaseio.com",
@@ -11,6 +15,12 @@ const firebase = {
   measurementId: "G-QYDJZW417T",
 };
 
+const app = initializeApp(config);
+const database = getDatabase(app);
+const storage = getStorage(app);
+
 module.exports = {
-  firebase: firebase,
+  config,
+  database,
+  storage,
 };

@@ -1,15 +1,9 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { ref, set, get } from "firebase/database";
 
-var config = require("@/modules/config.js");
-
-const app = initializeApp(config.firebase);
-const db = getDatabase(app);
+const { database } = require("@/modules/firebase-config.js");
 
 export default async function create(req, res) {
   // TODO:
-  // validate input
-  // verify roomID exists
   // check if user already in room
   // authenticate username
 
@@ -34,15 +28,16 @@ export default async function create(req, res) {
     roomID = validation[0]; // first matched substring
   }
 
-  console.log("User: '" + username + "' joined room with ID: '" + roomID + "'");
-
   var room;
-  await get(ref(db, "room/" + roomID))
+  await get(ref(database, "room/" + roomID))
     .then((snapshot) => {
       if (snapshot.exists()) {
         room = snapshot.toJSON();
       } else {
-        console.log("Room does not exist");
+        res.status(404).json({
+          status: "Room does not exist",
+        });
+        return;
       }
     })
     .catch((error) => {
@@ -50,9 +45,11 @@ export default async function create(req, res) {
         status: "ERROR",
       });
       console.error(error);
+      return;
     });
+
   var puzzleType;
-  await get(ref(db, "puzzle/" + room.puzzleID + "/puzzleType"))
+  await get(ref(database, "puzzle/" + room.puzzleID + "/puzzleType"))
     .then((snapshot) => {
       if (snapshot.exists()) {
         puzzleType = snapshot.val();
@@ -60,6 +57,7 @@ export default async function create(req, res) {
         res.status(500).json({
           status: "No puzzle type available",
         });
+        return;
       }
     })
     .catch((error) => {
@@ -67,12 +65,15 @@ export default async function create(req, res) {
         status: "ERROR",
       });
       console.error(error);
+      return;
     });
 
   if (puzzleType == "multi") {
-    set(ref(db, "room/" + roomID + "/leaderboard/" + username), { score: 0 });
+    set(ref(database, "room/" + roomID + "/leaderboard/" + username), {
+      score: 0,
+    });
   } else {
-    set(ref(db, "room/" + roomID + "/leaderboard/" + username), 0);
+    set(ref(database, "room/" + roomID + "/leaderboard/" + username), 0);
   }
 
   res.status(200).json({
