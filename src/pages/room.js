@@ -154,7 +154,7 @@ export default function Room({ roomID, puzzleTitle, puzzleType }) {
 }
 
 export async function getServerSideProps(context) {
-  var roomID = context.query.roomID;
+  var { roomID } = context.query;
 
   if (roomID == undefined) {
     return {
@@ -172,6 +172,15 @@ export async function getServerSideProps(context) {
     puzzleID = snapshot.val();
   });
 
+  if (puzzleID == undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
+
   var puzzleType = "None";
   await get(ref(database, "puzzle/" + puzzleID + "/puzzleType")).then(
     (snapshot) => {
@@ -183,7 +192,6 @@ export async function getServerSideProps(context) {
   );
 
   var puzzleTitle;
-
   await get(ref(database, "puzzle/" + puzzleID + "/title")).then((snapshot) => {
     if (snapshot.exists()) {
       puzzleTitle = snapshot.val();

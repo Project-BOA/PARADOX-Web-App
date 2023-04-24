@@ -145,20 +145,21 @@ export default function Home({ user }) {
                       >
                         <Col>
                           <Text
-                            size={28}
-                            weight="bold"
+                            size={26}
+                            weight="extrabold"
+                            align="center"
                             transform="uppercase"
-                            color="black"
                           >
                             {puzzle.title}
                           </Text>
                           <Text
-                            size={18}
+                            size={20}
                             weight="bold"
+                            align="center"
                             transform="uppercase"
-                            color="black"
+                            css={{ color: "$green" }}
                           >
-                            {puzzle.description}
+                            {puzzle.puzzleType} Puzzle
                           </Text>
                         </Col>
                       </Card.Header>

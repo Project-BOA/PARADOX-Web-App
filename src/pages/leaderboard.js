@@ -77,7 +77,25 @@ export default function Leaderboard({ title, entries, type }) {
 }
 
 export async function getServerSideProps(context) {
-  if (context.query.roomID == undefined) {
+  var { roomID } = context.query;
+
+  if (roomID == undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
+
+  roomID = roomID.toUpperCase();
+
+  var puzzleID;
+  await get(ref(database, "room/" + roomID + "/puzzleID")).then((snapshot) => {
+    puzzleID = snapshot.val();
+  });
+
+  if (puzzleID == undefined) {
     return {
       redirect: {
         permanent: false,
@@ -87,16 +105,9 @@ export async function getServerSideProps(context) {
   }
 
   var leaderboard;
-  await get(
-    ref(database, "room/" + context.query.roomID + "/leaderboard")
-  ).then((snapshot) => {
-    leaderboard = snapshot.val();
-  });
-
-  var puzzleID;
-  await get(ref(database, "room/" + context.query.roomID + "/puzzleID")).then(
+  await get(ref(database, "room/" + roomID + "/leaderboard")).then(
     (snapshot) => {
-      puzzleID = snapshot.val();
+      leaderboard = snapshot.val();
     }
   );
 
@@ -105,7 +116,7 @@ export async function getServerSideProps(context) {
     if (snapshot.exists()) {
       title = snapshot.val();
     } else {
-      console.log("No puzzle type available");
+      console.log("No puzzle available");
     }
   });
 
@@ -126,7 +137,7 @@ export async function getServerSideProps(context) {
   for (var player in leaderboard) {
     entries.push([player, leaderboard[player].score ?? leaderboard[player]]);
 
-    await update(ref(database, "users/" + player + "/solved/" + title), {
+    update(ref(database, "users/" + player + "/solved/" + title), {
       completedOn: date,
       points: leaderboard[player].score ?? leaderboard[player],
     });

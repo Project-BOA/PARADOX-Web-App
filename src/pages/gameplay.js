@@ -186,7 +186,7 @@ export default function Gameplay({
         )}
         {!loading && snapshots && (
           <Fragment>
-            <Spacer y={4} />
+            <Spacer y={2} />
             <Text h2 size={30} align="center">
               Top 3
             </Text>
@@ -222,20 +222,23 @@ export default function Gameplay({
             css={{
               background: "$green",
               padding: "1em",
-              w: "auto",
-              h: "70vh",
-              width: "auto",
+              height: "80vh",
+              width: "100%",
             }}
           >
-            <Card css={{ h: "70vh", marginTop: "auto", marginBottom: "auto" }}>
+            <Card
+              css={{
+                height: "100%",
+                width: "100%",
+              }}
+            >
               <Image
                 src={puzzlePieces[pieceIndex]}
-                // css={{ }}
+                height="100%"
+                width="100%"
                 id="puzzlePieceImg"
                 alt={"Puzzle piece image"}
-                width="auto"
-                height="auto"
-                object-fit="cover"
+                objectFit="scale-down"
               />
             </Card>
           </Card>
@@ -244,20 +247,20 @@ export default function Gameplay({
         <Grid>
           <Card
             css={{
-              width: "auto",
               background: "$green",
               padding: "1em",
-              h: "70vh",
+              height: "80vh",
+              width: "100%",
             }}
           >
-            <Card css={{ h: "70vh", width: "auto" }}>
-              <Card.Body
-                css={{
-                  p: 0,
-                  backgroundColor: "$lightGreen",
-                  border: "#17706E",
-                }}
-              >
+            <Card
+              css={{
+                height: "100%",
+                width: "100%",
+                backgroundColor: "$lightGreen",
+              }}
+            >
+              <Card.Body>
                 <div className="timer-wrapper">
                   <CountdownCircleTimer
                     isPlaying
@@ -271,9 +274,9 @@ export default function Gameplay({
                         return { shouldRepeat: false };
                       }
 
-                      if (puzzleType == "time") {
-                        if (getPoints <= 0) getPoints = 0;
+                      if (puzzleType.toUpperCase() == "TIME") {
                         getPoints = getPoints - decrement;
+                        if (getPoints <= 0) getPoints = 0;
                         update(ref_database(database, "room/" + roomID), {
                           points: getPoints,
                         });
@@ -290,10 +293,13 @@ export default function Gameplay({
                     {RenderTime}
                   </CountdownCircleTimer>
                 </div>
-                <Text h3 size={25} align="center" id="availPoints">
+                <Spacer y={2} />
+                <Text h3 size={25} align="center">
                   Available Points:
                 </Text>
-                <Text h3 size={25} align="center" id="availPoints"></Text>
+                <Text h3 size={25} align="center" id="availPoints">
+                  {getPoints}
+                </Text>
                 <Leaderboard />
               </Card.Body>
             </Card>
@@ -305,9 +311,9 @@ export default function Gameplay({
 }
 
 export async function getServerSideProps(context) {
-  var puzzleID;
+  var { roomID } = context.query;
 
-  if (context.query.roomID == undefined) {
+  if (roomID == undefined) {
     return {
       redirect: {
         permanent: false,
@@ -316,14 +322,29 @@ export async function getServerSideProps(context) {
     };
   }
 
-  await get(
-    ref_database(database, "room/" + context.query.roomID + "/puzzleID")
-  ).then((snapshot) => {
-    puzzleID = snapshot.val();
-  });
+  roomID = roomID.toUpperCase();
+
+  var puzzleID;
+  await get(ref_database(database, "room/" + roomID + "/puzzleID")).then(
+    (snapshot) => {
+      if (snapshot.exists()) {
+        puzzleID = snapshot.val();
+      } else {
+        console.log("No puzzle ID available");
+      }
+    }
+  );
+
+  if (puzzleID == undefined) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
 
   var puzzleName;
-
   await get(ref_database(database, "puzzle/" + puzzleID + "/title")).then(
     (snapshot) => {
       if (snapshot.exists()) {
@@ -350,16 +371,16 @@ export async function getServerSideProps(context) {
         time = pieceTime.interval ?? 10;
         decrement = pieceTime.decrement ?? 10;
       } else {
-        console.log("No puzzle piece available");
+        console.log("No puzzle pieceTime available");
       }
     }
   );
 
-  await get(
-    ref_database(database, "room/" + context.query.roomID + "/points")
-  ).then((snapshot) => {
-    getPoints = snapshot.val();
-  });
+  await get(ref_database(database, "room/" + roomID + "/points")).then(
+    (snapshot) => {
+      getPoints = snapshot.val();
+    }
+  );
 
   const listRef = ref_storage(storage, puzzleID);
   var puzzlePieces = [];
