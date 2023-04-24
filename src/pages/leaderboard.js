@@ -30,7 +30,10 @@ export default function Leaderboard({ title, entries, type }) {
         roomID={roomID}
         puzzleName={title}
         puzzleType={type}
-        Endfunction={() => {
+        logoAction={() => {
+          endRoom(router, roomID);
+        }}
+        action={() => {
           endRoom(router, roomID);
         }}
       />
@@ -123,16 +126,10 @@ export async function getServerSideProps(context) {
   for (var player in leaderboard) {
     entries.push([player, leaderboard[player].score ?? leaderboard[player]]);
 
-    await get(ref(database, "users/" + player + "/solved/" + title)).then(
-      async (snapshot) => {
-        if (!snapshot.exists()) {
-          await update(ref(database, "users/" + player + "/solved/" + title), {
-            completedOn: date,
-            points: leaderboard[player].score ?? leaderboard[player],
-          });
-        }
-      }
-    );
+    await update(ref(database, "users/" + player + "/solved/" + title), {
+      completedOn: date,
+      points: leaderboard[player].score ?? leaderboard[player],
+    });
   }
 
   return { props: { title, entries, type } };

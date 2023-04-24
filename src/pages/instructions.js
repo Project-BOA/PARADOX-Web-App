@@ -92,7 +92,7 @@ export default function Instruction({ user }) {
               margin: "1em",
             }}
           >
-            <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
+            <Card css={{ w: "30em", h: "20vh", margin: "1em" }}>
               <Card.Body
                 css={{
                   p: 0,
@@ -123,7 +123,7 @@ export default function Instruction({ user }) {
               margin: "1em",
             }}
           >
-            <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
+            <Card css={{ w: "30em", h: "20vh", margin: "1em" }}>
               <Card.Body
                 css={{
                   p: 0,
@@ -154,7 +154,7 @@ export default function Instruction({ user }) {
               margin: "1em",
             }}
           >
-            <Card css={{ w: "30em", h: "50vh", margin: "1em" }}>
+            <Card css={{ w: "30em", h: "20vh", margin: "1em" }}>
               <Card.Body
                 css={{
                   backgroundColor: "$lightGreen",

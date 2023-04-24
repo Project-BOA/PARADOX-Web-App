@@ -431,7 +431,7 @@ export const getServerSideProps = withIronSessionSsr(
     return {
       props: {
         user: req.session.user,
-        completedPuzzles: completedPuzzles,
+        completedPuzzles: completedPuzzles ?? {},
       },
     };
   }, // -------------------- All boilerplate code for sessions ------------------------------------
