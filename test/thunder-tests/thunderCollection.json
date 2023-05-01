@@ -7,7 +7,7 @@
     "folders": [],
     "settings": {
       "options": {
-        "baseUrl": "http://localhost:3000/api/profile/"
+        "baseUrl": "https://paradox-kappa.vercel.app/api/profile/"
       }
     }
   },

@@ -315,6 +315,22 @@ export default function Profile({ user, completedPuzzles }) {
                                 Update
                               </Button>
                             </Grid>
+                            <Grid>
+                              <Button
+                                auto
+                                ghost
+                                css={{
+                                  color: "$buttonPrimary",
+                                  borderColor: "$buttonPrimary",
+                                  "&:hover": {
+                                    color: "$buttonSecondary",
+                                    backgroundColor: "$buttonPrimary",
+                                  },
+                                }}
+                              >
+                                Delete
+                              </Button>
+                            </Grid>
                           </Grid.Container>
                         </form>
                       </Grid.Container>
