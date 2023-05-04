@@ -33,7 +33,7 @@ export default withIronSessionApiRoute(
     var email = req.body.email;
 
     // there should be something to edit
-    if (newPassword == null && biography == null && email == null) {
+    if (!newPassword && !biography && !email) {
       res.status(400).json({
         status: "Invalid input",
       });
@@ -44,7 +44,7 @@ export default withIronSessionApiRoute(
     var updatedInfo = {};
 
     // if biography is provided
-    if (biography != undefined) {
+    if (biography) {
       biography = biography.trim();
 
       if (filter.isProfane(biography)) {
@@ -65,7 +65,7 @@ export default withIronSessionApiRoute(
     }
 
     // if email is provided
-    if (email != undefined) {
+    if (email) {
       email = email.trim();
       if (email.length < 3 || username.length > 255) {
         res.status(400).json({
@@ -85,7 +85,7 @@ export default withIronSessionApiRoute(
     }
 
     // if new password is provided
-    if (newPassword != undefined) {
+    if (newPassword) {
       newPassword = newPassword.trim();
       if (password.length < 3) {
         res.status(400).json({
