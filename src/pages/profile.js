@@ -34,6 +34,7 @@ export default function Profile({ user, completedPuzzles }) {
   const router = useRouter();
 
   const [visible, setVisible] = React.useState(false);
+  const [isUpdate, setUpdate] = React.useState(false);
   const openModal = () => setVisible(true);
   const closeModal = () => setVisible(false);
 
@@ -77,7 +78,7 @@ export default function Profile({ user, completedPuzzles }) {
     return <></>;
   }
 
-  function ChangePasswordModal() {
+  function PasswordConfirmationModal() {
     return (
       <Modal
         closeButton
@@ -103,7 +104,11 @@ export default function Profile({ user, completedPuzzles }) {
           >
             <form
               onSubmit={(event) => {
-                postEdit(event);
+                if (isUpdate) {
+                  postEdit(event);
+                } else {
+                  deleteHandler(event);
+                }
               }}
             >
               <Modal.Header>
@@ -150,7 +155,8 @@ export default function Profile({ user, completedPuzzles }) {
                     backgroundColor: "$buttonPrimary",
                   }}
                 >
-                  Update
+                  {isUpdate && "Update"}
+                  {!isUpdate && "Delete"}
                 </Button>
               </Modal.Footer>
             </form>
@@ -207,6 +213,47 @@ export default function Profile({ user, completedPuzzles }) {
     }
   }
 
+  async function deleteHandler(event) {
+    event.preventDefault();
+
+    // Send the data to the server in JSON format.
+    const data = {
+      username: user.username,
+      password: event.target.password.value,
+    };
+
+    // API endpoint where we send form data.
+    const endpoint = "/api/profile/delete";
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data, (key, value) => {
+        if (/^\s*$/.test(value)) {
+          return undefined;
+        }
+        return value;
+      }),
+    };
+
+    // Send the form data to our forms API on Vercel and get a response.
+    const response = await fetch(endpoint, options);
+
+    // Get the response data from server as JSON.
+    // If server returns the name submitted, that means the form works.
+    const result = await response.json();
+
+    // redirect or display based on the result
+    if (result.status == "OK") {
+      setVisible(false);
+      router.push("/logout");
+    } else {
+      alert(result.status);
+    }
+  }
+
   return (
     <>
       <NextUIProvider theme={theme}>
@@ -241,6 +288,7 @@ export default function Profile({ user, completedPuzzles }) {
                           id="profile-info-form"
                           onSubmit={(event) => {
                             event.preventDefault();
+                            setUpdate(true);
                             openModal(event);
                           }}
                         >
@@ -319,6 +367,7 @@ export default function Profile({ user, completedPuzzles }) {
                               <Button
                                 auto
                                 ghost
+                                onPress={openModal}
                                 css={{
                                   color: "$buttonPrimary",
                                   borderColor: "$buttonPrimary",
@@ -413,7 +462,7 @@ export default function Profile({ user, completedPuzzles }) {
                 </Card>
               </Col>
             </Row>
-            <ChangePasswordModal />
+            <PasswordConfirmationModal />
           </div>
 
           <Footer />

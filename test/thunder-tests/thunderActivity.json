@@ -4,16 +4,16 @@
     "colId": "history",
     "containerId": "",
     "name": "https://paradox-git-dev-team-boa.vercel.app/api/profile/login",
-    "url": "https://paradox-kappa.vercel.app/api/profile/edit",
+    "url": "http://localhost:3000/api/room/puzzle",
     "method": "GET",
     "sortNum": 0,
     "created": "2023-04-12T02:55:58.352Z",
-    "modified": "2023-05-01T19:46:50.487Z",
+    "modified": "2023-05-01T21:49:49.189Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"username\": \"alan\",\n  \"password\": \"pass\",\n  \"biography\": \"testing12345\"\n}",
+      "raw": "{\n  \"roomID\": \"TESTI\"\n}",
       "form": []
     },
     "tests": []
